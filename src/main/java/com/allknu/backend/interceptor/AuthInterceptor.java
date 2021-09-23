@@ -1,4 +1,4 @@
-package com.allknu.backend.kafka;
+package com.allknu.backend.interceptor;
 
 import com.allknu.backend.exception.errors.CustomJwtRuntimeException;
 import com.allknu.backend.provider.security.JwtAuthToken;
