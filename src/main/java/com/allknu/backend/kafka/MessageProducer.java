@@ -1,5 +1,6 @@
 package com.allknu.backend.kafka;
 
+import com.allknu.backend.kafka.dto.FCMRequestMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
@@ -8,10 +9,11 @@ import org.springframework.stereotype.Service;
 @Service
 public class MessageProducer {
     private static final String FCM_TOPIC = "fcm";
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void sendMessage(String message) {
-        System.out.println(String.format("Produce message : %s", message));
-        this.kafkaTemplate.send(FCM_TOPIC, message);
+    public void sendFCMMessage(FCMRequestMessage fcmRequestMessage) {
+
+        System.out.println(String.format("Produce message : success" ));
+        this.kafkaTemplate.send(FCM_TOPIC, fcmRequestMessage);
     }
 }
