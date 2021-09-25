@@ -15,7 +15,6 @@ public class RequestFCMMessage {
     @Data
     public static class Web {
         private List<SubscribeType> subscribeTypes; //보내고자하는 구독 유형 리스트
-        private List<String> tokens; // 보내고자하는 토큰 리스트
         @NotEmpty(message = "제목이 비어있다.")
         private String title;
         @NotEmpty(message = "내용이 비어있다.")
