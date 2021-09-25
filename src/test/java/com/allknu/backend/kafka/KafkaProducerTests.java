@@ -22,10 +22,8 @@ public class KafkaProducerTests {
     void requestFCMMessageTest() {
         //given
         List<SubscribeType> subs = Arrays.asList(SubscribeType.CAREER, SubscribeType.SOFTWARE);
-        List<String> tokens = Arrays.asList("123","456");
         FCMWebMessage message = FCMWebMessage.builder()
                                         .subscribeTypes(subs)
-                                        .tokens(tokens)
                                         .title("world")
                                         .body("hello")
                                         .build();

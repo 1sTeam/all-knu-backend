@@ -26,7 +26,6 @@ public class RequestFCMMessage {
         public FCMWebMessage toFCMRequestMessage() {
             return FCMWebMessage.builder()
                     .subscribeTypes(this.subscribeTypes)
-                    .tokens(this.tokens)
                     .title(this.title)
                     .body(this.body)
                     .clickLink(this.clickLink)
