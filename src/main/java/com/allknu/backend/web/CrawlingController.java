@@ -1,6 +1,7 @@
 package com.allknu.backend.web;
 
 
+import com.allknu.backend.core.types.UnivNoticeType;
 import com.allknu.backend.provider.service.CrawlingService;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.ResponseCrawling;
@@ -17,8 +18,8 @@ public class CrawlingController {
     private final CrawlingService crawlingService;
 
     @GetMapping("/crawling/notice/univ/{page}") // 학교 공지사항 크롤링 요청
-    public ResponseEntity<CommonResponse> requestPushNotificationToWeb(@PathVariable int page) {
-        List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(page).orElseGet(() -> null);
+    public ResponseEntity<CommonResponse> requestPushNotificationToWeb(@PathVariable int page, @RequestParam(value = "type", required = false, defaultValue = "ALL") UnivNoticeType type) {
+        List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(page, type).orElseGet(() -> null);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
