@@ -29,6 +29,13 @@ public class KafkaProducerConfig{
                 .replicas(1)
                 .build();
     }
+    @Bean
+    public NewTopic fcmRequestSubscribeTopic() {
+        return TopicBuilder.name("fcmSubscribe")
+                .partitions(1)
+                .replicas(1)
+                .build();
+    }
 
     @Bean
     public ProducerFactory<String, Object> producerFactory() {
