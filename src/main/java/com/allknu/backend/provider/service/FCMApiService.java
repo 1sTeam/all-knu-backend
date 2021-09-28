@@ -2,6 +2,7 @@ package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.FCMApiServiceInterface;
 import com.allknu.backend.kafka.MessageProducer;
+import com.allknu.backend.kafka.dto.FCMSubscribeMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import com.allknu.backend.web.dto.RequestFCMMessage;
 import lombok.RequiredArgsConstructor;
@@ -16,5 +17,11 @@ public class FCMApiService implements FCMApiServiceInterface {
     public void pushToKafkaWebMessage(RequestFCMMessage.Web message) {
         FCMWebMessage fcmWebMessage = message.toFCMRequestMessage();
         messageProducer.sendFCMMessage(fcmWebMessage);
+    }
+
+    @Override
+    public void pushToKafkaSubscribeMessage(RequestFCMMessage.Subscribe message) {
+        FCMSubscribeMessage fcmSubscribeMessage = message.toFCMSubscribeMessage();
+        messageProducer.sendFCMRequestSubscribeMessage(fcmSubscribeMessage);
     }
 }
