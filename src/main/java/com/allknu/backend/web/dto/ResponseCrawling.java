@@ -11,5 +11,10 @@ public class ResponseCrawling {
     public static class UnivNotice {
         private String title;
         private String link;
+        private String type;
+        private String writer;
+        private String date;
+        private String views;
+        private String number;
     }
 }

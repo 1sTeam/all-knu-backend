@@ -1,6 +1,7 @@
 package com.allknu.backend.provider.service;
 
 
+import com.allknu.backend.core.types.UnivNoticeType;
 import com.allknu.backend.web.dto.ResponseCrawling;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -21,11 +22,10 @@ public class CrawlingServiceTests {
     @Test
     @DisplayName("공지사항 크롤링 테스트")
     void getUnivNoticeTest() {
-        List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(1).orElseGet(()->null);
+        List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(1, UnivNoticeType.ALL).orElseGet(()->null);
         for(int i = 0 ; i < notices.size() ; i++) {
             ResponseCrawling.UnivNotice notice = notices.get(i);
-            System.out.println(notice.getTitle());
-            System.out.println(notice.getLink());
+            System.out.println(notice.getTitle() + notice.getLink() + notice.getDate() + notice.getViews());
         }
     }
 }

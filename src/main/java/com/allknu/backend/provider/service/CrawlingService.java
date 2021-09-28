@@ -1,10 +1,12 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.CrawlingServiceInterface;
+import com.allknu.backend.core.types.UnivNoticeType;
 import com.allknu.backend.web.dto.ResponseCrawling;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Jsoup;
+import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
@@ -28,30 +30,48 @@ public class CrawlingService implements CrawlingServiceInterface {
     }
 
     @Override
-    public Optional<List<ResponseCrawling.UnivNotice>> getUnivNotice(int pageNum) {
+    public Optional<List<ResponseCrawling.UnivNotice>> getUnivNotice(int pageNum, UnivNoticeType type) {
         List<ResponseCrawling.UnivNotice> lists = new ArrayList<>();
 
+        //type에 따라 전체, 학사, 장학, 학습/상담, 취창업 공지 크롤링
         String url = "https://web.kangnam.ac.kr/menu/f19069e6134f8f8aa7f689a4a675e66f.do?paginationInfo.currentPageNo="
-                +pageNum+"&searchMenuSeq=0&searchType=&searchValue=";
+                +pageNum+"&searchMenuSeq=" + type.getSearchMenuNumber() + "&searchType=&searchValue=";
 
         try {
             Document doc = Jsoup.connect(url).get();
-            Elements elem = doc.select("div.tbody > ul");
 
-            Iterator<Element> links = elem.select("a.detailLink").iterator();
+            Iterator<Element> rows = doc.select("div.tbody > ul").iterator();
+            while(rows.hasNext()) {
+                Element target = rows.next();
+                Elements li = target.select("li"); // ul 안의 li들
 
-            while (links.hasNext()) {
-                Element target = links.next();
+                String number = li.get(0).text(); // 게시글번호 li
+                if(!StringUtil.isNumeric(number)) {
+                    //넘버가 숫자가 아니라면 필독공지임 이거는 패스
+                    continue;
+                }
 
-                JsonNode jsonNode = objectMapper.readTree(target.attr("data-params"));
+                Element linkElement = li.get(1).selectFirst("a.detailLink"); // 링크li
+                JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
                 String encMenuSeq = jsonNode.get("encMenuSeq").asText();
                 String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
                 String link = "https://web.kangnam.ac.kr/menu/board/info/f19069e6134f8f8aa7f689a4a675e66f.do?scrtWrtiYn=false&encMenuSeq="
                         + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
 
+                String title = linkElement.text();
+                String writeType = li.get(2).text(); //구분 li
+                String writer = li.get(4).text(); // 작성자
+                String date = li.get(5).text(); // date
+                String views = li.get(6).text(); // views
+
                 ResponseCrawling.UnivNotice notice = ResponseCrawling.UnivNotice.builder()
-                        .title(target.text())
                         .link(link)
+                        .date(date)
+                        .number(number)
+                        .writer(writer)
+                        .type(writeType)
+                        .views(views)
+                        .title(title)
                         .build();
 
                 lists.add(notice);
