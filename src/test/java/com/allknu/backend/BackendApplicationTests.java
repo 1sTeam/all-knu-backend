@@ -1,5 +1,8 @@
 package com.allknu.backend;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -9,7 +12,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Iterator;
+import java.util.Map;
 
 @SpringBootTest
 @ActiveProfiles("local")
@@ -42,4 +47,33 @@ class BackendApplicationTests {
 
 	}
 
+	@Test
+	void loginKnuTest() {
+		String url = "https://m.kangnam.ac.kr/knusmart/c/c001.do?user_id=20171234&user_pwd=1234";
+		try {
+
+			Connection.Response res = Jsoup.connect(url)
+					.method(Connection.Method.GET)
+					.ignoreContentType(true)
+					.userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
+					.execute();
+
+			System.out.println(res.body());
+			ObjectMapper mapper = new ObjectMapper();
+			JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
+
+			if(jsonNode.get("result").equals("success")) {
+				System.out.println("로그인 성공");
+				Map<String, String> cookies = res.cookies();
+
+				for( Map.Entry<String, String> elem : cookies.entrySet() ){
+					System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
+				}
+			} else {
+				System.out.println("로그인 실패");
+			}
+ 		} catch (IOException e) {
+			System.out.println(e);
+		}
+	}
 }
