@@ -49,7 +49,7 @@ class BackendApplicationTests {
 
 	@Test
 	void loginKnuTest() {
-		String url = "https://m.kangnam.ac.kr/knusmart/c/c001.do?user_id=20171234&user_pwd=1234";
+		String url = "https://m.kangnam.ac.kr/knusmart/c/c001.do?user_id=201704017&user_pwd=1234";
 		try {
 
 			Connection.Response res = Jsoup.connect(url)
@@ -62,13 +62,23 @@ class BackendApplicationTests {
 			ObjectMapper mapper = new ObjectMapper();
 			JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
 
-			if(jsonNode.get("result").equals("success")) {
+			if(jsonNode.get("result").toString().equals("\"success\"")) {
 				System.out.println("로그인 성공");
 				Map<String, String> cookies = res.cookies();
 
 				for( Map.Entry<String, String> elem : cookies.entrySet() ){
 					System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
 				}
+				//시간표 조회 테스트
+				url = "https://m.kangnam.ac.kr/knusmart/s/s251.do";
+				Connection.Response timeRes = Jsoup.connect(url)
+						.method(Connection.Method.GET)
+						.ignoreContentType(true)
+						.cookies(cookies) // 로그인 쿠키 삽입
+						.userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
+						.execute();
+
+				System.out.println(timeRes.body());// 결과
 			} else {
 				System.out.println("로그인 실패");
 			}
