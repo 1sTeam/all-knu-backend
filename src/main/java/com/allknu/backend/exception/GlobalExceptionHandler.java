@@ -2,6 +2,7 @@ package com.allknu.backend.exception;
 
 
 import com.allknu.backend.exception.errors.CustomJwtRuntimeException;
+import com.allknu.backend.exception.errors.LoginFailedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -72,5 +73,16 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.INVALID_JWT_TOKEN.getStatus());
+    }
+    @ExceptionHandler(LoginFailedException.class)
+    protected ResponseEntity<ErrorResponse> handleLoginFailedException(LoginFailedException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.LOGIN_FAILED.getCode())
+                .message(ErrorCode.LOGIN_FAILED.getMessage())
+                .status(ErrorCode.LOGIN_FAILED.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, ErrorCode.LOGIN_FAILED.getStatus());
     }
 }
