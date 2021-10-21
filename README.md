@@ -12,9 +12,9 @@
 ```
 
 ## docker build
-이미지 이름을 지정
+이미지 이름을 지정, java.security 이슈 때문에 지정된 자바 버전 사용..!
 ```bash
-./mvnw spring-boot:build-image -Dspring-boot.build-image.imageName=all-knu-backend
+docker build -t all-knu-backend .
 ```
 
 ## docker run
