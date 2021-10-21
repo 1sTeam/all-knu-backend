@@ -9,6 +9,23 @@ public enum SubscribeType {
 
     //학과
     SOFTWARE, //소응
-    IOT, // 전자공
-
+    WELFARE,
+    SENIOR,
+    UVD,
+    VISUAL_ART,
+    SPORT,
+    CHRISTIANITY,
+    KOREA_CULTURE,
+    INTERNATIONAL_REGIONAL,
+    CHINA_REGIONAL,
+    MUSIC,
+    EDU,
+    CHILDHOOD_EDU,
+    SPECIAL_EDU,
+    GLOBAL_BIZ,
+    PUBLIC,
+    TAX_ECONOMIC,
+    IOT,
+    INTELLIGENCE,
+    CONSTRUCTION
 }
