@@ -4,6 +4,7 @@ import com.allknu.backend.exception.errors.LoginFailedException;
 import com.allknu.backend.provider.service.KnuApiService;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.RequestKnu;
+import com.allknu.backend.web.dto.ResponseKnu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -40,6 +41,18 @@ public class KnuApiController {
                 .status(HttpStatus.OK.value())
                 .message("로그아웃 성공")
                 .list(null)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/knu/timetable")
+    public ResponseEntity<CommonResponse> knuTimeTable(@RequestBody Map<String, String> cookies) {
+
+        ResponseKnu.TimeTable responseTimeTable = knuApiService.getTimeTable(cookies).orElseThrow(()->new LoginFailedException());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("시간표 성공")
+                .list(responseTimeTable)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
