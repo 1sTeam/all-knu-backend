@@ -51,10 +51,44 @@ public class KnuApiServiceTests {
             }
             ResponseKnu.TimeTable timeTable = knuApiService.getTimeTable(cookies).orElseGet(()->null);
             //assertNotNull(timeTable);
-            System.out.println(timeTable.getData());
+            //System.out.println(timeTable.getData());
 
             knuApiService.logout(cookies); // 로그아웃
         }
+    }
 
+    @Test
+    @DisplayName("재학 기간 조회 테스트")
+    void getPeriodOfUnivTest() {
+        //로그인
+        RequestKnu.Login login = RequestKnu.Login.builder()
+                .id("201704017")
+                .password("1234")
+                .build();
+        Map<String, String> cookies = knuApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        if(cookies != null) {
+            ResponseKnu.PeriodUniv period = knuApiService.getPeriodOfUniv(cookies).orElseGet(()->null);
+            //assertNotNull(period);
+            //System.out.println(period.getData());
+
+            knuApiService.logout(cookies); // 로그아웃
+        }
+    }
+    @Test
+    @DisplayName("성적 조회 테스트")
+    void getGradeTest() {
+        //로그인
+        RequestKnu.Login login = RequestKnu.Login.builder()
+                .id("201704017")
+                .password("1234")
+                .build();
+        Map<String, String> cookies = knuApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        if(cookies != null) {
+            ResponseKnu.Grade grade = knuApiService.getGrade(cookies, "2021", "1").orElseGet(()->null);
+            //assertNotNull(grade);
+            //System.out.println(grade.getData());
+
+            knuApiService.logout(cookies); // 로그아웃
+        }
     }
 }
