@@ -10,6 +10,16 @@ public class ResponseKnu {
     @Data
     @Builder
     public static class TimeTable {
-        private List<Object> data;
+        private Object data;
+    }
+    @Data
+    @Builder
+    public static class PeriodUniv {
+        private Object data;
+    }
+    @Data
+    @Builder
+    public static class Grade {
+        private Object data;
     }
 }

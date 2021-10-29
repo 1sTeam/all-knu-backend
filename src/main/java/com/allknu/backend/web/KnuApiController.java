@@ -56,4 +56,30 @@ public class KnuApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @PostMapping("/knu/period")
+    public ResponseEntity<CommonResponse> getPeriodUniv(@RequestBody Map<String, String> cookies) {
+
+        ResponseKnu.PeriodUniv period = knuApiService.getPeriodOfUniv(cookies).orElseThrow(()->new LoginFailedException());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("재학 기간 조회 성공")
+                .list(period)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/knu/grade")
+    public ResponseEntity<CommonResponse> getKnuGrade(@Valid @RequestBody RequestKnu.Grade requestGradeDto) {
+
+        ResponseKnu.Grade grade = knuApiService.getGrade(requestGradeDto.getCookies(), requestGradeDto.getYear(), requestGradeDto.getSemester())
+                .orElseThrow(()->new LoginFailedException());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성적 조회 성공")
+                .list(grade)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
