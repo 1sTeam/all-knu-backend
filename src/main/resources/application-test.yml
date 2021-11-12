@@ -19,3 +19,6 @@ spring:
 
   kafka:
     bootstrap-servers: 13.124.108.212:9092
+    consumer:
+      group-id: all-knu-backend
+      auto-offset-reset: earliest
