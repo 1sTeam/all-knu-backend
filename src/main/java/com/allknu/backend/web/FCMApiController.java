@@ -1,6 +1,7 @@
 package com.allknu.backend.web;
 
 import com.allknu.backend.entity.FirebaseLog;
+import com.allknu.backend.kafka.dto.FCMWebMessage;
 import com.allknu.backend.provider.security.JwtAuthToken;
 import com.allknu.backend.provider.security.JwtAuthTokenProvider;
 import com.allknu.backend.provider.service.FCMApiService;
@@ -30,7 +31,6 @@ public class FCMApiController {
 
     @PostMapping("/fcm/push/web")
     public ResponseEntity<CommonResponse> requestPushNotificationToWeb(@RequestBody @Valid RequestFCMMessage.Web message, HttpServletRequest request) {
-
         //토큰에서 이메일 꺼내기
         Optional<String> token = jwtAuthTokenProvider.resolveToken(request);
         String email = null;
@@ -39,7 +39,8 @@ public class FCMApiController {
             email = jwtAuthToken.getData().getSubject();
         }
 
-        fcmApiService.pushToKafkaWebMessage(email, message);
+        FCMWebMessage fcmWebMessage = message.toFCMRequestMessage();
+        fcmApiService.pushToKafkaWebMessage(email, fcmWebMessage);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())

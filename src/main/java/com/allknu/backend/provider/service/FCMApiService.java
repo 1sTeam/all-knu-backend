@@ -24,9 +24,9 @@ public class FCMApiService implements FCMApiServiceInterface {
 
     @Transactional
     @Override
-    public void pushToKafkaWebMessage(String email, RequestFCMMessage.Web message) {
-        FCMWebMessage fcmWebMessage = message.toFCMRequestMessage();
-        messageProducer.sendFCMMessage(fcmWebMessage);
+    public void pushToKafkaWebMessage(String email, FCMWebMessage message) {
+        //push
+        messageProducer.sendFCMMessage(message);
 
         //log 등록
         FirebaseLog log = FirebaseLog.builder()
