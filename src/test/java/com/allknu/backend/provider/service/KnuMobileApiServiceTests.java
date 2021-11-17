@@ -13,7 +13,7 @@ import java.util.Map;
 
 @SpringBootTest
 @ActiveProfiles("local")
-public class KnuApiServiceTests {
+public class KnuMobileApiServiceTests {
     @Autowired
     private KnuMobileApiService knuMobileApiService;
 
