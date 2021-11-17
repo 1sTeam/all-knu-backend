@@ -8,7 +8,12 @@
 
 ## maven build
 ```bash
-./mvnw clean package -P local
+./mvnw clean package
+```
+### option
+테스트 스킵
+```bash
+-DskipTests
 ```
 
 ## docker build
