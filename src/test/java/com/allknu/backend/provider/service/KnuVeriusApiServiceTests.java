@@ -21,12 +21,14 @@ public class KnuVeriusApiServiceTests {
     @Test
     @DisplayName("학생 정보 가져오기 테스트")
     void getStudentInfoTest() {
-        Map<String, String> cookies = knuApiService.ssoLogin("123","1234").orElseGet(()->null);
+        // sso login
+        Map<String, String> cookies = knuApiService.ssoLogin("1234","1234").orElseGet(()->null);
         assertNotNull(cookies);
 
         for( Map.Entry<String, String> elem : cookies.entrySet() ){
             System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
         }
+        //get student info
         Map<String, String> info = knuVeriusApiService.getStudentInfo(cookies).orElseGet(()->null);
         assertNotNull(info);
         System.out.println("정보출력");
