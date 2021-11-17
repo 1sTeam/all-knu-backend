@@ -7,7 +7,7 @@ import com.fasterxml.jackson.databind.JsonNode;
 import java.util.Map;
 import java.util.Optional;
 
-public interface KnuApiServiceInterface {
+public interface KnuMobileApiServiceInterface {
     Optional<JsonNode> getKnuApiJsonData(String url, Map<String,String> cookies);
     Optional<Map<String, String>> login(String id, String password);
     void logout(Map<String, String> cookies);
