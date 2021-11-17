@@ -43,7 +43,6 @@ public class KnuApiService implements KnuApiServiceInterface {
                     .execute();
 
             cookies = ssoLoginRes.cookies();
-            cookies.put("JSESSIONID","B4D3AA87AE2630021F76A1C9FF240BB3"); // 왜인지 모르겠으나 리턴 받는 세션아이디는 안먹힘, 임의지정...
 
             //로그인 성공 시 sso_token을 받는다. 이를 통해 로그인 성공 여부 판단
             if(cookies.get("sso_token") == null) {
