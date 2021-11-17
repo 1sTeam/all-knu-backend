@@ -2,6 +2,7 @@ package com.allknu.backend.exception;
 
 
 import com.allknu.backend.exception.errors.CustomJwtRuntimeException;
+import com.allknu.backend.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.exception.errors.LoginFailedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -84,5 +85,16 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.LOGIN_FAILED.getStatus());
+    }
+    @ExceptionHandler(KnuApiCallFailedException.class)
+    protected ResponseEntity<ErrorResponse> handleKnuApiCallFailedException(KnuApiCallFailedException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.KNU_API_FAILED.getCode())
+                .message(ErrorCode.KNU_API_FAILED.getMessage())
+                .status(ErrorCode.KNU_API_FAILED.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, ErrorCode.KNU_API_FAILED.getStatus());
     }
 }
