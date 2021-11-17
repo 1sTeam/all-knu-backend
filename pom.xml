@@ -16,7 +16,7 @@
 	<properties>
 		<java.version>11</java.version>
 		<!-- maven에서 -P 로 명시하지 않을 경우 기본 프로파일 -->
-		<env>local</env>
+		<env>dev</env>
 	</properties>
 
 	<profiles>
