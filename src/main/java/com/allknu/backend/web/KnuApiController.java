@@ -1,7 +1,7 @@
 package com.allknu.backend.web;
 
 import com.allknu.backend.exception.errors.LoginFailedException;
-import com.allknu.backend.provider.service.KnuApiService;
+import com.allknu.backend.provider.service.KnuMobileApiService;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
@@ -18,12 +18,12 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class KnuApiController {
-    private final KnuApiService knuApiService;
+    private final KnuMobileApiService knuMobileApiService;
 
     @PostMapping("/knu/login")
     public ResponseEntity<CommonResponse> knuLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
 
-        Map<String, String> cookies = knuApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
+        Map<String, String> cookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -35,7 +35,7 @@ public class KnuApiController {
     @PostMapping("/knu/logout")
     public ResponseEntity<CommonResponse> knuLogout(@RequestBody Map<String, String> cookies) {
 
-        knuApiService.logout(cookies);
+        knuMobileApiService.logout(cookies);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -47,7 +47,7 @@ public class KnuApiController {
     @PostMapping("/knu/timetable")
     public ResponseEntity<CommonResponse> knuTimeTable(@RequestBody Map<String, String> cookies) {
 
-        ResponseKnu.TimeTable responseTimeTable = knuApiService.getTimeTable(cookies).orElseThrow(()->new LoginFailedException());
+        ResponseKnu.TimeTable responseTimeTable = knuMobileApiService.getTimeTable(cookies).orElseThrow(()->new LoginFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -59,7 +59,7 @@ public class KnuApiController {
     @PostMapping("/knu/period")
     public ResponseEntity<CommonResponse> getPeriodUniv(@RequestBody Map<String, String> cookies) {
 
-        ResponseKnu.PeriodUniv period = knuApiService.getPeriodOfUniv(cookies).orElseThrow(()->new LoginFailedException());
+        ResponseKnu.PeriodUniv period = knuMobileApiService.getPeriodOfUniv(cookies).orElseThrow(()->new LoginFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -72,7 +72,7 @@ public class KnuApiController {
     @PostMapping("/knu/grade")
     public ResponseEntity<CommonResponse> getKnuGrade(@Valid @RequestBody RequestKnu.Grade requestGradeDto) {
 
-        ResponseKnu.Grade grade = knuApiService.getGrade(requestGradeDto.getCookies(), requestGradeDto.getYear(), requestGradeDto.getSemester())
+        ResponseKnu.Grade grade = knuMobileApiService.getGrade(requestGradeDto.getCookies(), requestGradeDto.getYear(), requestGradeDto.getSemester())
                 .orElseThrow(()->new LoginFailedException());
 
         CommonResponse response = CommonResponse.builder()

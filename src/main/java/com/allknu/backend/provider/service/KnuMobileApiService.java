@@ -1,12 +1,10 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.service.KnuApiServiceInterface;
+import com.allknu.backend.core.service.KnuMobileApiServiceInterface;
 import com.allknu.backend.exception.errors.LoginFailedException;
-import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
@@ -15,7 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-public class KnuApiService implements KnuApiServiceInterface {
+public class KnuMobileApiService implements KnuMobileApiServiceInterface {
 
     @Override
     public Optional<JsonNode> getKnuApiJsonData(String url, Map<String, String> cookies) {

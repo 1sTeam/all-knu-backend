@@ -10,14 +10,12 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 
 @SpringBootTest
 @ActiveProfiles("local")
 public class KnuApiServiceTests {
     @Autowired
-    private KnuApiService knuApiService;
+    private KnuMobileApiService knuMobileApiService;
 
     @Test
     @DisplayName("로그인 테스트")
@@ -26,12 +24,12 @@ public class KnuApiServiceTests {
                 .id("1234")
                 .password("1234")
                 .build();
-        Map<String, String> cookies = knuApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
         if(cookies != null) {
             for( Map.Entry<String, String> elem : cookies.entrySet() ){
                 System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
             }
-            knuApiService.logout(cookies); // 로그아웃
+            knuMobileApiService.logout(cookies); // 로그아웃
         }
         //assertNotNull(cookies);
     }
@@ -44,16 +42,16 @@ public class KnuApiServiceTests {
                 .id("201704017")
                 .password("1234")
                 .build();
-        Map<String, String> cookies = knuApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
         if(cookies != null) {
             for( Map.Entry<String, String> elem : cookies.entrySet() ){
                 System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
             }
-            ResponseKnu.TimeTable timeTable = knuApiService.getTimeTable(cookies).orElseGet(()->null);
+            ResponseKnu.TimeTable timeTable = knuMobileApiService.getTimeTable(cookies).orElseGet(()->null);
             //assertNotNull(timeTable);
             //System.out.println(timeTable.getData());
 
-            knuApiService.logout(cookies); // 로그아웃
+            knuMobileApiService.logout(cookies); // 로그아웃
         }
     }
 
@@ -65,13 +63,13 @@ public class KnuApiServiceTests {
                 .id("201704017")
                 .password("1234")
                 .build();
-        Map<String, String> cookies = knuApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
         if(cookies != null) {
-            ResponseKnu.PeriodUniv period = knuApiService.getPeriodOfUniv(cookies).orElseGet(()->null);
+            ResponseKnu.PeriodUniv period = knuMobileApiService.getPeriodOfUniv(cookies).orElseGet(()->null);
             //assertNotNull(period);
             //System.out.println(period.getData());
 
-            knuApiService.logout(cookies); // 로그아웃
+            knuMobileApiService.logout(cookies); // 로그아웃
         }
     }
     @Test
@@ -82,13 +80,13 @@ public class KnuApiServiceTests {
                 .id("201704017")
                 .password("1234")
                 .build();
-        Map<String, String> cookies = knuApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
         if(cookies != null) {
-            ResponseKnu.Grade grade = knuApiService.getGrade(cookies, "2021", "1").orElseGet(()->null);
+            ResponseKnu.Grade grade = knuMobileApiService.getGrade(cookies, "2021", "1").orElseGet(()->null);
             //assertNotNull(grade);
             //System.out.println(grade.getData());
 
-            knuApiService.logout(cookies); // 로그아웃
+            knuMobileApiService.logout(cookies); // 로그아웃
         }
     }
 }
