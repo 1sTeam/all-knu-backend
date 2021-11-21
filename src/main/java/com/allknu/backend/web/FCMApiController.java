@@ -52,14 +52,6 @@ public class FCMApiController {
     @PostMapping("/dev/fcm/subscribe")
     public ResponseEntity<CommonResponse> requestSubscribe(@RequestBody @Valid RequestFCMMessage.Subscribe message) {
 
-        if(message.getSubscribeTypes() == null || message.getSubscribeTypes().size() <= 0) {
-            CommonResponse response = CommonResponse.builder()
-                    .status(HttpStatus.OK.value())
-                    .message("요청은 성공, 구독은 하지 않는 것으로 확인")
-                    .list(null)
-                    .build();
-            return new ResponseEntity<>(response, HttpStatus.OK);
-        }
         fcmApiService.pushToKafkaSubscribeMessage(message);
 
         CommonResponse response = CommonResponse.builder()
