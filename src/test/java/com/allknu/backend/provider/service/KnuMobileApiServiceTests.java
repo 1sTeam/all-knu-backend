@@ -42,7 +42,7 @@ public class KnuMobileApiServiceTests {
     void getTimeTableTest() {
         //로그인
         RequestKnu.Login login = RequestKnu.Login.builder()
-                .id("201704017")
+                .id("1234")
                 .password("1234")
                 .build();
         Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
@@ -51,8 +51,8 @@ public class KnuMobileApiServiceTests {
                 System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
             }
             ResponseKnu.TimeTable timeTable = knuMobileApiService.getTimeTable(cookies).orElseGet(()->null);
-            //assertNotNull(timeTable);
-            //System.out.println(timeTable.getData());
+            assertNotNull(timeTable);
+            System.out.println(timeTable.getData());
 
             knuMobileApiService.logout(cookies); // 로그아웃
         }
@@ -63,14 +63,14 @@ public class KnuMobileApiServiceTests {
     void getPeriodOfUnivTest() {
         //로그인
         RequestKnu.Login login = RequestKnu.Login.builder()
-                .id("201704017")
+                .id("1234")
                 .password("1234")
                 .build();
         Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
         if(cookies != null) {
             ResponseKnu.PeriodUniv period = knuMobileApiService.getPeriodOfUniv(cookies).orElseGet(()->null);
-            //assertNotNull(period);
-            //System.out.println(period.getData());
+            assertNotNull(period);
+            System.out.println(period.getData());
 
             knuMobileApiService.logout(cookies); // 로그아웃
         }
@@ -80,14 +80,14 @@ public class KnuMobileApiServiceTests {
     void getGradeTest() {
         //로그인
         RequestKnu.Login login = RequestKnu.Login.builder()
-                .id("201704017")
+                .id("1234")
                 .password("1234")
                 .build();
         Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
         if(cookies != null) {
             ResponseKnu.Grade grade = knuMobileApiService.getGrade(cookies, "2021", "1").orElseGet(()->null);
-            //assertNotNull(grade);
-            //System.out.println(grade.getData());
+            assertNotNull(grade);
+            System.out.println(grade.getData());
 
             knuMobileApiService.logout(cookies); // 로그아웃
         }
@@ -99,6 +99,26 @@ public class KnuMobileApiServiceTests {
         assertNotNull(list);
         for (ResponseKnu.CalendarItem item : list) {
             System.out.println(item.getYear() + " " + item.getStart() + " " + item.getEnd() + " " + item.getDescribe());
+        }
+    }
+    @Test
+    @DisplayName("장학 조회 테스트")
+    void getMyScholarshipTest() {
+        //로그인
+        RequestKnu.Login login = RequestKnu.Login.builder()
+                .id("1234")
+                .password("1234")
+                .build();
+        Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        if(cookies != null) {
+            List<ResponseKnu.ScholarshipItem> items = knuMobileApiService.getMyScholarship(cookies).orElseGet(()->null);
+            assertNotNull(items);
+
+            for (ResponseKnu.ScholarshipItem item : items){
+                System.out.println(item.getAmount() + " " + item.getDescribe() + " " + item.getYear() + " " + item.getDepartment() + " " + item.getSemester() + " " + item.getGrade());
+            }
+
+            knuMobileApiService.logout(cookies); // 로그아웃
         }
     }
 }
