@@ -121,4 +121,22 @@ public class KnuMobileApiServiceTests {
             knuMobileApiService.logout(cookies); // 로그아웃
         }
     }
+    @Test
+    @DisplayName("등록금 조회 테스트")
+    void getMyTuitionTest() {
+        //로그인
+        RequestKnu.Login login = RequestKnu.Login.builder()
+                .id("1234")
+                .password("1234")
+                .build();
+        Map<String, String> cookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        if(cookies != null) {
+            ResponseKnu.Tuition tuition = knuMobileApiService.getMyTuition(cookies, 2021, 1).orElseGet(()->null);
+            assertNotNull(tuition);
+
+            System.out.println(tuition.getAmount() + " " + tuition.getBank() + " " + tuition.getBankNumber() + " " + tuition.getDividedAmount() + " " + tuition.getDividedPay() + " "+ tuition.getDate()+" " + tuition.getTerm());
+
+            knuMobileApiService.logout(cookies); // 로그아웃
+        }
+    }
 }

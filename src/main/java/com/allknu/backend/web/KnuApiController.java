@@ -112,12 +112,25 @@ public class KnuApiController {
     @GetMapping("/knu/scholarship")
     public ResponseEntity<CommonResponse> getKnuScholarship(Map<String, String> cookies) {
 
-        List<ResponseKnu.ScholarshipItem> itemList = knuMobileApiService.getMyScholarship(cookies).orElseGet(()->List.of());
+        List<ResponseKnu.ScholarshipItem> itemList = knuMobileApiService.getMyScholarship(cookies).orElseThrow(()->new LoginFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("조회 성공")
                 .list(itemList)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/knu/tuition")
+    public ResponseEntity<CommonResponse> getKnuTuition(RequestKnu.Tuition tuition) {
+
+        ResponseKnu.Tuition result = knuMobileApiService.getMyTuition(tuition.getCookies(), tuition.getYear(), tuition.getSemester())
+                .orElseThrow(()->new LoginFailedException());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("조회 성공")
+                .list(result)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

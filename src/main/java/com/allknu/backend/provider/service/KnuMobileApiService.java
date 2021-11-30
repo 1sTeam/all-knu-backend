@@ -264,4 +264,42 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
         }
         return Optional.ofNullable(list);
     }
+
+    @Override
+    public Optional<ResponseKnu.Tuition> getMyTuition(Map<String, String> cookies, Integer year, Integer semester) {
+        JsonNode knuData = getKnuApiJsonData("***REMOVED***?schl_year=" + year + "&schl_smst=" + semester, cookies).orElseGet(()->null);
+
+        ResponseKnu.Tuition tuition = null;
+        if(knuData != null) {
+            //success
+            if (knuData.get("data").isArray()) {
+                for (final JsonNode objNode : knuData.get("data")) {
+                    String date = objNode.get("schl_date").asText();
+                    String bankName = objNode.get("bank_name").asText();
+                    String term = objNode.get("used_term").asText();
+                    String amount = objNode.get("act_sum").asText();
+                    String bankNumber = objNode.get("bank_numb").asText();
+                    String dividedAmount = objNode.get("divd_gubn").asText();
+                    String dividedPay = objNode.get("pay_gubn").toString().substring(
+                            objNode.get("pay_gubn").toString().indexOf(">") + 1,
+                            objNode.get("pay_gubn").toString().lastIndexOf('<')
+                    ); // 문자열 자르기로 가져오기
+
+                    tuition = ResponseKnu.Tuition.builder()
+                            .dividedAmount(dividedAmount)
+                            .term(term)
+                            .amount(amount)
+                            .bank(bankName)
+                            .bankNumber(bankNumber)
+                            .date(date)
+                            .dividedPay(dividedPay)
+                            .build();
+                }
+            }
+        } else {
+            //fail
+            System.out.println("조회 실패");
+        }
+        return Optional.ofNullable(tuition);
+    }
 }
