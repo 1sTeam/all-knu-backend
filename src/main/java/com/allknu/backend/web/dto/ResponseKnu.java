@@ -30,4 +30,14 @@ public class ResponseKnu {
         private String end;
         private String describe;
     }
+    @Data
+    @Builder
+    public static class ScholarshipItem {
+        private String amount;
+        private String department;
+        private String year;
+        private String grade;
+        private String semester;
+        private String describe;
+    }
 }
