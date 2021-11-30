@@ -229,4 +229,39 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
         }
         return Optional.ofNullable(list);
     }
+
+    @Override
+    public Optional<List<ResponseKnu.ScholarshipItem>> getMyScholarship(Map<String, String> cookies) {
+        JsonNode knuData = getKnuApiJsonData("https://m.kangnam.ac.kr/knusmart/s/s253.do", cookies).orElseGet(()->null);
+
+        List<ResponseKnu.ScholarshipItem> list = null;
+        if(knuData != null) {
+            //success
+            list = new ArrayList<>();
+            if (knuData.get("data").isArray()) {
+                for (final JsonNode objNode : knuData.get("data")) {
+                    String amount = objNode.get("schp_amnt").asText();
+                    String year = objNode.get("schl_year").asText();
+                    String department = objNode.get("dept_code").asText();
+                    String semester = objNode.get("schl_smst").asText();
+                    String grade = objNode.get("stnt_grad").asText();
+                    String describe = objNode.get("schp_kfnm").asText();
+
+                    ResponseKnu.ScholarshipItem item = ResponseKnu.ScholarshipItem.builder()
+                            .amount(amount)
+                            .year(year)
+                            .department(department)
+                            .semester(semester)
+                            .grade(grade)
+                            .describe(describe)
+                            .build();
+                    list.add(item);
+                }
+            }
+        } else {
+            //fail
+            System.out.println("조회 실패");
+        }
+        return Optional.ofNullable(list);
+    }
 }

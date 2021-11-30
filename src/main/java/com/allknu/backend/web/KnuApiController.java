@@ -109,4 +109,16 @@ public class KnuApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @GetMapping("/knu/scholarship")
+    public ResponseEntity<CommonResponse> getKnuScholarship(Map<String, String> cookies) {
+
+        List<ResponseKnu.ScholarshipItem> itemList = knuMobileApiService.getMyScholarship(cookies).orElseGet(()->List.of());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("조회 성공")
+                .list(itemList)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
