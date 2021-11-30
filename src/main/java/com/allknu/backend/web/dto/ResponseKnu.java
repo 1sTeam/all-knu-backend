@@ -22,4 +22,12 @@ public class ResponseKnu {
     public static class Grade {
         private Object data;
     }
+    @Data
+    @Builder
+    public static class CalendarItem {
+        private String year;
+        private String start;
+        private String end;
+        private String describe;
+    }
 }
