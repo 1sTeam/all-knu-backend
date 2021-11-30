@@ -11,12 +11,14 @@ import com.allknu.backend.web.dto.ResponseKnu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
@@ -94,6 +96,16 @@ public class KnuApiController {
                 .status(HttpStatus.OK.value())
                 .message("성적 조회 성공")
                 .list(grade)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/knu/calendar")
+    public ResponseEntity<CommonResponse> getKnuCalendar() {
+        List<ResponseKnu.CalendarItem> itemList = knuMobileApiService.getKnuCalendar().orElseGet(()->List.of());
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("조회 성공")
+                .list(itemList)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

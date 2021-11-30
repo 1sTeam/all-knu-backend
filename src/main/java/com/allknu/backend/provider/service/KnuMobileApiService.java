@@ -193,4 +193,40 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
         }
         return Optional.ofNullable(responseGrade);
     }
+
+    @Override
+    public Optional<List<ResponseKnu.CalendarItem>> getKnuCalendar() {
+        //gubn이 1이면 학생용, 2면 교수용인듯
+        JsonNode knuData = getKnuApiJsonData("***REMOVED***?cors_gubn=1", Map.of()).orElseGet(()->null);
+
+        List<ResponseKnu.CalendarItem> list = null;
+        if(knuData != null) {
+            //success
+            list = new ArrayList<>();
+            if (knuData.get("data").isArray()) {
+                for (final JsonNode objNode : knuData.get("data")) {
+                    //캘린더 항목들
+                    String start = objNode.get("used_sdat").toString().substring(
+                            objNode.get("used_sdat").toString().indexOf(">") + 1,
+                            objNode.get("used_sdat").toString().indexOf('일') + 1
+                    ); // 문자열 자르기로 시작날짜 가져오기
+                    String end = objNode.get("used_edat").asText();
+                    String describe = objNode.get("used_desc").asText();
+                    String year = objNode.get("used_yyyy").asText();
+
+                    ResponseKnu.CalendarItem item = ResponseKnu.CalendarItem.builder()
+                            .start(start)
+                            .end(end)
+                            .describe(describe)
+                            .year(year)
+                            .build();
+                    list.add(item);
+                }
+            }
+        } else {
+            //fail
+            System.out.println("조회 실패");
+        }
+        return Optional.ofNullable(list);
+    }
 }
