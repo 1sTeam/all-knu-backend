@@ -40,4 +40,15 @@ public class ResponseKnu {
         private String semester;
         private String describe;
     }
+    @Data
+    @Builder
+    public static class Tuition {
+        private String date;
+        private String bank;
+        private String bankNumber;
+        private String term;
+        private String amount;
+        private String dividedAmount;
+        private String dividedPay;
+    }
 }

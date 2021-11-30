@@ -25,4 +25,13 @@ public class RequestKnu {
         private String year; // 년도
         private String semester; // 학기
     }
+    @Builder
+    @Data
+    public static class Tuition {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private Map<String, String> cookies;
+        private Integer year; // 년도
+        private Integer semester; // 학기
+
+    }
 }
