@@ -4,6 +4,7 @@ import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
 import com.fasterxml.jackson.databind.JsonNode;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -14,4 +15,5 @@ public interface KnuMobileApiServiceInterface {
     Optional<ResponseKnu.TimeTable> getTimeTable(Map<String, String> cookies);
     Optional<ResponseKnu.PeriodUniv> getPeriodOfUniv(Map<String, String> cookies);
     Optional<ResponseKnu.Grade> getGrade(Map<String, String> cookies, String year, String semester);
+    Optional<List<ResponseKnu.CalendarItem>> getKnuCalendar();
 }
