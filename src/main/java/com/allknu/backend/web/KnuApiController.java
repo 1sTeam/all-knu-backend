@@ -134,4 +134,16 @@ public class KnuApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @GetMapping("/knu/verius/satisfaction")
+    public ResponseEntity<CommonResponse> getKnuVeriusSatisfaction(Map<String, String> ssoCookies, Integer page) {
+
+        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(ssoCookies, page).orElseThrow(()->new LoginFailedException());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("조회 성공")
+                .list(list)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

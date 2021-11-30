@@ -51,4 +51,13 @@ public class ResponseKnu {
         private String dividedAmount;
         private String dividedPay;
     }
+    @Data
+    @Builder
+    public static class VeriusSatisfaction {
+        private String number;
+        private String name;
+        private String operationEndDate;
+        private String satisfactionEndDate;
+        private String status;
+    }
 }

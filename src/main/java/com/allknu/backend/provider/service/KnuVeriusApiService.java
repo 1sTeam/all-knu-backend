@@ -2,16 +2,17 @@ package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.KnuVeriusApiServiceInterface;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
+import com.allknu.backend.exception.errors.LoginFailedException;
+import com.allknu.backend.web.dto.ResponseKnu;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 //참인재시스템 verius 오타 아님 ㅎㅎ
@@ -62,5 +63,60 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
             throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(result);
+    }
+
+    @Override
+    public Optional<List<ResponseKnu.VeriusSatisfaction>> getMyVeriusSatisfactionInfo(Map<String, String> ssoCookies, Integer page) {
+        Map<String, String> veriusCookies = veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
+        if(page <= 0) page = 1;
+
+        //해당 참인재 쿠키로 정보를 긁어온다.
+        String url = "***REMOVED***?CURRENT_MENU_CODE=MENU0052&TOP_MENU_CODE=MENU0010&CURR_PAGE=" + page;
+        List<ResponseKnu.VeriusSatisfaction> list = new ArrayList<>();
+
+        try {
+            Document res = Jsoup.connect(url)
+                    .method(Connection.Method.GET)
+                    .cookies(veriusCookies)
+                    .userAgent("***REMOVED***")
+                    .get();
+
+            Elements views = res.select("div.bbsListLot tbody"); // bbsListLot tbody를 리스트로 가져온다.
+
+            Iterator<Element> rows = views.select("tr").iterator();
+            while(rows.hasNext()) {
+                ResponseKnu.VeriusSatisfaction satisfaction;
+
+                Element target = rows.next();
+                Elements td = target.select("td"); // td들
+
+                String number = td.get(0).text();
+                String name = td.get(1).text();
+                String endDate = td.get(2).text();
+                String satisfactionEndDate = td.get(3).text();
+                String status = td.get(4).text();
+
+                // 앞에 strong 태그 내용 삭제, 더 효율적인 방법이 있능가
+                name = name.substring(name.indexOf(" "));
+                endDate = endDate.substring(endDate.indexOf(" "));
+                satisfactionEndDate = satisfactionEndDate.substring(satisfactionEndDate.lastIndexOf(" "));
+                status = status.substring(status.indexOf(" "));
+
+                satisfaction = ResponseKnu.VeriusSatisfaction.builder()
+                        .number(number)
+                        .name(name)
+                        .operationEndDate(endDate)
+                        .satisfactionEndDate(satisfactionEndDate)
+                        .status(status)
+                        .build();
+                list.add(satisfaction);
+            }
+
+
+        } catch (IOException e) {
+            System.out.println(e);
+            throw new KnuApiCallFailedException();
+        }
+        return Optional.ofNullable(list);
     }
 }
