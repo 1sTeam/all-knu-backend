@@ -11,10 +11,7 @@ import com.allknu.backend.web.dto.ResponseKnu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -110,7 +107,7 @@ public class KnuApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/knu/scholarship")
-    public ResponseEntity<CommonResponse> getKnuScholarship(Map<String, String> cookies) {
+    public ResponseEntity<CommonResponse> getKnuScholarship(@RequestParam Map<String, String> cookies) {
 
         List<ResponseKnu.ScholarshipItem> itemList = knuMobileApiService.getMyScholarship(cookies).orElseThrow(()->new LoginFailedException());
 
@@ -122,7 +119,7 @@ public class KnuApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @GetMapping("/knu/tuition")
-    public ResponseEntity<CommonResponse> getKnuTuition(RequestKnu.Tuition tuition) {
+    public ResponseEntity<CommonResponse> getKnuTuition(@RequestParam RequestKnu.Tuition tuition) {
 
         ResponseKnu.Tuition result = knuMobileApiService.getMyTuition(tuition.getCookies(), tuition.getYear(), tuition.getSemester())
                 .orElseThrow(()->new LoginFailedException());
@@ -134,8 +131,8 @@ public class KnuApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping("/knu/verius/satisfaction")
-    public ResponseEntity<CommonResponse> getKnuVeriusSatisfaction(Map<String, String> ssoCookies, Integer page) {
+    @GetMapping("/knu/verius/satisfaction/{page}")
+    public ResponseEntity<CommonResponse> getKnuVeriusSatisfaction(@PathVariable("page") Integer page, @RequestParam Map<String, String> ssoCookies) {
 
         List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(ssoCookies, page).orElseThrow(()->new LoginFailedException());
 
