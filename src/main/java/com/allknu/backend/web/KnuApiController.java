@@ -118,8 +118,8 @@ public class KnuApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping("/knu/tuition")
-    public ResponseEntity<CommonResponse> getKnuTuition(@RequestParam RequestKnu.Tuition tuition) {
+    @PostMapping("/knu/tuition")
+    public ResponseEntity<CommonResponse> getKnuTuition(@RequestBody RequestKnu.Tuition tuition) {
 
         ResponseKnu.Tuition result = knuMobileApiService.getMyTuition(tuition.getCookies(), tuition.getYear(), tuition.getSemester())
                 .orElseThrow(()->new LoginFailedException());
