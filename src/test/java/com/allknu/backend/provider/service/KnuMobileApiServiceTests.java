@@ -11,6 +11,7 @@ import org.springframework.test.context.ActiveProfiles;
 import java.util.List;
 import java.util.Map;
 
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 
@@ -137,6 +138,16 @@ public class KnuMobileApiServiceTests {
             System.out.println(tuition.getAmount() + " " + tuition.getBank() + " " + tuition.getBankNumber() + " " + tuition.getDividedAmount() + " " + tuition.getDividedPay() + " "+ tuition.getDate()+" " + tuition.getTerm());
 
             knuMobileApiService.logout(cookies); // 로그아웃
+        }
+    }
+    @Test
+    @DisplayName("교직원 조회 테스트")
+    void getStaffList() {
+        List<ResponseKnu.Staff> list = knuMobileApiService.getKnuStaffInfo().orElseGet(()->List.of());
+        assertNotEquals(list.size(), 0);
+
+        for (ResponseKnu.Staff staff : list) {
+            System.out.println(staff.getDepartment() + " " + staff.getLocation() + " " + staff.getMail() + " " + staff.getOffice()+" " + staff.getUserName()+" " + staff.getWorkOn());
         }
     }
 }
