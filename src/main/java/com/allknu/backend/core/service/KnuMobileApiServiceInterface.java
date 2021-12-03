@@ -18,4 +18,5 @@ public interface KnuMobileApiServiceInterface {
     Optional<List<ResponseKnu.CalendarItem>> getKnuCalendar();
     Optional<List<ResponseKnu.ScholarshipItem>> getMyScholarship(Map<String, String> cookies);
     Optional<ResponseKnu.Tuition> getMyTuition(Map<String, String> cookies, Integer year, Integer semester);
+    Optional<List<ResponseKnu.Staff>> getKnuStaffInfo();
 }

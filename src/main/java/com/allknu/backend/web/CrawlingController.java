@@ -4,8 +4,10 @@ package com.allknu.backend.web;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.core.types.UnivNoticeType;
 import com.allknu.backend.provider.service.CrawlingService;
+import com.allknu.backend.provider.service.KnuMobileApiService;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.ResponseCrawling;
+import com.allknu.backend.web.dto.ResponseKnu;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,6 +21,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class CrawlingController {
     private final CrawlingService crawlingService;
+    private final KnuMobileApiService knuMobileApiService;
 
     @GetMapping("/crawling/notice/univ/{page}") // 학교 공지사항 크롤링 요청
     public ResponseEntity<CommonResponse> getUnivNotice(@PathVariable int page, @RequestParam(value = "type", required = false, defaultValue = "ALL") UnivNoticeType type) {
@@ -45,6 +48,17 @@ public class CrawlingController {
                 .status(HttpStatus.OK.value())
                 .message("성공")
                 .list(map)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/crawling/staff")
+    public ResponseEntity<CommonResponse> getStaffList() {
+        List<ResponseKnu.Staff> list = knuMobileApiService.getKnuStaffInfo().orElseGet(()->List.of());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("성공")
+                .list(list)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
