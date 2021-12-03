@@ -27,8 +27,6 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
                     .userAgent("***REMOVED***")
                     .execute();
 
-            System.out.println(res.body());// 결과
-
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
 
@@ -301,5 +299,40 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
             System.out.println("조회 실패");
         }
         return Optional.ofNullable(tuition);
+    }
+
+    @Override
+    public Optional<List<ResponseKnu.Staff>> getKnuStaffInfo() {
+        JsonNode knuData = getKnuApiJsonData("***REMOVED***", Map.of()).orElseGet(()->null);
+
+        List<ResponseKnu.Staff> list = new ArrayList<>();
+        if(knuData != null) {
+            //success
+            if (knuData.get("data").isArray()) {
+                for (final JsonNode objNode : knuData.get("data")) {
+                    String workOn = objNode.get("work_on").asText();
+                    String userName = objNode.get("user_name").asText();
+                    String mail = objNode.get("mail_addr").asText();
+                    String office = objNode.get("tele_offi").asText();
+                    String department = objNode.get("dept_name").asText();
+                    String location = objNode.get("user_loca").asText();
+
+                    ResponseKnu.Staff staff = ResponseKnu.Staff.builder()
+                            .userName(userName)
+                            .workOn(workOn)
+                            .mail(mail)
+                            .office(office)
+                            .department(department)
+                            .location(location)
+                            .build();
+
+                    list.add(staff);
+                }
+            }
+        } else {
+            //fail
+            System.out.println("조회 실패");
+        }
+        return Optional.ofNullable(list);
     }
 }

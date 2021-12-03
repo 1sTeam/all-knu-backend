@@ -60,4 +60,14 @@ public class ResponseKnu {
         private String satisfactionEndDate;
         private String status;
     }
+    @Data
+    @Builder
+    public static class Staff {
+        private String workOn;
+        private String userName;
+        private String mail;
+        private String office;
+        private String department;
+        private String location;
+    }
 }
