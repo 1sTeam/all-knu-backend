@@ -1,9 +1,7 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.types.SubscribeType;
 import com.allknu.backend.entity.FirebaseLog;
 import com.allknu.backend.repository.FirebaseLogRepository;
-import com.allknu.backend.web.dto.RequestFCMMessage;
 import com.allknu.backend.web.dto.ResponseFcm;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,27 +13,15 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
-
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("test") // 테스트서버 프로파일 적용
 public class FCMApiServiceTests {
     @Autowired
     private FCMApiService fcmApiService;
     @Autowired
     private FirebaseLogRepository firebaseLogRepository;
-
-    @DisplayName("구독 요청 서비스 테스트")
-    @Test
-    void subscribeTest() {
-        RequestFCMMessage.Subscribe message = RequestFCMMessage.Subscribe.builder()
-                .token("feelz-2ZH-kiOMNHF9dLC0:APA91bEHgfbHDp5l0n3OMlFcdb2yazuPnaPuTXwUPUOkzc2KxAqZJU8mbh5D4Rfiy9tRim-WfsYKdZ6BT-UVxV9a4gtreWpygJiYG_b6gCrAMZ9HiXYckQdXKWpNXU9zyxsrpN9Xo_lF")
-                .subscribeTypes(Arrays.asList(SubscribeType.CAREER, SubscribeType.SOFTWARE))
-                .build();
-        fcmApiService.pushToKafkaSubscribeMessage(message);
-    }
 
     @Transactional
     @DisplayName("로그 조회 pageable 테스트")

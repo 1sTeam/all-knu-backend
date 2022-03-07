@@ -1,11 +1,13 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.web.dto.ResponseKnu;
-import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Map;
@@ -13,25 +15,41 @@ import java.util.Map;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("test") // 테스트서버 프로파일 적용
+@TestPropertySource("classpath:/secrets/personal-account-secrets.properties")
+@TestInstance(TestInstance.Lifecycle.PER_CLASS) // 테스트 인스턴스의 라이프 사이클을 클래스 단위로 설정
 public class KnuVeriusApiServiceTests {
     @Autowired
     private KnuVeriusApiService knuVeriusApiService;
     @Autowired
     private KnuApiService knuApiService;
+    @Value("${knu.id}")
+    private String id;
+    @Value("${knu.password}")
+    private String password;
+    private Map<String, String> ssoCookies;
+
+    @BeforeAll
+    void beforeAll() {
+        //testInstance덕에 static 아니여도 됨
+        ssoCookies = knuApiService.ssoLogin(id,password).orElseGet(()->null);
+        assertNotNull(ssoCookies);
+    }
+    @AfterAll
+    void afterAll() {
+
+    }
 
     @Test
     @DisplayName("학생 정보 가져오기 테스트")
     void getStudentInfoTest() {
         // sso login
-        Map<String, String> cookies = knuApiService.ssoLogin("1234","1234").orElseGet(()->null);
-        assertNotNull(cookies);
 
-        for( Map.Entry<String, String> elem : cookies.entrySet() ){
+        for( Map.Entry<String, String> elem : ssoCookies.entrySet() ){
             System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
         }
         //get student info
-        Map<String, String> info = knuVeriusApiService.getStudentInfo(cookies).orElseGet(()->null);
+        Map<String, String> info = knuVeriusApiService.getStudentInfo(ssoCookies).orElseGet(()->null);
         assertNotNull(info);
         System.out.println("정보출력");
         for( Map.Entry<String, String> elem : info.entrySet() ){
@@ -41,12 +59,8 @@ public class KnuVeriusApiServiceTests {
     @Test
     @DisplayName("만족도 조사 참여 현황 테스트")
     void getSatisfactionTest() {
-        // sso login
-        Map<String, String> cookies = knuApiService.ssoLogin("1234","1234").orElseGet(()->null);
-        assertNotNull(cookies);
-
         //get student info
-        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(cookies, 1).orElseGet(()->null);
+        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(ssoCookies, 1).orElseGet(()->null);
         assertNotNull(list);
         System.out.println("정보출력");
         for( ResponseKnu.VeriusSatisfaction elem : list ){

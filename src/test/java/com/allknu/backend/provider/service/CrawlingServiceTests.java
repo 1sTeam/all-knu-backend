@@ -16,8 +16,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
-@ActiveProfiles("local")
-
+@ActiveProfiles("test") // 테스트서버 프로파일 적용
 public class CrawlingServiceTests {
 
     @Autowired
