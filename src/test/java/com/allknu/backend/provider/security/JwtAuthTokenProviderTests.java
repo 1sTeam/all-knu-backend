@@ -12,7 +12,7 @@ import java.time.ZoneId;
 import java.util.Date;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 public class JwtAuthTokenProviderTests {
     @Autowired
     JwtAuthTokenProvider jwtAuthTokenProvider;

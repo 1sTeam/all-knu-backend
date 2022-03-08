@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 public class KafkaProducerTests {
     @Autowired
     private MessageProducer messageProducer;
