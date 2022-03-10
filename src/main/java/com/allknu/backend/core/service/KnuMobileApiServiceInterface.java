@@ -2,6 +2,7 @@ package com.allknu.backend.core.service;
 
 import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
+import com.allknu.backend.web.dto.SessionInfo;
 import com.fasterxml.jackson.databind.JsonNode;
 
 import java.util.List;
@@ -10,7 +11,7 @@ import java.util.Optional;
 
 public interface KnuMobileApiServiceInterface {
     Optional<JsonNode> getKnuApiJsonData(String url, Map<String,String> cookies);
-    Optional<Map<String, String>> login(String id, String password);
+    Optional<Map<String, String>> login(String id, String password,SessionInfo sessionInfo);
     void logout(Map<String, String> cookies);
     Optional<ResponseKnu.TimeTable> getTimeTable(Map<String, String> cookies);
     Optional<ResponseKnu.PeriodUniv> getPeriodOfUniv(Map<String, String> cookies);

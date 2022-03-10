@@ -28,7 +28,7 @@ public class KnuApiController {
     @PostMapping("/knu/login")
     public ResponseEntity<CommonResponse> knuLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
         //모바일 로그인
-        Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
+        Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword(),loginDto.getSessionInfo()).orElseThrow(()->new LoginFailedException());
         //통합 SSO 로그인
         Map<String, String> ssoCookies = knuApiService.ssoLogin(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         //학생 정보 긁어오기
