@@ -32,6 +32,7 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
 
         }catch (IOException e) {
             e.printStackTrace();
+            throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(veriusCookies);
     }
@@ -39,7 +40,7 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
     public Optional<Map<String, String>> getStudentInfo(Map<String, String> ssoCookies) {
         //참인재시스템에서 학과, 학번, 이름 등 학생 정보를 긁어다 준다.
         //먼저 sso쿠키로 참인재에 로그인한다.
-        Map<String, String> veriusCookies = veriusLogin(ssoCookies).orElseThrow(()->new KnuApiCallFailedException());
+        Map<String, String> veriusCookies = veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
         //해당 참인재 쿠키로 정보를 긁어온다.
         String url = "https://verius.kangnam.ac.kr/user/Std/MyHm010.do?CURRENT_MENU_CODE=MENU0264&TOP_MENU_CODE=MENU0010";
         Map<String, String> result;

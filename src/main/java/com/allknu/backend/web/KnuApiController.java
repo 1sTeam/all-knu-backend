@@ -61,7 +61,7 @@ public class KnuApiController {
     @PostMapping("/knu/timetable")
     public ResponseEntity<CommonResponse> knuTimeTable(@RequestBody Map<String, String> cookies) {
 
-        ResponseKnu.TimeTable responseTimeTable = knuMobileApiService.getTimeTable(cookies).orElseThrow(()->new LoginFailedException());
+        ResponseKnu.TimeTable responseTimeTable = knuMobileApiService.getTimeTable(cookies).orElseThrow(()->new KnuApiCallFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -73,7 +73,7 @@ public class KnuApiController {
     @PostMapping("/knu/period")
     public ResponseEntity<CommonResponse> getPeriodUniv(@RequestBody Map<String, String> cookies) {
 
-        ResponseKnu.PeriodUniv period = knuMobileApiService.getPeriodOfUniv(cookies).orElseThrow(()->new LoginFailedException());
+        ResponseKnu.PeriodUniv period = knuMobileApiService.getPeriodOfUniv(cookies).orElseThrow(()->new KnuApiCallFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -87,7 +87,7 @@ public class KnuApiController {
     public ResponseEntity<CommonResponse> getKnuGrade(@Valid @RequestBody RequestKnu.Grade requestGradeDto) {
 
         ResponseKnu.Grade grade = knuMobileApiService.getGrade(requestGradeDto.getCookies(), requestGradeDto.getYear(), requestGradeDto.getSemester())
-                .orElseThrow(()->new LoginFailedException());
+                .orElseThrow(()->new KnuApiCallFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -109,7 +109,7 @@ public class KnuApiController {
     @GetMapping("/knu/scholarship")
     public ResponseEntity<CommonResponse> getKnuScholarship(@RequestParam Map<String, String> cookies) {
 
-        List<ResponseKnu.ScholarshipItem> itemList = knuMobileApiService.getMyScholarship(cookies).orElseThrow(()->new LoginFailedException());
+        List<ResponseKnu.ScholarshipItem> itemList = knuMobileApiService.getMyScholarship(cookies).orElseThrow(()->new KnuApiCallFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -122,7 +122,7 @@ public class KnuApiController {
     public ResponseEntity<CommonResponse> getKnuTuition(@RequestBody RequestKnu.Tuition tuition) {
 
         ResponseKnu.Tuition result = knuMobileApiService.getMyTuition(tuition.getCookies(), tuition.getYear(), tuition.getSemester())
-                .orElseThrow(()->new LoginFailedException());
+                .orElseThrow(()->new KnuApiCallFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -134,7 +134,7 @@ public class KnuApiController {
     @GetMapping("/knu/verius/satisfaction/{page}")
     public ResponseEntity<CommonResponse> getKnuVeriusSatisfaction(@PathVariable("page") Integer page, @RequestParam Map<String, String> ssoCookies) {
 
-        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(ssoCookies, page).orElseThrow(()->new LoginFailedException());
+        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(ssoCookies, page).orElseThrow(()->new KnuApiCallFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
