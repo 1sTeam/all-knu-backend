@@ -20,7 +20,6 @@ public class RequestKnu {
         private String id;
         @NotNull(message = "비밀번호가 비었다")
         private String password;
-        @Null
         private SessionInfo sessionInfo;
     }
 

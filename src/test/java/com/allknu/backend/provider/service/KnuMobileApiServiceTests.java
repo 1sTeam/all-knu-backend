@@ -38,7 +38,7 @@ public class KnuMobileApiServiceTests {
                 .id(id)
                 .password(password)
                 .build();
-        loginCookies = knuMobileApiService.login(login.getId(), login.getPassword(), null).orElseGet(()->null);
+        loginCookies = knuMobileApiService.login(login.getId(), login.getPassword(),null).orElseGet(()->null);
     }
     @AfterAll
     void after() {

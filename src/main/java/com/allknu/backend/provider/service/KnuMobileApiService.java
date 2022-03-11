@@ -21,12 +21,13 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
         JsonNode result = null;
         //knu api 호출해서 바디만 반환하는 메서드, 실패시 널 반환
         try {
-            Connection.Response res = Jsoup.connect(url)
+            Connection connection = Jsoup.connect(url)
                     .method(Connection.Method.GET)
                     .ignoreContentType(true)
-                    .cookies(cookies) // 로그인 쿠키 삽입
-                    .userAgent("***REMOVED***")
-                    .execute();
+                    .userAgent("***REMOVED***");
+            if(cookies != null) connection.cookies(cookies);
+
+            Connection.Response res = connection.execute();
 
             ObjectMapper mapper = new ObjectMapper();
             JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
@@ -48,13 +49,14 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
     public Optional<Map<String, String>> login(String id, String password, SessionInfo sessionInfo) {
         String url = "***REMOVED***?user_id=" + id + "&user_pwd=" + password;
         Map<String, String> cookies = null;
+        System.out.println("login 작동");
         if(sessionInfo != null) {
             cookies = sessionInfo.getMobileCookies();
         }
 
         //쿠키가 원래 없거나 쿠키가 있는데 유효 안하면 쿠키 만들기
         try {
-            if(getMyScholarship(cookies).get() != null) {
+            if(getMyScholarship(cookies).isPresent()) {
                 // 모바일 세션은 유효하므로 발급하지 않음
                 System.out.println("기존 것이 유효해서 발급하지 않음");
                 return Optional.ofNullable(cookies);
