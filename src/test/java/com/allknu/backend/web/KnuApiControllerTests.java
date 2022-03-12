@@ -4,18 +4,17 @@ import com.allknu.backend.provider.service.KnuMobileApiService;
 import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.SessionInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -25,22 +24,21 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @SpringBootTest
+@AutoConfigureMockMvc
 @ActiveProfiles("test")
 @TestPropertySource("classpath:/secrets/personal-account-secrets.properties")
 public class KnuApiControllerTests {
-    private MockMvc mockMvc;
     @Autowired
-    private  KnuApiController knuApiController;
+    private MockMvc mockMvc;
 
-    @BeforeEach
-    public void init(){
-        this.mockMvc = MockMvcBuilders.standaloneSetup(knuApiController).build();
-    }
+    @Value("${knu.id}")
+    private String id;
+    @Value("${knu.password}")
+    private String password;
+
     @DisplayName("모바일 세션 유효 시 재발급 방지 테스트")
     @Test
     void login() throws Exception{
-        String id ="";
-        String password = "";
         // 기존 서비스로 모바일 세션을 받아온다.
         KnuMobileApiService knuMobileApiService = new KnuMobileApiService();
         Map<String, String> mobileCookies = knuMobileApiService.login(id,password,null).orElseGet(()->null);
