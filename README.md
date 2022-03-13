@@ -28,4 +28,8 @@ docker build -t all-knu-backend .
 ```bash
 docker run -e "SPRING_PROFILES_ACTIVE=local" -d -p 8080:8080 -t all-knu-backend
 ```
+### option
+- 컨테이너 이름 지정 `--name`
+- docker network 지정 `--net`
+
 ![포스터 (2)](https://user-images.githubusercontent.com/35598710/146746726-6032219a-f47d-4c1e-b996-ec7f5252adb7.png)
