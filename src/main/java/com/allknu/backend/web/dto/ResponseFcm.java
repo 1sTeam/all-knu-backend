@@ -30,4 +30,12 @@ public class ResponseFcm {
                     .build();
         }
     }
+
+    @Builder
+    @Data
+    public static class SubscribeType {
+        private String topic;
+        private String korean;
+        private String team;
+    }
 }
