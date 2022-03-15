@@ -1,5 +1,6 @@
 package com.allknu.backend;
 
+import com.allknu.backend.core.types.SubscribeType;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Connection;
@@ -17,7 +18,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 class BackendApplicationTests {
 
 	@Test
@@ -42,47 +43,6 @@ class BackendApplicationTests {
 			}
 
 		} catch (IOException e) {
-			System.out.println(e);
-		}
-
-	}
-
-	@Test
-	void loginKnuTest() {
-		String url = "***REMOVED***?user_id=201704017&user_pwd=1234";
-		try {
-
-			Connection.Response res = Jsoup.connect(url)
-					.method(Connection.Method.GET)
-					.ignoreContentType(true)
-					.userAgent("***REMOVED***")
-					.execute();
-
-			System.out.println(res.body());
-			ObjectMapper mapper = new ObjectMapper();
-			JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
-
-			if(jsonNode.get("result").toString().equals("\"success\"")) {
-				System.out.println("로그인 성공");
-				Map<String, String> cookies = res.cookies();
-
-				for( Map.Entry<String, String> elem : cookies.entrySet() ){
-					System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
-				}
-				//시간표 조회 테스트
-				url = "***REMOVED***";
-				Connection.Response timeRes = Jsoup.connect(url)
-						.method(Connection.Method.GET)
-						.ignoreContentType(true)
-						.cookies(cookies) // 로그인 쿠키 삽입
-						.userAgent("***REMOVED***")
-						.execute();
-
-				System.out.println(timeRes.body());// 결과
-			} else {
-				System.out.println("로그인 실패");
-			}
- 		} catch (IOException e) {
 			System.out.println(e);
 		}
 	}
