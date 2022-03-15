@@ -14,7 +14,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -49,5 +49,24 @@ public class FCMApiService implements FCMApiServiceInterface {
     public Optional<Page<ResponseFcm.Log>> getAllFcmLog(Pageable pageable) {
         Page<FirebaseLog> logs = firebaseLogRepository.findAll(pageable);
         return Optional.ofNullable(logs.map(ResponseFcm.Log::of));
+    }
+
+    @Override
+    public List<ResponseFcm.SubscribeType> getAllKnuSubscribeTypes(String team) {
+        List<ResponseFcm.SubscribeType> list = new LinkedList<>();
+        EnumSet.allOf(com.allknu.backend.core.types.SubscribeType.class)
+                .forEach(type -> {
+                    if(team == null || type.getTeam().equals(team)) {
+                        ResponseFcm.SubscribeType responseDto =
+                                ResponseFcm.SubscribeType
+                                        .builder()
+                                        .topic(type.toString())
+                                        .korean(type.getKorean())
+                                        .team(type.getTeam())
+                                .build();
+                        list.add(responseDto);
+                    }
+                });
+        return list;
     }
 }

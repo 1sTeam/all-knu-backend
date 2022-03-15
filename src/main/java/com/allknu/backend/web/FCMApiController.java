@@ -14,13 +14,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.validation.Valid;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -70,6 +68,30 @@ public class FCMApiController {
                 .status(HttpStatus.OK.value())
                 .message("fcm 로그 조회 요청 성공")
                 .list(logs)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/knu/subscribe")
+    public ResponseEntity<CommonResponse> getSubscribeTypes() {
+
+        List<ResponseFcm.SubscribeType> list = fcmApiService.getAllKnuSubscribeTypes(null);
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("구독 토픽 조회 성공")
+                .list(list)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/knu/subscribe/{team}")
+    public ResponseEntity<CommonResponse> getSubscribeTypes(@PathVariable("team") String team) {
+
+        List<ResponseFcm.SubscribeType> list = fcmApiService.getAllKnuSubscribeTypes(team);
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("구독 토픽 조회 성공")
+                .list(list)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
