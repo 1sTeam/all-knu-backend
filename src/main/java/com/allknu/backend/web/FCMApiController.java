@@ -71,20 +71,8 @@ public class FCMApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @GetMapping("/knu/subscribe")
-    public ResponseEntity<CommonResponse> getSubscribeTypes() {
-
-        List<ResponseFcm.SubscribeType> list = fcmApiService.getAllKnuSubscribeTypes(null);
-
-        CommonResponse response = CommonResponse.builder()
-                .status(HttpStatus.OK.value())
-                .message("구독 토픽 조회 성공")
-                .list(list)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-    @GetMapping("/knu/subscribe/{team}")
-    public ResponseEntity<CommonResponse> getSubscribeTypes(@PathVariable("team") String team) {
+    @GetMapping(value = {"/knu/subscribe/{team}", "/knu/subscribe"})
+    public ResponseEntity<CommonResponse> getSubscribeTypes(@PathVariable(value = "team", required = false) String team) {
 
         List<ResponseFcm.SubscribeType> list = fcmApiService.getAllKnuSubscribeTypes(team);
 
