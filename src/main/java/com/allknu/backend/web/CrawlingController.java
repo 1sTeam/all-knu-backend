@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -23,9 +24,17 @@ public class CrawlingController {
     private final CrawlingService crawlingService;
     private final KnuMobileApiService knuMobileApiService;
 
-    @GetMapping("/crawling/notice/univ/{page}") // 학교 공지사항 크롤링 요청
-    public ResponseEntity<CommonResponse> getUnivNotice(@PathVariable int page, @RequestParam(value = "type", required = false, defaultValue = "ALL") UnivNoticeType type) {
-        List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(page, type).orElseGet(() -> null);
+    @GetMapping(value = {"/crawling/notice/univ/{type}/{page}", "/crawling/notice/univ/{type}"}) // 학교 공지사항 크롤링 요청
+    public ResponseEntity<CommonResponse> getUnivNotice(@PathVariable String type, @PathVariable(required = false) Optional<Integer> page) {
+
+        UnivNoticeType realType = null;
+        try {
+            realType = UnivNoticeType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            realType = UnivNoticeType.ALL;
+        }
+
+        List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(page.orElseGet(()->1), realType).orElseGet(() -> null);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
