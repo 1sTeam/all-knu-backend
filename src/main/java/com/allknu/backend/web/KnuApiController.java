@@ -34,9 +34,13 @@ public class KnuApiController {
         //학생 정보 긁어오기
         Map<String, String> studentInfo = knuVeriusApiService.getStudentInfo(ssoCookies).orElseThrow(()->new KnuApiCallFailedException());
 
+        // 세션인포 정보 삽입
+        Map<String, Object> sessionInfo = new HashMap<>();
+        sessionInfo.put("mobileCookies", mobileCookies);
+        sessionInfo.put("ssoCookies", ssoCookies);
+
         Map<String, Object> responseList = new HashMap<>();
-        responseList.put("mobileCookies", mobileCookies);
-        responseList.put("ssoCookies", ssoCookies);
+        responseList.put("sessionInfo", sessionInfo);
         responseList.put("studentInfo", studentInfo);
 
         CommonResponse response = CommonResponse.builder()
