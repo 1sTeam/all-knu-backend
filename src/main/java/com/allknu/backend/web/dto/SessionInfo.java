@@ -1,9 +1,7 @@
 package com.allknu.backend.web.dto;
 
 import lombok.*;
-import org.springframework.lang.Nullable;
 
-import javax.validation.constraints.Null;
 import java.util.Map;
 
 @Builder
