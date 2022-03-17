@@ -107,40 +107,22 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
     public Optional<ResponseKnu.TimeTable> getTimeTable(Map<String, String> cookies) {
         ResponseKnu.TimeTable timeTable = null;
 
-        String url = "https://m.kangnam.ac.kr/knusmart/s/s251.do";
-        try {
-            Connection.Response res = Jsoup.connect(url)
-                    .method(Connection.Method.GET)
-                    .ignoreContentType(true)
-                    .cookies(cookies) // 로그인 쿠키 삽입
-                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
-                    .execute();
-
-            System.out.println(res.body());// 결과
-
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
+        JsonNode knuData = getKnuApiJsonData("https://m.kangnam.ac.kr/knusmart/s/s251.do", cookies).orElseGet(()->null);
+        if(knuData != null) {
+            //시간표 가져오기 성공
             List<Object> timeTableList = new ArrayList<>();
-
-            if(jsonNode.get("result").toString().equals("\"success\"")) {
-                //시간표 가져오기 성공
-                if (jsonNode.get("data").isArray()) {
-                    for (final JsonNode objNode : jsonNode.get("data")) {
-                        //시간표 항목들
-                        System.out.println(objNode);
-                        timeTableList.add(objNode);
-                    }
+            if (knuData.get("data").isArray()) {
+                for (final JsonNode objNode : knuData.get("data")) {
+                    //시간표 항목들
+                    System.out.println(objNode);
+                    timeTableList.add(objNode);
                 }
-                timeTable = ResponseKnu.TimeTable.builder()
-                        .data(timeTableList)
-                        .build();
-            } else {
-                //로그인 쿠키가 맞지 않음
-                System.out.println("시간표 조회 실패");
             }
-        } catch (IOException e) {
-            e.printStackTrace();
+            timeTable = ResponseKnu.TimeTable.builder()
+                    .data(timeTableList)
+                    .build();
         }
+
         return Optional.ofNullable(timeTable);
     }
 

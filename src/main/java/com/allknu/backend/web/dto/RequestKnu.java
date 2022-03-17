@@ -22,22 +22,60 @@ public class RequestKnu {
         private String password;
         private SessionInfo sessionInfo;
     }
-
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Logout {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+    }
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Timetable {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+    }
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Period {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+    }
     @Builder
     @Data
     public static class Grade {
         @NotNull(message = "강남대 쿠키 넣어주세요")
-        private Map<String, String> cookies;
+        private SessionInfo sessionInfo;
         private String year; // 년도
         private String semester; // 학기
     }
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Scholarship {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+    }
+    @Builder
+    @Data
     public static class Tuition {
         @NotNull(message = "강남대 쿠키 넣어주세요")
-        private Map<String, String> cookies;
+        private SessionInfo sessionInfo;
         private Integer year; // 년도
         private Integer semester; // 학기
-
+    }
+    @Builder
+    @Data
+    public static class VeriusSatisfaction {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+        @NotNull(message = "페이지를 넣어주세요")
+        private Integer page;
     }
 }
