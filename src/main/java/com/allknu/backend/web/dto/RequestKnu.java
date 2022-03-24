@@ -20,6 +20,16 @@ public class RequestKnu {
         private String id;
         @NotNull(message = "비밀번호가 비었다")
         private String password;
+    }
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Refresh {
+        @NotNull(message = "아이디가 비었다")
+        private String id;
+        @NotNull(message = "비밀번호가 비었다")
+        private String password;
         private SessionInfo sessionInfo;
     }
     @Builder

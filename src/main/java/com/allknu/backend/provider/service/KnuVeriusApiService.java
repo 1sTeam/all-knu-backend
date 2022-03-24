@@ -17,7 +17,7 @@ import java.util.*;
 @Service
 //참인재시스템 verius 오타 아님 ㅎㅎ
 public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
-    private Optional<Map<String, String>> veriusLogin(Map<String, String> ssoCookies) {
+    public Optional<Map<String, String>> veriusLogin(Map<String, String> ssoCookies) {
         //sso쿠키로 참인재 로그인
         String url = "https://verius.kangnam.ac.kr/sso.do";
         Map<String, String> veriusCookies = null;
@@ -37,10 +37,8 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
         return Optional.ofNullable(veriusCookies);
     }
     @Override
-    public Optional<Map<String, String>> getStudentInfo(Map<String, String> ssoCookies) {
+    public Optional<Map<String, String>> getStudentInfo(Map<String, String> veriusCookies) {
         //참인재시스템에서 학과, 학번, 이름 등 학생 정보를 긁어다 준다.
-        //먼저 sso쿠키로 참인재에 로그인한다.
-        Map<String, String> veriusCookies = veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
         //해당 참인재 쿠키로 정보를 긁어온다.
         String url = "https://verius.kangnam.ac.kr/user/Std/MyHm010.do?CURRENT_MENU_CODE=MENU0264&TOP_MENU_CODE=MENU0010";
         Map<String, String> result;
@@ -67,8 +65,7 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
     }
 
     @Override
-    public Optional<List<ResponseKnu.VeriusSatisfaction>> getMyVeriusSatisfactionInfo(Map<String, String> ssoCookies, Integer page) {
-        Map<String, String> veriusCookies = veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
+    public Optional<List<ResponseKnu.VeriusSatisfaction>> getMyVeriusSatisfactionInfo(Map<String, String> veriusCookies, Integer page) {
         if(page <= 0) page = 1;
 
         //해당 참인재 쿠키로 정보를 긁어온다.
@@ -97,6 +94,22 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
                 String satisfactionEndDate = td.get(3).text();
                 String status = td.get(4).text();
 
+                // 만족도조사 링크를 따온다.
+                String link = null;
+                String linkOnClickText = td.get(4).select("a").attr("onclick");
+                int startIdx = linkOnClickText.indexOf("(");
+                int endIdx = linkOnClickText.indexOf(")");
+                if(endIdx - startIdx > 1) {
+                    // 링크가 존재
+                    String[] params = linkOnClickText.substring(startIdx + 1, endIdx).split(",");
+                    for(int i = 0 ; i < params.length ; i++) {
+                        params[i] = params[i].replace("'", "");
+                    }
+                    link = "https://verius.kangnam.ac.kr/user/Ep/Ms/EpMs040D.do?CURRENT_MENU_CODE=MENU0052&TOP_MENU_CODE=MENU0010" +
+                            "&SURVEY_SEQ=" + params[0] + "&SURVEY_GB=" + params[1] + "&INPUT_SEQ=" + params[2];
+                }
+
+
                 // 앞에 strong 태그 내용 삭제, 더 효율적인 방법이 있능가
                 name = name.substring(name.indexOf(" "));
                 endDate = endDate.substring(endDate.indexOf(" "));
@@ -109,6 +122,7 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
                         .operationEndDate(endDate)
                         .satisfactionEndDate(satisfactionEndDate)
                         .status(status)
+                        .link(link)
                         .build();
                 list.add(satisfaction);
             }
