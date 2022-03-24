@@ -46,22 +46,10 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
     }
 
     @Override
-    public Optional<Map<String, String>> login(String id, String password, SessionInfo sessionInfo) {
+    public Optional<Map<String, String>> login(String id, String password) {
         String url = "***REMOVED***?user_id=" + id + "&user_pwd=" + password;
         Map<String, String> cookies = null;
-        System.out.println("login 작동");
-        if(sessionInfo != null) {
-            cookies = sessionInfo.getMobileCookies();
-        }
-
-        //쿠키가 원래 없거나 쿠키가 있는데 유효 안하면 쿠키 만들기
         try {
-            if(getMyScholarship(cookies).isPresent()) {
-                // 모바일 세션은 유효하므로 발급하지 않음
-                System.out.println("기존 것이 유효해서 발급하지 않음");
-                return Optional.ofNullable(cookies);
-            }
-            // 기존 모바일 세션이 유효하지 않으므로 새로 발급
             Connection.Response res = Jsoup.connect(url)
                     .method(Connection.Method.GET)
                     .ignoreContentType(true)
@@ -74,10 +62,6 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
             if(jsonNode.get("result").toString().equals("\"success\"")) {
                 System.out.println("로그인 성공");
                 cookies = res.cookies();
-
-                for( Map.Entry<String, String> elem : cookies.entrySet() ){
-                    System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
-                }
             } else {
                 System.out.println("로그인 실패");
             }
@@ -86,6 +70,21 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
             System.out.println(e);
         }
         return Optional.ofNullable(cookies);
+    }
+
+    @Override
+    public Optional<Map<String, String>> refreshSession(String id, String password, SessionInfo sessionInfo) {
+        Map<String, String> cookies = null;
+        if(sessionInfo != null) {
+            cookies = sessionInfo.getMobileCookies();
+        }
+        if(getMyScholarship(cookies).isPresent()) {
+            // 모바일 세션은 유효하므로 발급하지 않음
+            System.out.println("기존 것이 유효해서 발급하지 않음");
+            return Optional.ofNullable(cookies);
+        }
+        // 기존 모바일 세션이 유효하지 않으므로 새로 발급
+        return login(id, password);
     }
 
     @Override
