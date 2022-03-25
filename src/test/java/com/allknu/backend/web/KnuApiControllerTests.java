@@ -37,29 +37,18 @@ public class KnuApiControllerTests {
     @Value("${knu.password}")
     private String password;
 
-    @DisplayName("모바일 세션 유효 시 재발급 방지 테스트")
+    @DisplayName("로그인 테스트")
     @Test
     void login() throws Exception{
-        // 기존 서비스로 모바일 세션을 받아온다.
-        KnuMobileApiService knuMobileApiService = new KnuMobileApiService();
-        Map<String, String> mobileCookies = knuMobileApiService.login(id,password,null).orElseGet(()->null);
-        System.out.println(mobileCookies == null);
-
-        SessionInfo sessionInfo = SessionInfo.builder()
-                .mobileCookies(mobileCookies).build();
-        // 모바일 세션을 넣어 목을 호출해 세션 재발급 일어나지 않는 것을 확인해본다
         RequestKnu.Login loginDto =RequestKnu.Login.builder()
                 .id(id)
                 .password(password)
-                .sessionInfo(sessionInfo)
                 .build();
 
         Map<String, Object> input = new HashMap<>();
         input.put("id", loginDto.getId());
         input.put("password", loginDto.getPassword());
-        input.put("sessionInfo", loginDto.getSessionInfo());
         ObjectMapper mapper = new ObjectMapper();
-        System.out.println(mapper.writeValueAsString(input));
 
         mockMvc.perform(
                 post("/knu/login")

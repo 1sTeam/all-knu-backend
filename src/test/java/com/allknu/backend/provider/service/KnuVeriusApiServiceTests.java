@@ -27,13 +27,15 @@ public class KnuVeriusApiServiceTests {
     private String id;
     @Value("${knu.password}")
     private String password;
-    private Map<String, String> ssoCookies;
+    private Map<String, String> veriusCookies;
 
     @BeforeAll
     void beforeAll() {
         //testInstance덕에 static 아니여도 됨
-        ssoCookies = knuApiService.ssoLogin(id,password).orElseGet(()->null);
+        Map<String, String> ssoCookies = knuApiService.ssoLogin(id,password).orElseGet(()->null);
         assertNotNull(ssoCookies);
+        veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseGet(()->null);
+        assertNotNull(veriusCookies);
     }
     @AfterAll
     void afterAll() {
@@ -45,11 +47,8 @@ public class KnuVeriusApiServiceTests {
     void getStudentInfoTest() {
         // sso login
 
-        for( Map.Entry<String, String> elem : ssoCookies.entrySet() ){
-            System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
-        }
         //get student info
-        Map<String, String> info = knuVeriusApiService.getStudentInfo(ssoCookies).orElseGet(()->null);
+        Map<String, String> info = knuVeriusApiService.getStudentInfo(veriusCookies).orElseGet(()->null);
         assertNotNull(info);
         System.out.println("정보출력");
         for( Map.Entry<String, String> elem : info.entrySet() ){
@@ -60,11 +59,11 @@ public class KnuVeriusApiServiceTests {
     @DisplayName("만족도 조사 참여 현황 테스트")
     void getSatisfactionTest() {
         //get student info
-        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(ssoCookies, 1).orElseGet(()->null);
+        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(veriusCookies, 1).orElseGet(()->null);
         assertNotNull(list);
         System.out.println("정보출력");
         for( ResponseKnu.VeriusSatisfaction elem : list ){
-            System.out.println(elem.getName()+" "+elem.getNumber()+" "+elem.getSatisfactionEndDate()+" "+elem.getOperationEndDate()+" "+elem.getStatus());
+            System.out.println(elem.getName()+" "+elem.getNumber()+" "+elem.getSatisfactionEndDate()+" "+elem.getOperationEndDate()+" "+elem.getStatus() + " " + elem.getLink());
         }
     }
 }

@@ -59,6 +59,7 @@ public class ResponseKnu {
         private String operationEndDate;
         private String satisfactionEndDate;
         private String status;
+        private String link;
     }
     @Data
     @Builder
