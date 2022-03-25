@@ -11,7 +11,8 @@ import java.util.Optional;
 
 public interface KnuMobileApiServiceInterface {
     Optional<JsonNode> getKnuApiJsonData(String url, Map<String,String> cookies);
-    Optional<Map<String, String>> login(String id, String password,SessionInfo sessionInfo);
+    Optional<Map<String, String>> login(String id, String password);
+    Optional<Map<String, String>> refreshSession(String id, String password,SessionInfo sessionInfo);
     void logout(Map<String, String> cookies);
     Optional<ResponseKnu.TimeTable> getTimeTable(Map<String, String> cookies);
     Optional<ResponseKnu.PeriodUniv> getPeriodOfUniv(Map<String, String> cookies);
