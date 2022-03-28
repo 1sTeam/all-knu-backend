@@ -49,4 +49,13 @@ public class CrawlingServiceTests {
                     }
                 });
     }
+
+    @Test
+    @DisplayName("웹사이트에서 학사일정 크롤링 테스트")
+    void getCalendar(){
+        List<ResponseCrawling.Calendar> list = crawlingService.getKnuCalendar().orElseGet(()->null);
+        for(ResponseCrawling.Calendar calendar:list){
+            System.out.println("학사일정 " +calendar.getDate() + "  "+ calendar.getContent());
+        }
+    }
 }

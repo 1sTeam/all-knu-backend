@@ -170,4 +170,33 @@ public class CrawlingService implements CrawlingServiceInterface {
         }
         return Optional.ofNullable(lists);
     }
+    @Override
+    public Optional<List<ResponseCrawling.Calendar>> getKnuCalendar(){
+        List<ResponseCrawling.Calendar> lists = new ArrayList<>();
+        String url = "https://web.kangnam.ac.kr/menu/02be162adc07170ec7ee034097d627e9.do?tab=2";
+        try{
+            Document doc = Jsoup.connect(url).get();
+            Iterator<Element> rows = doc.select(".cal_list").iterator();
+            while(rows.hasNext()){
+                //월별 날짜와 일정 내용
+                Iterator<Element> tr = rows.next().select("div.tbl.typeA.calendal_list > table > tbody > tr").iterator();
+                while(tr.hasNext()){
+                    //날짜
+                    String date = tr.next().select("th").text();
+                    //일정내용
+                    String content = tr.next().select("td").text();
+                    System.out.println("학사일정 나온다--------------------------------일정:" +date +"내용:"+ content);
+                    ResponseCrawling.Calendar calendar = ResponseCrawling.Calendar.builder()
+                            .date(date)
+                            .content(content)
+                            .build();
+                    lists.add(calendar);
+                }
+            }
+
+        }catch (IOException e){
+            System.out.println(e);
+        }
+        return Optional.ofNullable(lists);
+    }
 }

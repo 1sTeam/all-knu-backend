@@ -17,4 +17,10 @@ public class ResponseCrawling {
         private String views;
         private String number;
     }
+    @Data
+    @Builder
+    public static class Calendar {
+        private String date;
+        private String content;
+    }
 }
