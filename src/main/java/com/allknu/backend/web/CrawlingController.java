@@ -73,11 +73,11 @@ public class CrawlingController {
     }
     @GetMapping("/crawling/calendar")
     public ResponseEntity<CommonResponse> getKnuCalendar(){
-        List<Map<String, Object>> list = crawlingService.getKnuCalendar().orElseGet(()->null);
+        Map<String,List<ResponseCrawling.Calendar>> map = crawlingService.getKnuCalendar().orElseGet(()->null);
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
-                .list(list)
+                .list(map)
                 .build();
         return  new ResponseEntity<>(response,HttpStatus.OK);
     }

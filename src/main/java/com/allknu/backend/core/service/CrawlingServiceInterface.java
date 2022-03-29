@@ -11,5 +11,5 @@ import java.util.Optional;
 public interface CrawlingServiceInterface {
     Optional<List<ResponseCrawling.UnivNotice>> getUnivNotice(int pageNum, UnivNoticeType type);
     Optional<List<ResponseCrawling.UnivNotice>> getMajorDefaultTemplateNotice(int pageNum, MajorNoticeType type);
-    Optional<List<Map<String, Object>>> getKnuCalendar();
+    Optional<Map<String, List<ResponseCrawling.Calendar>>> getKnuCalendar();
 }
