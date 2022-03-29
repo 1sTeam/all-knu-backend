@@ -168,8 +168,8 @@ public class CrawlingService implements CrawlingServiceInterface {
         return Optional.ofNullable(lists);
     }
     @Override
-    public Optional<Map<String, List<ResponseCrawling.Calendar>>> getKnuCalendar(){
-        Map<String, List<ResponseCrawling.Calendar>> monthMap = new LinkedHashMap<>();
+    public Optional<Map<String, List<ResponseCrawling.Schedule>>> getKnuCalendar(){
+        Map<String, List<ResponseCrawling.Schedule>> monthMap = new LinkedHashMap<>();
         String url = "***REMOVED***?tab=2";
         String[] month = {"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
         int idx =0;
@@ -177,18 +177,18 @@ public class CrawlingService implements CrawlingServiceInterface {
             Document doc = Jsoup.connect(url).get();
             Iterator<Element> rows = doc.select(".cal_list").iterator();
             while(rows.hasNext()){
-                List<ResponseCrawling.Calendar> EachMonth_list = new ArrayList<>();
+                List<ResponseCrawling.Schedule> scheduleList = new ArrayList<>();
                 //월별 날짜와 일정 내용
                 Iterator<Element> trs = rows.next().select("div.tbl.typeA.calendal_list > table > tbody > tr").iterator();
                 while(trs.hasNext()){
                     String[] tr = trs.next().text().split(" ");
-                    ResponseCrawling.Calendar calendar = ResponseCrawling.Calendar.builder()
+                    ResponseCrawling.Schedule schedule = ResponseCrawling.Schedule.builder()
                             .date(tr[0])
                             .content(tr[1])
                             .build();
-                    EachMonth_list.add(calendar);
+                    scheduleList.add(schedule);
                 }
-                monthMap.put(month[idx++],EachMonth_list);
+                monthMap.put(month[idx++],scheduleList);
             }
 
         }catch (IOException e){

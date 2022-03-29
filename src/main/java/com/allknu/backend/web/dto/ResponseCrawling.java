@@ -19,7 +19,7 @@ public class ResponseCrawling {
     }
     @Data
     @Builder
-    public static class Calendar {
+    public static class Schedule {
         private String date;
         private String content;
     }
