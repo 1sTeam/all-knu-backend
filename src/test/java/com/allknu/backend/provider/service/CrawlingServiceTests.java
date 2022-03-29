@@ -12,6 +12,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -48,5 +49,13 @@ public class CrawlingServiceTests {
                         System.out.println(notice.getTitle() + notice.getDate() + notice.getViews() + notice.getLink());
                     }
                 });
+    }
+
+    @Test
+    @DisplayName("웹사이트에서 학사일정 크롤링 테스트")
+    void getCalendar(){
+        Map<String, List<ResponseCrawling.Schedule>> list = crawlingService.getKnuCalendar().orElseGet(()->null);
+        System.out.println(list);
+
     }
 }

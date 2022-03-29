@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CrawlingService implements CrawlingServiceInterface {
@@ -169,5 +166,34 @@ public class CrawlingService implements CrawlingServiceInterface {
             System.out.println(e);
         }
         return Optional.ofNullable(lists);
+    }
+    @Override
+    public Optional<Map<String, List<ResponseCrawling.Schedule>>> getKnuCalendar(){
+        Map<String, List<ResponseCrawling.Schedule>> monthMap = new LinkedHashMap<>();
+        String url = "***REMOVED***?tab=2";
+        String[] month = {"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
+        int idx =0;
+        try{
+            Document doc = Jsoup.connect(url).get();
+            Iterator<Element> rows = doc.select(".cal_list").iterator();
+            while(rows.hasNext()){
+                List<ResponseCrawling.Schedule> scheduleList = new ArrayList<>();
+                //월별 날짜와 일정 내용
+                Iterator<Element> trs = rows.next().select("div.tbl.typeA.calendal_list > table > tbody > tr").iterator();
+                while(trs.hasNext()){
+                    String[] tr = trs.next().text().split(" ");
+                    ResponseCrawling.Schedule schedule = ResponseCrawling.Schedule.builder()
+                            .date(tr[0])
+                            .content(tr[1])
+                            .build();
+                    scheduleList.add(schedule);
+                }
+                monthMap.put(month[idx++],scheduleList);
+            }
+
+        }catch (IOException e){
+            System.out.println(e);
+        }
+        return Optional.ofNullable(monthMap);
     }
 }
