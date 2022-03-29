@@ -15,10 +15,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class CrawlingService implements CrawlingServiceInterface {
@@ -171,27 +168,30 @@ public class CrawlingService implements CrawlingServiceInterface {
         return Optional.ofNullable(lists);
     }
     @Override
-    public Optional<List<ResponseCrawling.Calendar>> getKnuCalendar(){
-        List<ResponseCrawling.Calendar> lists = new ArrayList<>();
+    public Optional<List<Map<String, Object>>> getKnuCalendar(){
+        List<Map<String, Object>> lists = new ArrayList<>();
         String url = "https://web.kangnam.ac.kr/menu/02be162adc07170ec7ee034097d627e9.do?tab=2";
+        String[] month = {"Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"};
+        int idx =0;
         try{
             Document doc = Jsoup.connect(url).get();
             Iterator<Element> rows = doc.select(".cal_list").iterator();
             while(rows.hasNext()){
+                List<ResponseCrawling.Calendar> EachMonth_list = new ArrayList<>();
+                Map<String, Object> map = new HashMap<>();
                 //월별 날짜와 일정 내용
-                Iterator<Element> tr = rows.next().select("div.tbl.typeA.calendal_list > table > tbody > tr").iterator();
-                while(tr.hasNext()){
-                    //날짜
-                    String date = tr.next().select("th").text();
-                    //일정내용
-                    String content = tr.next().select("td").text();
-                    System.out.println("학사일정 나온다--------------------------------일정:" +date +"내용:"+ content);
+                Iterator<Element> trs = rows.next().select("div.tbl.typeA.calendal_list > table > tbody > tr").iterator();
+                while(trs.hasNext()){
+                    String[] tr = trs.next().text().split(" ");
                     ResponseCrawling.Calendar calendar = ResponseCrawling.Calendar.builder()
-                            .date(date)
-                            .content(content)
+                            .date(tr[0])
+                            .content(tr[1])
                             .build();
-                    lists.add(calendar);
+                    EachMonth_list.add(calendar);
                 }
+                map.put(month[idx++],EachMonth_list);
+                lists.add(map);
+
             }
 
         }catch (IOException e){
