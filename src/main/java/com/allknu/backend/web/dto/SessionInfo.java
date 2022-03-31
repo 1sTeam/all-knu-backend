@@ -11,4 +11,5 @@ import java.util.Map;
 public class SessionInfo {
     private Map<String, String> mobileCookies;
     private Map<String, String> ssoCookies;
+    private Map<String, String> veriusCookies;
 }

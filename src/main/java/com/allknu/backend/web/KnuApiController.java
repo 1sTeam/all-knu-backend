@@ -172,7 +172,7 @@ public class KnuApiController {
     public ResponseEntity<CommonResponse> getKnuVeriusSatisfaction(@RequestBody RequestKnu.VeriusSatisfaction veriusSatisfaction) {
 
         List<ResponseKnu.VeriusSatisfaction> list
-                = knuVeriusApiService.getMyVeriusSatisfactionInfo(veriusSatisfaction.getSessionInfo().getSsoCookies(), veriusSatisfaction.getPage()).orElseThrow(()->new KnuApiCallFailedException());
+                = knuVeriusApiService.getMyVeriusSatisfactionInfo(veriusSatisfaction.getSessionInfo().getVeriusCookies(), veriusSatisfaction.getPage()).orElseThrow(()->new KnuApiCallFailedException());
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
