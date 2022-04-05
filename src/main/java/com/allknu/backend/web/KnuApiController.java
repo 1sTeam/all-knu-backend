@@ -55,8 +55,6 @@ public class KnuApiController {
     }
     @PostMapping("/knu/login/staff")
     public ResponseEntity<CommonResponse> knuStaffLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
-        //모바일 로그인
-        Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         //통합 SSO 로그인
         Map<String, String> ssoCookies = knuApiService.ssoLogin(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         // 참인재 로그인
@@ -64,7 +62,6 @@ public class KnuApiController {
 
         // 세션인포 정보 삽입
         Map<String, Object> sessionInfo = new HashMap<>();
-        sessionInfo.put("mobileCookies", mobileCookies);
         sessionInfo.put("ssoCookies", ssoCookies);
         sessionInfo.put("veriusCookies", veriusCookies);
 
