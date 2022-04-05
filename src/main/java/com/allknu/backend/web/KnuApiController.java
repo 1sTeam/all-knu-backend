@@ -53,6 +53,31 @@ public class KnuApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @PostMapping("/knu/login/staff")
+    public ResponseEntity<CommonResponse> knuStaffLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
+        //모바일 로그인
+        Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
+        //통합 SSO 로그인
+        Map<String, String> ssoCookies = knuApiService.ssoLogin(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
+        // 참인재 로그인
+        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
+
+        // 세션인포 정보 삽입
+        Map<String, Object> sessionInfo = new HashMap<>();
+        sessionInfo.put("mobileCookies", mobileCookies);
+        sessionInfo.put("ssoCookies", ssoCookies);
+        sessionInfo.put("veriusCookies", veriusCookies);
+
+        Map<String, Object> responseList = new HashMap<>();
+        responseList.put("sessionInfo", sessionInfo);
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("로그인 성공")
+                .list(responseList)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
     @PostMapping("/knu/refresh/session")
     public ResponseEntity<CommonResponse> knuRefreshSession(@Valid @RequestBody RequestKnu.Refresh refreshDto) {
         //모바일은 유효여부 판단 후 사용하고 나머지는 새로 만든다
