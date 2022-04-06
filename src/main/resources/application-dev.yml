@@ -28,4 +28,4 @@ spring:
     bootstrap-servers: kafka:9092
     consumer:
       group-id: all-knu-backend
-      auto-offset-reset: earliest
+      auto-offset-reset: latest
