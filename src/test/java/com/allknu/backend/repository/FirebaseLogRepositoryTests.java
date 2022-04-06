@@ -13,7 +13,7 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
-@ActiveProfiles("local")
+@ActiveProfiles("test")
 public class FirebaseLogRepositoryTests {
     @Autowired
     private FirebaseLogRepository firebaseLogRepository;
