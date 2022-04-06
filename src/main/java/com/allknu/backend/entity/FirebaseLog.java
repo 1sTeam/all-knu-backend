@@ -8,16 +8,16 @@ import org.hibernate.annotations.CreationTimestamp;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name="FCMLog")
+@Table(name="fcm_log")
 @Entity
 @Getter
 @NoArgsConstructor
 public class FirebaseLog {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "adminEmail")
+    @Column(name = "admin_email")
     private String adminEmail;
 
     @Column(name = "title")
