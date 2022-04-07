@@ -63,14 +63,14 @@ pipeline {
 		}
 	   }
 	}
-	stage('create application-${env.PROFILE} properties by aws parameter store') {
+	stage("create application-${env.PROFILE} properties by aws parameter store") {
     		steps {
     			dir('src/main/resources') {
     				withAWSParameterStore(credentialsId: 'aws-all-knu',
                    				path: "/all-knu/properties/${env.PROFILE}",
                    				naming: 'basename',
                    				regionName: 'ap-northeast-2') {
-                                    writeFile file: 'application-${env.PROFILE}.properties', text: "${env.all-knu-backend}"
+                                    writeFile file: "application-${env.PROFILE}.properties", text: "${env.BACKEND}"
                 		   }
     		    }
             }
