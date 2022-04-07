@@ -12,6 +12,8 @@ import org.jsoup.select.Elements;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
@@ -133,5 +135,60 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
             throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(list);
+    }
+
+    @Override
+    public Optional<List<ResponseKnu.MyVeriusProgram>> getMyVeriusProgram(Map<String, String> veriusCookies, int page) {
+        List<ResponseKnu.MyVeriusProgram> lists = new ArrayList<>();
+
+        String url = "***REMOVED***?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&CURR_PAGE="+page;
+        //크롤링하기
+        try{
+            Document doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+                    .cookies(veriusCookies)
+                    .get();
+
+            Iterator<Element> rows = doc.select("#frm > div > div > table > tbody > tr").iterator();
+            while(rows.hasNext()) {
+                Element target = rows.next();
+                Elements td = target.select("td"); // tr의 td들
+                Elements num= target.select("a");// title
+                String title = td.get(2).text();     //제목
+                String[] number = num.get(0).attr("href").split("'");
+                String applicationDate1 = td.get(9).text();     //신청일
+                String[] operationPeriod = td.get(4).text().split("~");     //운영기간
+                String department = td.get(5).text();
+                String link = null;         //제목 링크
+                if("P" == number[3]){
+                    link = "***REMOVED***?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&PRM_SEQ="+number[1];
+                }else{
+                    link = "***REMOVED***?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&PRM_SEQ="+number[1];
+                }
+
+                SimpleDateFormat operationFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
+                SimpleDateFormat applicationFormatter = new SimpleDateFormat("yyyy.MM.dd");
+
+                Date applicationDate = applicationFormatter.parse(applicationDate1);    //신청일
+                Date operationPeriodStart = operationFormatter.parse(operationPeriod[0]);    //운영시작
+                Date operationPeriodEnd = operationFormatter.parse(operationPeriod[1]);  //운영종료
+
+                ResponseKnu.MyVeriusProgram myVeriusProgram = ResponseKnu.MyVeriusProgram.builder()
+                        .department(department)
+                        .link(link)
+                        .number(number[1])
+                        .applicationDate(applicationDate)
+                        .operationPeriodStart(operationPeriodStart)
+                        .operationPeriodEnd(operationPeriodEnd)
+                        .title(title)
+                        .build();
+                lists.add(myVeriusProgram);
+                System.out.println(lists);
+            }
+        } catch (IOException | ParseException e){
+            System.out.println(e);
+
+        }
+        return Optional.ofNullable(lists);
     }
 }

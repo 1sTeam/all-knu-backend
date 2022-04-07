@@ -52,6 +52,15 @@ public class RequestKnu {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
+    public static class MyVeriusProgram {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+        private int page;
+    }
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Period {
         @NotNull(message = "강남대 쿠키 넣어주세요")
         private SessionInfo sessionInfo;
