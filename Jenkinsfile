@@ -9,7 +9,7 @@ pipeline {
         TARGET_BRANCH = 'main'
         IMAGE_NAME = 'all-knu-backend'
         CONTAINER_NAME = 'all-knu-backend'
-        PROFILE = 'test'
+        PROFILE = 'prod'
 	DOCKER_NETWORK = 'haproxy-net'
     }
     stages{
@@ -47,7 +47,7 @@ pipeline {
 		steps {
 			dir('src/main/resources/secrets') {
 				withAWSParameterStore(credentialsId: 'aws-all-knu',
-               				path: "/all-knu/jwt_${env.PROFILE}",
+               				path: "/all-knu/jwt/${env.PROFILE}",
                				naming: 'basename',
                				regionName: 'ap-northeast-2') {
                                 writeFile file: 'jwt-secrets.properties', text: "${env.KEY}"
@@ -63,6 +63,26 @@ pipeline {
 		}
 	   }
 	}
+	stage('create application-${env.PROFILE} properties by aws parameter store') {
+    		steps {
+    			dir('src/main/resources') {
+    				withAWSParameterStore(credentialsId: 'aws-all-knu',
+                   				path: "/all-knu/properties/${env.PROFILE}",
+                   				naming: 'basename',
+                   				regionName: 'ap-northeast-2') {
+                                    writeFile file: 'application-${env.PROFILE}.properties', text: "${env.all-knu-backend}"
+                		   }
+    		    }
+            }
+    	   post {
+    		success {
+    		   echo 'success create secret file'
+    		}
+    		failure {
+    		   error 'fail create secret file'
+    		}
+    	   }
+    	}
 	stage('building by maven') {
 		steps{
 		 sh '''
