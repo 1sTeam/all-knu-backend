@@ -66,4 +66,15 @@ public class KnuVeriusApiServiceTests {
             System.out.println(elem.getName()+" "+elem.getNumber()+" "+elem.getSatisfactionEndDate()+" "+elem.getOperationEndDate()+" "+elem.getStatus() + " " + elem.getLink());
         }
     }
+    @Test
+    @DisplayName("참여 비교과 조회 테스트")
+    void getMyVeriusProgramTest() {
+        //get student info
+        List<ResponseKnu.MyVeriusProgram> list = knuVeriusApiService.getMyVeriusProgram(veriusCookies, 1).orElseGet(()->null);
+        //assertNotNull(list);
+        System.out.println("정보출력--------------------");
+        for( ResponseKnu.MyVeriusProgram elem : list ){
+            System.out.println(elem.getDepartment()+" "+elem.getTitle()+" "+elem.getNumber()+" "+elem.getApplicationDate()+" "+elem.getOperationPeriodStart()+" "+elem.getOperationPeriodEnd() + " " + elem.getLink());
+        }
+    }
 }

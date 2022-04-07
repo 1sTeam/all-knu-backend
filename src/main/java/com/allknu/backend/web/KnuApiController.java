@@ -203,4 +203,16 @@ public class KnuApiController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+    @PostMapping("/knu/verius/program/participate")
+    public ResponseEntity<CommonResponse> getMyVeriusProgram(@RequestBody RequestKnu.MyVeriusProgram myVeriusProgram){
+        List<ResponseKnu.MyVeriusProgram> list
+                = knuVeriusApiService.getMyVeriusProgram(myVeriusProgram.getSessionInfo().getVeriusCookies(), myVeriusProgram.getPage()).orElseThrow(()->new KnuApiCallFailedException());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("조회 성공")
+                .list(list)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }

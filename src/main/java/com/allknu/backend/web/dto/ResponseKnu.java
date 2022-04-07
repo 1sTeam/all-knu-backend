@@ -3,6 +3,7 @@ package com.allknu.backend.web.dto;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.Date;
 import java.util.List;
 
 public class ResponseKnu {
@@ -60,6 +61,17 @@ public class ResponseKnu {
         private String satisfactionEndDate;
         private String status;
         private String link;
+    }
+    @Data
+    @Builder
+    public static class MyVeriusProgram {
+        private String number;                  //번호(fnDetail, 식별자)
+        private String title;                   //제목
+        private Date applicationDate;           //신청일
+        private Date operationPeriodStart;      //운영기간 시작
+        private Date operationPeriodEnd;        //운영기간 끝
+        private String department;              //부서
+        private String link;                    //제목 링크
     }
     @Data
     @Builder
