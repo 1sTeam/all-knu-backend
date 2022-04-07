@@ -63,7 +63,7 @@ pipeline {
 		}
 	   }
 	}
-	stage("create application-${env.PROFILE} properties by aws parameter store") {
+	stage('create application-${env.PROFILE} properties by aws parameter store') {
     		steps {
     			dir('src/main/resources') {
     				withAWSParameterStore(credentialsId: 'aws-all-knu',
