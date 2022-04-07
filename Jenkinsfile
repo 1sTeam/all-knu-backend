@@ -70,7 +70,7 @@ pipeline {
                    				path: "/all-knu/properties/${env.PROFILE}",
                    				naming: 'basename',
                    				regionName: 'ap-northeast-2') {
-                                    writeFile file: "application-${env.PROFILE}.properties", text: "${env.BACKEND}"
+                                    writeFile file: "application-${env.PROFILE}.yml", text: "${env.BACKEND}"
                 		   }
     		    }
             }
