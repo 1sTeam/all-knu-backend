@@ -3,6 +3,7 @@ package com.allknu.backend.provider.service;
 import com.allknu.backend.core.service.FCMApiServiceInterface;
 import com.allknu.backend.entity.FirebaseLog;
 import com.allknu.backend.kafka.MessageProducer;
+import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMSubscribeMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import com.allknu.backend.repository.FirebaseLogRepository;
@@ -22,11 +23,28 @@ public class FCMApiService implements FCMApiServiceInterface {
     private final MessageProducer messageProducer; // FCM 마이크로서비스로 보내기 위한 카프카 프로듀서
     private final FirebaseLogRepository firebaseLogRepository;
 
+    @Deprecated
     @Transactional
     @Override
     public void pushToKafkaWebMessage(String email, FCMWebMessage message) {
         //push
-        messageProducer.sendFCMMessage(message);
+        messageProducer.sendFCMWebMessage(message);
+
+        //log 등록
+        FirebaseLog log = FirebaseLog.builder()
+                .adminEmail(email)
+                .title(message.getTitle())
+                .body(message.getBody())
+                .link(message.getClickLink())
+                .build();
+        firebaseLogRepository.save(log);
+    }
+
+    @Transactional
+    @Override
+    public void pushToKafkaMobileMessage(String email, FCMMobileMessage message) {
+        //push
+        messageProducer.sendFCMMobileMessage(message);
 
         //log 등록
         FirebaseLog log = FirebaseLog.builder()
