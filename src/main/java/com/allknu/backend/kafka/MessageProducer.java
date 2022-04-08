@@ -1,5 +1,6 @@
 package com.allknu.backend.kafka;
 
+import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMSubscribeMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import lombok.RequiredArgsConstructor;
@@ -13,10 +14,15 @@ public class MessageProducer {
     private static final String FCM_SUBSCRIBE_TOPIC = "fcmSubscribe";
     private final KafkaTemplate<String, Object> kafkaTemplate;
 
-    public void sendFCMMessage(FCMWebMessage fcmWebMessage) {
-
+    @Deprecated
+    public void sendFCMWebMessage(FCMWebMessage fcmWebMessage) {
         System.out.println(String.format("Produce message : success" ));
         this.kafkaTemplate.send(FCM_TOPIC, fcmWebMessage);
+    }
+
+    public void sendFCMMobileMessage(FCMMobileMessage fcmMobileMessage) {
+        System.out.println(String.format("Produce message : success" ));
+        this.kafkaTemplate.send(FCM_TOPIC, fcmMobileMessage);
     }
 
     public void sendFCMRequestSubscribeMessage(FCMSubscribeMessage message) {
