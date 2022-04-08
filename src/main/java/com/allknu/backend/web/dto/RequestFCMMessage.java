@@ -1,6 +1,10 @@
 package com.allknu.backend.web.dto;
 
 import com.allknu.backend.core.types.SubscribeType;
+import com.allknu.backend.core.types.firebase.AndroidPriority;
+import com.allknu.backend.core.types.firebase.ApnsPriority;
+import com.allknu.backend.core.types.firebase.ApnsPushType;
+import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMSubscribeMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import lombok.Builder;
@@ -24,12 +28,38 @@ public class RequestFCMMessage {
         @NotEmpty(message = "클릭 링크가 비어있다.")
         private String clickLink;
 
-        public FCMWebMessage toFCMRequestMessage() {
+        public FCMWebMessage toFCMWebMessage() {
             return FCMWebMessage.builder()
                     .subscribeTypes(this.subscribeTypes)
                     .title(this.title)
                     .body(this.body)
                     .clickLink(this.clickLink)
+                    .build();
+        }
+    }
+    @Builder
+    @Data
+    public static class Mobile {
+        private List<SubscribeType> subscribeTypes; //보내고자하는 구독 유형 리스트
+        @NotEmpty(message = "제목이 비어있다.")
+        private String title;
+        @NotEmpty(message = "내용이 비어있다.")
+        private String body;
+        @NotEmpty(message = "클릭 링크가 비어있다.")
+        private String clickLink;
+        private ApnsPushType apnsPushType;
+        private ApnsPriority apnsPriority;
+        private AndroidPriority androidPriority;
+
+        public FCMMobileMessage toFCMMobileMessage() {
+            return FCMMobileMessage.builder()
+                    .subscribeTypes(this.subscribeTypes)
+                    .title(this.title)
+                    .body(this.body)
+                    .clickLink(this.clickLink)
+                    .apnsPushType(this.apnsPushType)
+                    .apnsPriority(this.apnsPriority)
+                    .androidPriority(this.androidPriority)
                     .build();
         }
     }
