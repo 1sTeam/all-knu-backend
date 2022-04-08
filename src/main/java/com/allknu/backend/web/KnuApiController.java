@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -213,6 +214,16 @@ public class KnuApiController {
                 .message("조회 성공")
                 .list(list)
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/knu/verius/mileage")
+    public ResponseEntity<CommonResponse>getVeriusmileage(@RequestBody RequestKnu.Mileage mileage){
+        Optional<Map<String,Map<String,Integer>>> list = Optional.ofNullable(knuVeriusApiService.getMileage(mileage.getSessionInfo().getVeriusCookies()).orElseThrow(() -> new KnuApiCallFailedException()));
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("마일리지 조회 성공")
+                .list(list)
+               .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

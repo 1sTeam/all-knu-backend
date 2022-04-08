@@ -83,4 +83,10 @@ public class ResponseKnu {
         private String department;
         private String location;
     }
+    @Data
+    @Builder
+    public static class Mileage {
+        private String semester;
+        private String mileage;
+    }
 }

@@ -1,5 +1,6 @@
 package com.allknu.backend.provider.service;
 
+import com.allknu.backend.web.dto.ResponseCrawling;
 import com.allknu.backend.web.dto.ResponseKnu;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -76,5 +78,12 @@ public class KnuVeriusApiServiceTests {
         for( ResponseKnu.MyVeriusProgram elem : list ){
             System.out.println(elem.getDepartment()+" "+elem.getTitle()+" "+elem.getNumber()+" "+elem.getApplicationDate()+" "+elem.getOperationPeriodStart()+" "+elem.getOperationPeriodEnd() + " " + elem.getLink());
         }
+    }
+    @Test
+    @DisplayName("마일리지 조회 테스트")
+    void getMileage(){
+        Map<String,Map<String,Integer>> list = knuVeriusApiService.getMileage(veriusCookies).orElseGet(()->null);
+        System.out.println(list);
+
     }
 }

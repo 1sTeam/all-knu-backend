@@ -3,12 +3,14 @@ package com.allknu.backend.provider.service;
 import com.allknu.backend.core.service.KnuVeriusApiServiceInterface;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.exception.errors.LoginFailedException;
+import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -191,4 +193,27 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
         }
         return Optional.ofNullable(lists);
     }
-}
+    @Override
+    public Optional<Map<String,Map<String,Integer>>> getMileage(Map<String, String> veriusCookies){
+    Map<String,Map<String,Integer>> response = new HashMap<>();
+    String url = "https://verius.kangnam.ac.kr/user/Std/MyHm0501.do?CURRENT_MENU_CODE=MENU0284&TOP_MENU_CODE=MENU0010";
+        try {//크롤링
+            Document doc = Jsoup.connect(url)
+                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+                    .cookies(veriusCookies)
+                    .get();
+            Iterator<Element> target = doc.select("#right > div.user_sub_data > div:nth-child(2) > table > tbody > tr").iterator();
+            while (target.hasNext()) {
+                String[] td = target.next().text().split(" ");
+                Map<String, Integer> item = response.get(td[0]);
+                if(item == null){
+                    response.put(td[0],new HashMap<>());
+                    item = response.get(td[0]);
+                }
+                item.put(td[1],Integer.valueOf(td[2]));
+            }}catch(IOException e){
+                System.out.println(e);
+            }
+            return Optional.ofNullable(response);
+        }
+    }
