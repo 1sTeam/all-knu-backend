@@ -217,8 +217,8 @@ public class KnuApiController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PostMapping("/knu/verius/mileage")
-    public ResponseEntity<CommonResponse>getVeriusmileage(@RequestBody RequestKnu.Mileage mileage){
-        Optional<Map<String,Map<String,Integer>>> list = Optional.ofNullable(knuVeriusApiService.getMileage(mileage.getSessionInfo().getVeriusCookies()).orElseThrow(() -> new KnuApiCallFailedException()));
+    public ResponseEntity<CommonResponse>getVeriusMileage(@RequestBody RequestKnu.Mileage mileage){
+        Map<String,Map<String,Integer>> list = knuVeriusApiService.getMileage(mileage.getSessionInfo().getVeriusCookies()).orElseThrow(() -> new KnuApiCallFailedException());
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("마일리지 조회 성공")
