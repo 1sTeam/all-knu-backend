@@ -1,6 +1,7 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.CrawlingServiceInterface;
+import com.allknu.backend.core.types.EventNoticeType;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.core.types.UnivNoticeType;
 import com.allknu.backend.web.dto.ResponseCrawling;
@@ -81,7 +82,59 @@ public class CrawlingService implements CrawlingServiceInterface {
 
         return Optional.ofNullable(lists);
     }
+    @Override
+    public Optional<List<ResponseCrawling.EventNotice>> getEventNotice(int pageNum, EventNoticeType type) {
+        List<ResponseCrawling.EventNotice> lists = new ArrayList<>();
 
+        //type에 따라 전체, 학사, 장학, 학습/상담, 취창업 공지 크롤링
+        String url = "***REMOVED***?paginationInfo.currentPageNo="
+                +pageNum+"&searchMenuSeq=" + type.getSearchMenuNumber() + "&searchType=&searchValue=";
+
+        try {
+            Document doc = Jsoup.connect(url).get();
+
+            Iterator<Element> rows = doc.select("div.tbody > ul").iterator();
+            while (rows.hasNext()) {
+                Element target = rows.next();
+                Elements dl = target.select("li > div > dl"); // li안에 div안에 dl들
+                Elements dt = dl.select("dt");  //title
+                Elements span = dl.select("dd > span");  //작성자, 등록일, 조회수
+
+                String title = dt.get(0).text(); // 제목 title
+
+                Element linkElement = dt.get(0).selectFirst("a.detailLink"); // 링크li
+                JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
+                String encMenuSeq = jsonNode.get("encMenuSeq").asText();
+                String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
+                String link = "***REMOVED***?scrtWrtiYn=false&encMenuSeq="
+                        + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
+
+                String[] writer = span.get(0).text().split(" "); // 작성자
+                String[] date = span.get(1).text().split(" "); // date
+                String[] views = span.get(2).text().split(" "); // views
+                String department = writer[1];
+                String tel = writer[writer.length-1];
+
+
+                ResponseCrawling.EventNotice eventsInformation = ResponseCrawling.EventNotice.builder()
+                        .link(link)
+                        .date(date[1])
+                        .writer(writer[2])
+                        .views(views[1])
+                        .department(department)
+                        .tel(tel)
+                        .title(title)
+                        .build();
+
+                lists.add(eventsInformation);
+            }
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+
+        return Optional.ofNullable(lists);
+    }
     @Override
     public Optional<List<ResponseCrawling.UnivNotice>> getMajorDefaultTemplateNotice(int pageNum, MajorNoticeType type) {
         List<ResponseCrawling.UnivNotice> lists = new ArrayList<>();

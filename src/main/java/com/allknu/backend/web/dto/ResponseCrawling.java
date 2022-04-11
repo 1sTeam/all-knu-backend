@@ -17,6 +17,17 @@ public class ResponseCrawling {
         private String views;
         private String number;
     }
+    @Builder
+    @Data
+    public static class EventNotice {
+        private String title;
+        private String link;
+        private String tel;
+        private String writer;
+        private String date;
+        private String views;
+        private String department;
+    }
     @Data
     @Builder
     public static class Schedule {
