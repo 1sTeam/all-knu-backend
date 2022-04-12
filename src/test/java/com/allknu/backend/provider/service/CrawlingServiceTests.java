@@ -30,17 +30,17 @@ public class CrawlingServiceTests {
         List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(1, UnivNoticeType.ALL).orElseGet(()->null);
         for(int i = 0 ; i < notices.size() ; i++) {
             ResponseCrawling.UnivNotice notice = notices.get(i);
-            System.out.println(notice.getTitle() + notice.getDate() + notice.getViews() + notice.getLink());
+            //System.out.println(notice.getTitle() + notice.getDate() + notice.getViews() + notice.getLink());
         }
     }
     @Test
     @DisplayName("행사/안내 크롤링 테스트")
     void getEventNoticeTest() {
-        List<ResponseCrawling.EventNotice> eventNotice = crawlingService.getEventNotice(3, EventNoticeType.SUBURBS).orElseGet(()->null);
+        List<ResponseCrawling.EventNotice> eventNotice = crawlingService.getEventNotice(1200, EventNoticeType.ALL).orElseGet(()->null);
         for(int i = 0 ; i < eventNotice.size() ; i++) {
             ResponseCrawling.EventNotice eventNoticeResult = eventNotice.get(i);
             System.out.println(eventNoticeResult.getTitle()+ "\n" + eventNoticeResult.getDate() + "\n" + eventNoticeResult.getViews() + "\n" + eventNoticeResult.getLink()
-                    + "\n" + eventNoticeResult.getDepartment() + "\n" + eventNoticeResult.getTel() + "\n" + eventNoticeResult.getWriter() + "\n-----------------------------------------------\n\n");
+                    + "\n" + "\n" + eventNoticeResult.getWriter() + "\n-----------------------------------------------\n\n");
         }
     }
 

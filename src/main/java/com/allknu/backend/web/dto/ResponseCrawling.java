@@ -22,11 +22,9 @@ public class ResponseCrawling {
     public static class EventNotice {
         private String title;
         private String link;
-        private String tel;
         private String writer;
         private String date;
         private String views;
-        private String department;
     }
     @Data
     @Builder

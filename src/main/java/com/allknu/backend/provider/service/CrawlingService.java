@@ -93,10 +93,14 @@ public class CrawlingService implements CrawlingServiceInterface {
         try {
             Document doc = Jsoup.connect(url).get();
 
-            Iterator<Element> rows = doc.select("div.tbody > ul").iterator();
+            Iterator<Element> rows = doc.select("div.tbody > ul > li").iterator();
             while (rows.hasNext()) {
                 Element target = rows.next();
-                Elements dl = target.select("li > div > dl"); // li안에 div안에 dl들
+                String noResult = target.attr("class");
+                if(noResult.equals("NO_RESULT")){   //page에 조회 자료가 없는 경우
+                    break;
+                }
+                Elements dl = target.select("div > dl"); // li안에 div안에 dl들
                 Elements dt = dl.select("dt");  //title
                 Elements span = dl.select("dd > span");  //작성자, 등록일, 조회수
 
@@ -108,25 +112,22 @@ public class CrawlingService implements CrawlingServiceInterface {
                 String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
                 String link = "https://web.kangnam.ac.kr/menu/e4058249224f49ab163131ce104214fb.do?scrtWrtiYn=false&encMenuSeq="
                         + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
+                String writer;
+                String date;
+                String views;
+                writer = span.get(0).text().substring(4, span.get(0).text().length()); // 작성자
+                date = span.get(1).text().substring(4, span.get(1).text().length()); // date
+                views = span.get(2).text().substring(4,span.get(2).text().length()); // views
 
-                String[] writer = span.get(0).text().split(" "); // 작성자
-                String[] date = span.get(1).text().split(" "); // date
-                String[] views = span.get(2).text().split(" "); // views
-                String department = writer[1];
-                String tel = writer[writer.length-1];
-
-
-                ResponseCrawling.EventNotice eventsInformation = ResponseCrawling.EventNotice.builder()
+                ResponseCrawling.EventNotice eventNotice = ResponseCrawling.EventNotice.builder()
                         .link(link)
-                        .date(date[1])
-                        .writer(writer[2])
-                        .views(views[1])
-                        .department(department)
-                        .tel(tel)
+                        .date(date)
+                        .writer(writer)
+                        .views(views)
                         .title(title)
                         .build();
 
-                lists.add(eventsInformation);
+                lists.add(eventNotice);
             }
         }
         catch (IOException e) {
