@@ -112,12 +112,9 @@ public class CrawlingService implements CrawlingServiceInterface {
                 String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
                 String link = "https://web.kangnam.ac.kr/menu/e4058249224f49ab163131ce104214fb.do?scrtWrtiYn=false&encMenuSeq="
                         + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
-                String writer;
-                String date;
-                String views;
-                writer = span.get(0).text().substring(4, span.get(0).text().length()); // 작성자
-                date = span.get(1).text().substring(4, span.get(1).text().length()); // date
-                views = span.get(2).text().substring(4,span.get(2).text().length()); // views
+                String writer = span.get(0).text().substring(4, span.get(0).text().length()); // 작성자
+                String date = span.get(1).text().substring(4, span.get(1).text().length()); // date
+                String views = span.get(2).text().substring(4,span.get(2).text().length()); // views
 
                 ResponseCrawling.EventNotice eventNotice = ResponseCrawling.EventNotice.builder()
                         .link(link)
