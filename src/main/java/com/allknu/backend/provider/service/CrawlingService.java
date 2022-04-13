@@ -1,6 +1,7 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.CrawlingServiceInterface;
+import com.allknu.backend.core.types.EventNoticeType;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.core.types.UnivNoticeType;
 import com.allknu.backend.web.dto.ResponseCrawling;
@@ -81,7 +82,57 @@ public class CrawlingService implements CrawlingServiceInterface {
 
         return Optional.ofNullable(lists);
     }
+    @Override
+    public Optional<List<ResponseCrawling.EventNotice>> getEventNotice(int pageNum, EventNoticeType type) {
+        List<ResponseCrawling.EventNotice> lists = new ArrayList<>();
 
+        //type에 따라 전체, 학사, 장학, 학습/상담, 취창업 공지 크롤링
+        String url = "https://web.kangnam.ac.kr/menu/e4058249224f49ab163131ce104214fb.do?paginationInfo.currentPageNo="
+                +pageNum+"&searchMenuSeq=" + type.getSearchMenuNumber() + "&searchType=&searchValue=";
+
+        try {
+            Document doc = Jsoup.connect(url).get();
+
+            Iterator<Element> rows = doc.select("div.tbody > ul > li").iterator();
+            while (rows.hasNext()) {
+                Element target = rows.next();
+                String noResult = target.attr("class");
+                if(noResult.equals("NO_RESULT")){   //page에 조회 자료가 없는 경우
+                    break;
+                }
+                Elements dl = target.select("div > dl"); // li안에 div안에 dl들
+                Elements dt = dl.select("dt");  //title
+                Elements span = dl.select("dd > span");  //작성자, 등록일, 조회수
+
+                String title = dt.get(0).text(); // 제목 title
+
+                Element linkElement = dt.get(0).selectFirst("a.detailLink"); // 링크li
+                JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
+                String encMenuSeq = jsonNode.get("encMenuSeq").asText();
+                String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
+                String link = "https://web.kangnam.ac.kr/menu/e4058249224f49ab163131ce104214fb.do?scrtWrtiYn=false&encMenuSeq="
+                        + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
+                String writer = span.get(0).text().substring(4, span.get(0).text().length()); // 작성자
+                String date = span.get(1).text().substring(4, span.get(1).text().length()); // date
+                String views = span.get(2).text().substring(4,span.get(2).text().length()); // views
+
+                ResponseCrawling.EventNotice eventNotice = ResponseCrawling.EventNotice.builder()
+                        .link(link)
+                        .date(date)
+                        .writer(writer)
+                        .views(views)
+                        .title(title)
+                        .build();
+
+                lists.add(eventNotice);
+            }
+        }
+        catch (IOException e) {
+            System.out.println(e);
+        }
+
+        return Optional.ofNullable(lists);
+    }
     @Override
     public Optional<List<ResponseCrawling.UnivNotice>> getMajorDefaultTemplateNotice(int pageNum, MajorNoticeType type) {
         List<ResponseCrawling.UnivNotice> lists = new ArrayList<>();
