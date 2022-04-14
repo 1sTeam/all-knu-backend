@@ -28,6 +28,7 @@ public class KnuApiController {
 
     @PostMapping("/knu/login")
     public ResponseEntity<CommonResponse> knuLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
+        if(loginDto.getId().charAt(0) == '1') throw new LoginFailedException(); // 사번이 1로 시작하는 교직원은 이용불가
         //모바일 로그인
         Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         //통합 SSO 로그인
