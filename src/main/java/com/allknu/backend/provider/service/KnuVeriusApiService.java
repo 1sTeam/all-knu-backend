@@ -209,6 +209,9 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
                 if(item == null){
                     response.put(td[0],new HashMap<>());
                     item = response.get(td[0]);
+                    // default 0
+                    item.put("1", 0);
+                    item.put("2", 0);
                 }
                 item.put(td[1],Integer.valueOf(td[2]));
             }}catch(IOException e){
