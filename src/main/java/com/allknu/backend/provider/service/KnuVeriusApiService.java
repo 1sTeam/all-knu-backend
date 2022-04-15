@@ -185,7 +185,6 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
                         .title(title)
                         .build();
                 lists.add(myVeriusProgram);
-                System.out.println(lists);
             }
         } catch (IOException | ParseException e){
             System.out.println(e);
