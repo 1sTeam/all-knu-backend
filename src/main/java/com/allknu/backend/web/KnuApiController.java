@@ -17,6 +17,7 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
@@ -27,6 +28,7 @@ public class KnuApiController {
 
     @PostMapping("/knu/login")
     public ResponseEntity<CommonResponse> knuLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
+        if(loginDto.getId().charAt(0) == '1') throw new LoginFailedException(); // 사번이 1로 시작하는 교직원은 이용불가
         //모바일 로그인
         Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         //통합 SSO 로그인
@@ -213,6 +215,16 @@ public class KnuApiController {
                 .message("조회 성공")
                 .list(list)
                 .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/knu/verius/mileage")
+    public ResponseEntity<CommonResponse>getVeriusMileage(@RequestBody RequestKnu.Mileage mileage){
+        Map<String,Map<String,Integer>> list = knuVeriusApiService.getMileage(mileage.getSessionInfo().getVeriusCookies()).orElseThrow(() -> new KnuApiCallFailedException());
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("마일리지 조회 성공")
+                .list(list)
+               .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 }

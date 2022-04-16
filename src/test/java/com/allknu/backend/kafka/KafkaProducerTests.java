@@ -1,6 +1,7 @@
 package com.allknu.backend.kafka;
 
 import com.allknu.backend.core.types.SubscribeType;
+import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMSubscribeMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import org.junit.jupiter.api.DisplayName;
@@ -23,13 +24,13 @@ public class KafkaProducerTests {
     void requestFCMMessageTest() {
         //given
         List<SubscribeType> subs = Arrays.asList(SubscribeType.CAREER, SubscribeType.SOFTWARE);
-        FCMWebMessage message = FCMWebMessage.builder()
+        FCMMobileMessage message = FCMMobileMessage.builder()
                                         .subscribeTypes(subs)
                                         .title("world")
                                         .body("hello")
                                         .build();
         //when
-        messageProducer.sendFCMMessage(message);
+        messageProducer.sendFCMMobileMessage(message);
     }
 
     @DisplayName("카프카 구독 메시지 전송 테스트")

@@ -121,6 +121,10 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
                     .data(timeTableList)
                     .build();
         }
+        else {
+            //fail
+            System.out.println("시간표 조회 실패");
+        }
 
         return Optional.ofNullable(timeTable);
     }
@@ -181,7 +185,7 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
                     .build();
         } else {
             //fail
-            System.out.println("재학기간 조회 실패");
+            System.out.println("성적 조회 실패");
         }
         return Optional.ofNullable(responseGrade);
     }
@@ -217,7 +221,7 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
             }
         } else {
             //fail
-            System.out.println("조회 실패");
+            System.out.println("학사일정 조회 실패");
         }
         return Optional.ofNullable(list);
     }
@@ -252,7 +256,7 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
             }
         } else {
             //fail
-            System.out.println("조회 실패");
+            System.out.println("장학금 조회 실패");
         }
         return Optional.ofNullable(list);
     }
@@ -290,7 +294,7 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
             }
         } else {
             //fail
-            System.out.println("조회 실패");
+            System.out.println("등록금 조회 실패");
         }
         return Optional.ofNullable(tuition);
     }
@@ -325,7 +329,7 @@ public class KnuMobileApiService implements KnuMobileApiServiceInterface {
             }
         } else {
             //fail
-            System.out.println("조회 실패");
+            System.out.println("교직원 조회 실패");
         }
         return Optional.ofNullable(list);
     }

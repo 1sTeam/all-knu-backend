@@ -12,4 +12,5 @@ public interface KnuVeriusApiServiceInterface {
     Optional<Map<String, String>> getStudentInfo(Map<String, String> veriusCookies);
     Optional<List<ResponseKnu.VeriusSatisfaction>> getMyVeriusSatisfactionInfo(Map<String, String> veriusCookies, Integer page);
     Optional<List<ResponseKnu.MyVeriusProgram>> getMyVeriusProgram(Map<String, String> veriusCookies, int page);
+    Optional<Map<String,Map<String,Integer>>> getMileage(Map<String, String> veriusCookies);
 }

@@ -1,6 +1,8 @@
 package com.allknu.backend.web;
 
 import com.allknu.backend.entity.FirebaseLog;
+import com.allknu.backend.exception.errors.CustomJwtRuntimeException;
+import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import com.allknu.backend.provider.security.JwtAuthToken;
 import com.allknu.backend.provider.security.JwtAuthTokenProvider;
@@ -27,22 +29,49 @@ public class FCMApiController {
     private final FCMApiService fcmApiService;
     private final JwtAuthTokenProvider jwtAuthTokenProvider;
 
+    @Deprecated
     @PostMapping("/fcm/push/web")
     public ResponseEntity<CommonResponse> requestPushNotificationToWeb(@RequestBody @Valid RequestFCMMessage.Web message, HttpServletRequest request) {
+        // 나중에 이 검증을 관리자 마이크로서비스에서 처리하도록 개선해야함, web push 포함
         //토큰에서 이메일 꺼내기
         Optional<String> token = jwtAuthTokenProvider.resolveToken(request);
         String email = null;
+        // 나중에 개선필요
         if(token.isPresent()) {
             JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
+            jwtAuthToken.validate();
             email = jwtAuthToken.getData().getSubject();
-        }
+        } else throw new CustomJwtRuntimeException();
 
-        FCMWebMessage fcmWebMessage = message.toFCMRequestMessage();
+        FCMWebMessage fcmWebMessage = message.toFCMWebMessage();
         fcmApiService.pushToKafkaWebMessage(email, fcmWebMessage);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("fcm 마이크로서비스에 웹 푸쉬 알림 요청 성공")
+                .list(null)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @PostMapping("/fcm/push/mobile")
+    public ResponseEntity<CommonResponse> requestPushNotificationToMobile(@RequestBody @Valid RequestFCMMessage.Mobile message, HttpServletRequest request) {
+        // 나중에 이 검증을 관리자 마이크로서비스에서 처리하도록 개선해야함, web push 포함
+        //토큰에서 이메일 꺼내기
+        Optional<String> token = jwtAuthTokenProvider.resolveToken(request);
+        String email = null;
+        // 나중에 개선필요
+        if(token.isPresent()) {
+            JwtAuthToken jwtAuthToken = jwtAuthTokenProvider.convertAuthToken(token.get());
+            jwtAuthToken.validate();
+            email = jwtAuthToken.getData().getSubject();
+        } else throw new CustomJwtRuntimeException();
+
+        FCMMobileMessage fcmMobileMessage = message.toFCMMobileMessage();
+        fcmApiService.pushToKafkaMobileMessage(email, fcmMobileMessage);
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("fcm 마이크로서비스에 mobile 푸쉬 알림 요청 성공")
                 .list(null)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
