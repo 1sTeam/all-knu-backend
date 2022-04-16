@@ -71,10 +71,12 @@ public class KnuVeriusApiServiceTests {
     @Test
     @DisplayName("참여 비교과 조회 테스트")
     void getMyVeriusProgramTest() {
-        //get student info
-        List<ResponseKnu.MyVeriusProgram> list = knuVeriusApiService.getMyVeriusProgram(veriusCookies, 1).orElseGet(()->null);
-        //assertNotNull(list);
+        List<ResponseKnu.MyVeriusProgram> list = knuVeriusApiService.getMyVeriusProgram(veriusCookies, 10).orElseGet(()->null);
+        assertNotNull(list);
         System.out.println("정보출력--------------------");
+        if(list.size() == 0){       //값이 없을 시 빈배열 반환 확인
+            System.out.println(list);
+        }
         for( ResponseKnu.MyVeriusProgram elem : list ){
             System.out.println(elem.getDepartment()+" "+elem.getTitle()+" "+elem.getNumber()+" "+elem.getApplicationDate()+" "+elem.getOperationPeriodStart()+" "+elem.getOperationPeriodEnd() + " " + elem.getLink());
         }

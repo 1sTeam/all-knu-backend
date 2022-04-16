@@ -155,6 +155,9 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
             while(rows.hasNext()) {
                 Element target = rows.next();
                 Elements td = target.select("td"); // tr의 td들
+                if(td.size()<2){
+                    break;
+                }
                 Elements num= target.select("a");// title
                 String title = td.get(2).text();     //제목
                 String[] number = num.get(0).attr("href").split("'");
@@ -185,7 +188,6 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
                         .title(title)
                         .build();
                 lists.add(myVeriusProgram);
-                System.out.println(lists);
             }
         } catch (IOException | ParseException e){
             System.out.println(e);
