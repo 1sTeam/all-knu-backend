@@ -36,11 +36,11 @@ public class CrawlingServiceTests {
     @Test
     @DisplayName("행사/안내 크롤링 테스트")
     void getEventNoticeTest() {
-        List<ResponseCrawling.EventNotice> eventNotice = crawlingService.getEventNotice(1200, EventNoticeType.ALL).orElseGet(()->null);
+        List<ResponseCrawling.EventNotice> eventNotice = crawlingService.getEventNotice(1, EventNoticeType.ALL).orElseGet(()->null);
         for(int i = 0 ; i < eventNotice.size() ; i++) {
             ResponseCrawling.EventNotice eventNoticeResult = eventNotice.get(i);
             System.out.println(eventNoticeResult.getTitle()+ "\n" + eventNoticeResult.getDate() + "\n" + eventNoticeResult.getViews() + "\n" + eventNoticeResult.getLink()
-                    + "\n" + "\n" + eventNoticeResult.getWriter());
+                    + "\n" + eventNoticeResult.getWriter());
         }
     }
 

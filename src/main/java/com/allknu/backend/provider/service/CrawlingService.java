@@ -110,7 +110,7 @@ public class CrawlingService implements CrawlingServiceInterface {
                 JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
                 String encMenuSeq = jsonNode.get("encMenuSeq").asText();
                 String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
-                String link = "https://web.kangnam.ac.kr/menu/e4058249224f49ab163131ce104214fb.do?scrtWrtiYn=false&encMenuSeq="
+                String link = "https://web.kangnam.ac.kr/menu/board/info/e4058249224f49ab163131ce104214fb.do?scrtWrtiYn=false&encMenuSeq="
                         + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
                 String writer = span.get(0).text().substring(4, span.get(0).text().length()); // 작성자
                 String date = span.get(1).text().substring(4, span.get(1).text().length()); // date
