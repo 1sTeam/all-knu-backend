@@ -97,4 +97,12 @@ public class RequestKnu {
         @NotNull(message = "페이지를 넣어주세요")
         private Integer page;
     }
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class Mileage {
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+    }
 }
