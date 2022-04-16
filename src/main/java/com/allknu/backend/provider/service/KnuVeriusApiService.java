@@ -92,6 +92,9 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
                 Element target = rows.next();
                 Elements td = target.select("td"); // td들
 
+                //끝처리
+                if(td.size() < 5) break;
+
                 String number = td.get(0).text();
                 String name = td.get(1).text();
                 String endDate = td.get(2).text();
@@ -114,11 +117,15 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
                 }
 
 
-                // 앞에 strong 태그 내용 삭제, 더 효율적인 방법이 있능가
-                name = name.substring(name.indexOf(" "));
-                endDate = endDate.substring(endDate.indexOf(" "));
-                satisfactionEndDate = satisfactionEndDate.substring(satisfactionEndDate.lastIndexOf(" "));
-                status = status.substring(status.indexOf(" "));
+                // 더 효율적인 방법이 있능가
+                // 앞에 strong 태그 내용 삭제
+                name = name.substring(name.indexOf(" ") + 1); // 앞에 띄어쓰기 되어있더라, + 1해서 지운다.
+                endDate = endDate.substring(endDate.indexOf(" ") + 1);
+                satisfactionEndDate = satisfactionEndDate.substring(satisfactionEndDate.lastIndexOf(" ") + 1);
+                status = status.substring(status.indexOf(" ") + 1);
+
+                // 만족도조사 종료일이 없다면 위의 결과는 "종료일"이고 그러면 null 넣기
+                if(satisfactionEndDate.equals("종료일")) satisfactionEndDate = null;
 
                 satisfaction = ResponseKnu.VeriusSatisfaction.builder()
                         .number(number)
