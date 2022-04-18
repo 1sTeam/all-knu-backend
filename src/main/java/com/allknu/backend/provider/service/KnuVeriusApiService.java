@@ -1,6 +1,7 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.KnuVeriusApiServiceInterface;
+import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.exception.errors.LoginFailedException;
 import com.allknu.backend.web.dto.RequestKnu;
@@ -59,7 +60,8 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
             result = new HashMap<>();
             result.put("name", dataList.get(0).text());
             result.put("id", dataList.get(1).text());
-            result.put("major", dataList.get(3).text());
+            result.put("major", dataList.get(3).text()); //전공
+            result.put("topic", MajorNoticeType.findByMajor(dataList.get(3).text()).toString());
 
         } catch (IOException e) {
             System.out.println(e);
