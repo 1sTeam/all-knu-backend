@@ -26,8 +26,8 @@ pipeline {
                     echo 'success init in pipeline'
                 }
                 failure {
-                    error 'fail init in pipeline'
                     slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+                    error 'fail init in pipeline'
                 }
             }
         }
@@ -43,8 +43,8 @@ pipeline {
                     echo 'success clone project'
                 }
                 failure {
-                    error 'fail clone project' // exit pipeline
                     slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+                    error 'fail clone project' // exit pipeline
                 }
             }
         }
@@ -64,8 +64,8 @@ pipeline {
 		   echo 'success create secret file'
 		}
 		failure {
-		   error 'fail create secret file'
 		   slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+		   error 'fail create secret file'
 		}
 	   }
 	}
@@ -85,8 +85,8 @@ pipeline {
     		   echo 'success create secret file'
     		}
     		failure {
-    		   error 'fail create secret file'
     		   slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+    		   error 'fail create secret file'
     		}
     	   }
     	}
@@ -101,8 +101,8 @@ pipeline {
 		    echo 'success build'
 		  }
 		  failure {
-		    error 'fail build'
 		    slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+		    error 'fail build'
 		  }
 		}
 	}
@@ -117,8 +117,8 @@ pipeline {
                     echo 'success dockerizing by Dockerfile'
                 }
                 failure {
-                    error 'fail dockerizing by Dockerfile' // exit pipeline
                     slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+                    error 'fail dockerizing by Dockerfile' // exit pipeline
                 }
             }
         }
@@ -129,12 +129,12 @@ pipeline {
             
             post {
                 success {
+                    slackSend (channel: '#jenkins-notification', color: '#00FF00', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 동작 성공")
                     echo 'success deploying all knu backend spring project'
-                    slackSend (channel: '#jenkins-notification', color: '#FFFFFF', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 동작 성공")
                 }
                 failure {
-                    error 'fail deploying all knu backend spring project' // exit pipeline
                     slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+                    error 'fail deploying all knu backend spring project' // exit pipeline
                 }
             }
         }
