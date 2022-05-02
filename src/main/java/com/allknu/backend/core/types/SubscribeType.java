@@ -5,6 +5,7 @@ import lombok.Getter;
 @Getter
 public enum SubscribeType {
 
+    ALL("전체(기본 구독 토픽)", "none"),
     EXCEPTION("예외유형", "none"), //예외
     //부서
     COUNSEL("마음나눔센터", "univ"), // 마음나눔센터
