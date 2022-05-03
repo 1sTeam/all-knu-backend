@@ -232,12 +232,16 @@ public class CrawlingService implements CrawlingServiceInterface {
                 //월별 날짜와 일정 내용
                 Iterator<Element> trs = rows.next().select("div.tbl.typeA.calendal_list > table > tbody > tr").iterator();
                 while(trs.hasNext()){
-                    String[] tr = trs.next().text().split(" ");
+                    Element target = trs.next();
+                    String th = target.select("th").text();
+                    String td = target.select("td").text();
+
                     ResponseCrawling.Schedule schedule = ResponseCrawling.Schedule.builder()
-                            .date(tr[0])
-                            .content(tr[1])
+                            .date(th)
+                            .content(td)
                             .build();
                     scheduleList.add(schedule);
+
                 }
                 monthMap.put(month[idx++],scheduleList);
             }
