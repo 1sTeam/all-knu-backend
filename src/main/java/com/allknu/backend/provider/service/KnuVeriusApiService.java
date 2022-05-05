@@ -61,7 +61,7 @@ public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
             result.put("name", dataList.get(0).text());
             result.put("id", dataList.get(1).text());
             result.put("major", dataList.get(3).text()); //전공
-            //result.put("topic", MajorNoticeType.findByMajor(dataList.get(3).text()).toString());
+            result.put("topic", MajorNoticeType.findByMajor(dataList.get(3).text()).toString());
 
         } catch (IOException e) {
             System.out.println(e);
