@@ -43,7 +43,7 @@ public enum MajorNoticeType {
     public static MajorNoticeType findByMajor(String major){
         return Arrays.stream(MajorNoticeType.values())
                 .filter(majorNoticeType -> majorNoticeType.hasMajor(major))
-                .findAny().orElseThrow();
+                .findAny().orElseGet(()->SOFTWARE); // 학과를 찾지 못한 경우 software 를 디폴트로 설정
     }
     public boolean hasMajor(String major){
         return majorList.stream().anyMatch(m -> m.equals(major));
