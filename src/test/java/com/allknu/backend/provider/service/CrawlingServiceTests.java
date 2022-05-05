@@ -50,14 +50,21 @@ public class CrawlingServiceTests {
         //EnumSet 이용해 모든 타입 단위테스트
         EnumSet.allOf(MajorNoticeType.class)
                 .forEach(type -> {
-                    System.out.println(type.getKorean() + "시작하겠습니다!");
+                    System.out.println(type.getKorean() + "공지사항 출력");
                     List<ResponseCrawling.UnivNotice> notices = crawlingService.getMajorDefaultTemplateNotice(1, type).orElseGet(()->null);
 
-                    assertNotNull(notices);
+                    assertNotEquals(notices.size(), 0);
 
                     for(int i = 0 ; i < notices.size() ; i++) {
                         ResponseCrawling.UnivNotice notice = notices.get(i);
-                        System.out.println(notice.getTitle() + notice.getDate() + notice.getViews() + notice.getLink());
+                        System.out.println("--------item--------");
+                        System.out.println("notice.getTitle(): " + notice.getTitle());
+                        System.out.println("notice.getDate(): " + notice.getDate());
+                        System.out.println("notice.getViews(): " + notice.getViews());
+                        System.out.println("notice.getLink(): " + notice.getLink());
+                        System.out.println("notice.getWriter(): " + notice.getWriter());
+                        System.out.println("notice.getNumber(): " + notice.getNumber());
+                        System.out.println("------------------");
                     }
                 });
     }
