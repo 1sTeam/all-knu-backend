@@ -1,18 +1,16 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.web.dto.ResponseCrawling;
+import com.allknu.backend.core.service.KnuVeriusApiService;
 import com.allknu.backend.web.dto.ResponseKnu;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.IfProfileValue;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -24,7 +22,7 @@ public class KnuVeriusApiServiceTests {
     @Autowired
     private KnuVeriusApiService knuVeriusApiService;
     @Autowired
-    private KnuApiService knuApiService;
+    private KnuApiServiceImpl knuApiService;
     @Value("${knu.id}")
     private String id;
     @Value("${knu.password}")

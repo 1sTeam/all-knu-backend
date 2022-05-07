@@ -1,6 +1,6 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.service.FCMApiServiceInterface;
+import com.allknu.backend.core.service.FCMApiService;
 import com.allknu.backend.entity.FirebaseLog;
 import com.allknu.backend.kafka.MessageProducer;
 import com.allknu.backend.kafka.dto.FCMMobileMessage;
@@ -19,7 +19,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class FCMApiService implements FCMApiServiceInterface {
+public class FCMApiServiceImpl implements FCMApiService {
     private final MessageProducer messageProducer; // FCM 마이크로서비스로 보내기 위한 카프카 프로듀서
     private final FirebaseLogRepository firebaseLogRepository;
 

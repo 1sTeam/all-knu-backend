@@ -1,17 +1,14 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.service.KnuVeriusApiServiceInterface;
+import com.allknu.backend.core.service.KnuVeriusApiService;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
-import com.allknu.backend.exception.errors.LoginFailedException;
-import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -21,7 +18,7 @@ import java.util.*;
 
 @Service
 //참인재시스템 verius 오타 아님 ㅎㅎ
-public class KnuVeriusApiService implements KnuVeriusApiServiceInterface {
+public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
     public Optional<Map<String, String>> veriusLogin(Map<String, String> ssoCookies) {
         //sso쿠키로 참인재 로그인
         String url = "https://verius.kangnam.ac.kr/sso.do";

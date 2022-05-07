@@ -10,7 +10,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.List;
 import java.util.Optional;
 
-public interface FCMApiServiceInterface {
+public interface FCMApiService {
     void pushToKafkaWebMessage(String email, FCMWebMessage message);
     void pushToKafkaMobileMessage(String email, FCMMobileMessage message);
     void pushToKafkaSubscribeMessage(RequestFCMMessage.Subscribe message);

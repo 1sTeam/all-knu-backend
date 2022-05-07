@@ -1,7 +1,6 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.service.KnuMobileApiServiceInterface;
-import com.allknu.backend.exception.errors.LoginFailedException;
+import com.allknu.backend.core.service.KnuMobileApiService;
 import com.allknu.backend.web.dto.ResponseKnu;
 import com.allknu.backend.web.dto.SessionInfo;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -14,7 +13,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-public class KnuMobileApiService implements KnuMobileApiServiceInterface {
+public class KnuMobileApiServiceImpl implements KnuMobileApiService {
 
     @Override
     public Optional<JsonNode> getKnuApiJsonData(String url, Map<String, String> cookies) {

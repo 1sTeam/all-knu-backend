@@ -1,20 +1,18 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.service.KnuApiServiceInterface;
+import com.allknu.backend.core.service.KnuApiService;
 import com.allknu.backend.exception.errors.LoginFailedException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
 @Service
-public class KnuApiService implements KnuApiServiceInterface {
+public class KnuApiServiceImpl implements KnuApiService {
     @Override
     public Optional<Map<String, String>> ssoLogin(String id, String password) {
         Map<String, String> cookies = null;

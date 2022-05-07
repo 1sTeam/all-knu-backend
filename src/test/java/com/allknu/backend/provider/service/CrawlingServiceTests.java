@@ -1,6 +1,7 @@
 package com.allknu.backend.provider.service;
 
 
+import com.allknu.backend.core.service.CrawlingService;
 import com.allknu.backend.core.types.EventNoticeType;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.core.types.UnivNoticeType;

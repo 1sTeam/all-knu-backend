@@ -1,6 +1,6 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.service.CrawlingServiceInterface;
+import com.allknu.backend.core.service.CrawlingService;
 import com.allknu.backend.core.types.EventNoticeType;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.core.types.UnivNoticeType;
@@ -19,7 +19,7 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
-public class CrawlingService implements CrawlingServiceInterface {
+public class CrawlingServiceImpl implements CrawlingService {
 
     private ObjectMapper objectMapper;
 

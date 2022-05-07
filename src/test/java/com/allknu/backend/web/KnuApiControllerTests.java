@@ -1,9 +1,6 @@
 package com.allknu.backend.web;
 
-import com.allknu.backend.provider.service.KnuMobileApiService;
 import com.allknu.backend.web.dto.RequestKnu;
-import com.allknu.backend.web.dto.ResponseKnu;
-import com.allknu.backend.web.dto.SessionInfo;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

@@ -1,5 +1,6 @@
 package com.allknu.backend.provider.service;
 
+import com.allknu.backend.core.service.KnuApiService;
 import com.allknu.backend.exception.errors.LoginFailedException;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
