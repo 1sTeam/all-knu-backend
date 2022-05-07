@@ -1,9 +1,9 @@
 package com.allknu.backend.kafka;
 
 
+import com.allknu.backend.core.service.FCMApiService;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import com.allknu.backend.kafka.dto.MLRequestMessage;
-import com.allknu.backend.provider.service.FCMApiService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.MessageHeaders;

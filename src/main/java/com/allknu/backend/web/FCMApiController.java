@@ -1,12 +1,11 @@
 package com.allknu.backend.web;
 
-import com.allknu.backend.entity.FirebaseLog;
+import com.allknu.backend.core.service.FCMApiService;
 import com.allknu.backend.exception.errors.CustomJwtRuntimeException;
 import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
 import com.allknu.backend.provider.security.JwtAuthToken;
 import com.allknu.backend.provider.security.JwtAuthTokenProvider;
-import com.allknu.backend.provider.service.FCMApiService;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.RequestFCMMessage;
 import com.allknu.backend.web.dto.ResponseFcm;

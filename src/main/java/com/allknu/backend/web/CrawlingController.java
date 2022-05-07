@@ -1,11 +1,11 @@
 package com.allknu.backend.web;
 
 
+import com.allknu.backend.core.service.CrawlingService;
+import com.allknu.backend.core.service.KnuMobileApiService;
 import com.allknu.backend.core.types.EventNoticeType;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.core.types.UnivNoticeType;
-import com.allknu.backend.provider.service.CrawlingService;
-import com.allknu.backend.provider.service.KnuMobileApiService;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.ResponseCrawling;
 import com.allknu.backend.web.dto.ResponseKnu;

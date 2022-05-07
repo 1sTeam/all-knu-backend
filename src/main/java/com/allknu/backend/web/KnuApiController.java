@@ -1,10 +1,13 @@
 package com.allknu.backend.web;
 
+import com.allknu.backend.core.service.KnuApiService;
+import com.allknu.backend.core.service.KnuMobileApiService;
+import com.allknu.backend.core.service.KnuVeriusApiService;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.exception.errors.LoginFailedException;
-import com.allknu.backend.provider.service.KnuApiService;
-import com.allknu.backend.provider.service.KnuMobileApiService;
-import com.allknu.backend.provider.service.KnuVeriusApiService;
+import com.allknu.backend.provider.service.KnuApiServiceImpl;
+import com.allknu.backend.provider.service.KnuMobileApiServiceImpl;
+import com.allknu.backend.provider.service.KnuVeriusApiServiceImpl;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
@@ -17,7 +20,6 @@ import javax.validation.Valid;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor

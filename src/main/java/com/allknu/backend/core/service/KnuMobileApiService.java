@@ -1,6 +1,5 @@
 package com.allknu.backend.core.service;
 
-import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
 import com.allknu.backend.web.dto.SessionInfo;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -9,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
-public interface KnuMobileApiServiceInterface {
+public interface KnuMobileApiService {
     Optional<JsonNode> getKnuApiJsonData(String url, Map<String,String> cookies);
     Optional<Map<String, String>> login(String id, String password);
     Optional<Map<String, String>> refreshSession(String id, String password,SessionInfo sessionInfo);
