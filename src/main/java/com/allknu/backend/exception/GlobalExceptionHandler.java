@@ -4,6 +4,7 @@ package com.allknu.backend.exception;
 import com.allknu.backend.exception.errors.CustomJwtRuntimeException;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.exception.errors.LoginFailedException;
+import com.allknu.backend.exception.errors.StationNameDuplicatedException;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -96,5 +97,17 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.KNU_API_FAILED.getStatus());
+    }
+    @ExceptionHandler(StationNameDuplicatedException.class)
+    protected ResponseEntity<ErrorResponse> handleStationNameDuplicatedException(StationNameDuplicatedException e) {
+        ErrorCode errorCode = ErrorCode.STATION_NAME_DUPLICATED;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
     }
 }
