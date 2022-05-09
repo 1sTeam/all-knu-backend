@@ -5,7 +5,7 @@ pipeline {
     }
     environment {
         REPOSITORY_CREDENTIAL_ID = 'all-knu-backend-jenkins-github-key' // github repository credential name
-        REPOSITORY_URL = 'https://github.com/1sTeam/all-knu-backend.git'
+        REPOSITORY_URL = 'git@github.com:1sTeam/all-knu-backend.git'
         TARGET_BRANCH = 'main'
         IMAGE_NAME = 'all-knu-backend'
         CONTAINER_NAME = 'all-knu-backend'
@@ -16,9 +16,6 @@ pipeline {
         stage('init') {
             steps {
                 echo 'init stage'
-                sh '''
-                docker rm -f $CONTAINER_NAME
-                '''
                 deleteDir()
             }
             post {
@@ -119,6 +116,23 @@ pipeline {
                 failure {
                     slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
                     error 'fail dockerizing by Dockerfile' // exit pipeline
+                }
+            }
+        }
+        stage('rm container') {
+            steps {
+                echo 'rm container stage'
+                sh '''
+                docker rm -f $CONTAINER_NAME
+                '''
+            }
+            post {
+                success {
+                    echo 'success rm container in pipeline'
+                }
+                failure {
+                    slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+                    error 'fail rm container in pipeline'
                 }
             }
         }
