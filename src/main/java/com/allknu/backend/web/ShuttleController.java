@@ -6,10 +6,7 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
@@ -37,6 +34,16 @@ public class ShuttleController {
                 .status(HttpStatus.OK.value())
                 .message("달구지 정거장 조회 성공")
                 .list(stationList)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @DeleteMapping("/knu/shuttle")
+    public ResponseEntity<CommonResponse> deleteStation(@RequestBody Map<String, String>  station){
+        shuttleService.deleteStation(station.get("station"));
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("달구지 정거장 삭제 성공")
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
