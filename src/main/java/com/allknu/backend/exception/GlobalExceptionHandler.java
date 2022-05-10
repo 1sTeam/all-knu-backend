@@ -1,10 +1,7 @@
 package com.allknu.backend.exception;
 
 
-import com.allknu.backend.exception.errors.CustomJwtRuntimeException;
-import com.allknu.backend.exception.errors.KnuApiCallFailedException;
-import com.allknu.backend.exception.errors.LoginFailedException;
-import com.allknu.backend.exception.errors.StationNameDuplicatedException;
+import com.allknu.backend.exception.errors.*;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -101,6 +98,18 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(StationNameDuplicatedException.class)
     protected ResponseEntity<ErrorResponse> handleStationNameDuplicatedException(StationNameDuplicatedException e) {
         ErrorCode errorCode = ErrorCode.STATION_NAME_DUPLICATED;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+    @ExceptionHandler(NotFoundStationException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundStationException(NotFoundStationException e) {
+        ErrorCode errorCode = ErrorCode.NOT_FOUND_STATION;
 
         ErrorResponse response = ErrorResponse.builder()
                 .code(errorCode.getCode())

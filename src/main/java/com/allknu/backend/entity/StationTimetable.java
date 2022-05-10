@@ -6,11 +6,11 @@ import lombok.NoArgsConstructor;
 import javax.persistence.*;
 import java.util.Date;
 
-@Table(name = "timetable")
+@Table(name = "station_timetable")
 @Getter
 @Entity
 @NoArgsConstructor
-public class TimeTable {
+public class StationTimetable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;

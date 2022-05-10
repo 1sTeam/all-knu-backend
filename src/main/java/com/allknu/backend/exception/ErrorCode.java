@@ -16,7 +16,8 @@ public enum ErrorCode {
     REQUEST_PARAMETER_BIND_FAILED(HttpStatus.BAD_REQUEST, "REQ_001", "PARAMETER_BIND_FAILED"),
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH004", "INVALID_JWT_TOKEN."),
     KNU_API_FAILED(HttpStatus.FORBIDDEN, "AUTH_005", "knu api call failed"),
-    STATION_NAME_DUPLICATED(HttpStatus.FORBIDDEN, "SHUTTLE_001", "정거장 이름 중복됨");
+    STATION_NAME_DUPLICATED(HttpStatus.FORBIDDEN, "SHUTTLE_001", "정거장 이름 중복됨"),
+    NOT_FOUND_STATION(HttpStatus.NOT_FOUND,"SHUTTLE_002","정거장이 없음.");
 
     private final String code;
     private final String message;

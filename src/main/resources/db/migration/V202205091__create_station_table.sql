@@ -2,7 +2,7 @@ CREATE TABLE station (
     station_name VARCHAR(63) PRIMARY KEY
 );
 
-CREATE TABLE timetable (
+CREATE TABLE station_timetable (
     id BIGINT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     stop_time TIME,
     station_name VARCHAR(63) NOT NULL,

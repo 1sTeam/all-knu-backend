@@ -18,7 +18,7 @@ public class Station {
     private String station;
 
     @OneToMany(mappedBy = "station")
-    private List<TimeTable> timeTableList = new ArrayList<>(); // 시간표 리스트
+    private List<StationTimetable> stationTimetableList = new ArrayList<>(); // 시간표 리스트
 
     @Builder
     public Station(String station){
