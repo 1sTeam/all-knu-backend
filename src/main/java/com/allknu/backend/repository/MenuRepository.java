@@ -16,5 +16,5 @@ public interface MenuRepository extends JpaRepository<Menu, Long> {
             "join m.restaurant r " +
             "where r.restaurantName = :restaurantName " +
             "and m.mealDate = :date")
-    List<Menu> findAllByMealTypeAndDateAndRestaurant(String restaurantName, Date date);
+    List<Menu> findAllByDateAndRestaurant(String restaurantName, Date date);
 }

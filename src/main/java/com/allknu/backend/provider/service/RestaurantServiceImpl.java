@@ -70,7 +70,7 @@ public class RestaurantServiceImpl implements RestaurantService {
             ResponseRestaurant.FindMenu.FindMenuBuilder itemBuilder = ResponseRestaurant.FindMenu.builder();
 
             itemBuilder.name(restaurants.get(i).getRestaurantName());
-            List<Menu> menuList = menuRepository.findAllByMealTypeAndDateAndRestaurant(restaurants.get(i).getRestaurantName(), date);
+            List<Menu> menuList = menuRepository.findAllByDateAndRestaurant(restaurants.get(i).getRestaurantName(), date);
             for(int j = 0 ; j < menuList.size() ; j++) {
                 Menu menu = menuList.get(j);
 
