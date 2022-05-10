@@ -6,6 +6,7 @@ import com.allknu.backend.entity.Menu;
 import com.allknu.backend.entity.Restaurant;
 import com.allknu.backend.repository.MenuRepository;
 import com.allknu.backend.repository.RestaurantRepository;
+import com.allknu.backend.web.dto.ResponseRestaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -55,5 +56,38 @@ public class RestaurantServiceImpl implements RestaurantService {
             listDto.add(restaurants.get(i).getRestaurantName());
         }
         return listDto;
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<ResponseRestaurant.FindMenu> getAllMenuByDate(Date date) {
+        List<ResponseRestaurant.FindMenu> list = new ArrayList<>();
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        for(int i = 0 ; i < restaurants.size() ; i++) {
+            List<String> breakfastList = new ArrayList<>();
+            List<String> lunchList = new ArrayList<>();
+            List<String> dinnerList = new ArrayList<>();
+            ResponseRestaurant.FindMenu.FindMenuBuilder itemBuilder = ResponseRestaurant.FindMenu.builder();
+
+            itemBuilder.name(restaurants.get(i).getRestaurantName());
+            List<Menu> menuList = menuRepository.findAllByMealTypeAndDateAndRestaurant(restaurants.get(i).getRestaurantName(), date);
+            for(int j = 0 ; j < menuList.size() ; j++) {
+                Menu menu = menuList.get(j);
+
+                if(menu.getMealType() == MealType.BREAKFAST) {
+                    breakfastList.add(menu.getMenuName());
+                } else if(menu.getMealType() == MealType.LUNCH) {
+                    lunchList.add(menu.getMenuName());
+                } else {
+                    dinnerList.add(menu.getMenuName());
+                }
+            }
+            itemBuilder.breakfast(breakfastList);
+            itemBuilder.lunch(lunchList);
+            itemBuilder.dinner(dinnerList);
+
+            list.add(itemBuilder.build());
+        }
+        return list;
     }
 }
