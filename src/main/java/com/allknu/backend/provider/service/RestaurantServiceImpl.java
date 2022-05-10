@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,5 +44,16 @@ public class RestaurantServiceImpl implements RestaurantService {
                     .build();
             menuRepository.save(menu1);
         }
+    }
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<String> getAllRestaurants() {
+        List<Restaurant> restaurants = restaurantRepository.findAll();
+        List<String> listDto = new ArrayList<>();
+        for(int i = 0 ; i < restaurants.size() ; i++) {
+            listDto.add(restaurants.get(i).getRestaurantName());
+        }
+        return listDto;
     }
 }

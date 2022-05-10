@@ -9,4 +9,5 @@ import java.util.List;
 public interface RestaurantService {
    void registerRestaurant(String restaurant);
    void registerMenu(String restaurant, Date date, List<String> menu, MealType time);
+   List<String> getAllRestaurants();
 }
