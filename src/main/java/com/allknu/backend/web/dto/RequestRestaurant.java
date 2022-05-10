@@ -36,13 +36,4 @@ public class RequestRestaurant {
         @NotNull(message = "메뉴 타입이 입력되지 않음")
         private MealType time;
     }
-    @Builder
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class FindMenu {
-        @NotNull(message = "메뉴별 날짜가 입력되지 않음")
-        @DateTimeFormat(pattern = "yyyy-MM-dd")
-        private Date date;
-    }
 }
