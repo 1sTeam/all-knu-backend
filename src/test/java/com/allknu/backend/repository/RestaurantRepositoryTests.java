@@ -32,7 +32,7 @@ public class RestaurantRepositoryTests {
                         .build();
                 restaurant = restaurantRepository.save(restaurant);
 
-                Restaurant restaurantAdd = restaurantRepository.findById(restaurant.getId()).orElseGet(()->null);
+                Restaurant restaurantAdd = restaurantRepository.findByRestaurantName(restaurant.getRestaurantName());
                 assertNotNull(restaurantAdd);
                 System.out.println(restaurantAdd.getRestaurantName());
         }
@@ -53,6 +53,7 @@ public class RestaurantRepositoryTests {
                         .restaurant(restaurant)
                         .build();
                 menu = menuRepository.save(menu);
+                assertNotNull(menu);
                 System.out.println(menu.getRestaurant()+" "+menu.getMenuName()+" "+menu.getMealDate()+" "+menu.getMealType());
         }
 
