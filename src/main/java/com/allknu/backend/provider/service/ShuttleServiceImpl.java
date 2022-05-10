@@ -47,4 +47,15 @@ public class ShuttleServiceImpl implements ShuttleService {
         }
         return stationNameList;
     }
+
+    @Transactional
+    @Override
+    public void deleteStation(String stationName){
+        //정거장 존재 확인
+        Station station = stationRepository.findByStation(stationName);
+        if(station == null){ //정거장이 없으면
+            throw new NotFoundStationException();
+        }
+        stationRepository.delete(station);
+    }
 }
