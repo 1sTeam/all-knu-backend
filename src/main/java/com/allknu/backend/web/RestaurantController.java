@@ -8,6 +8,7 @@ import com.allknu.backend.core.service.RestaurantService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -27,6 +28,17 @@ public class RestaurantController {
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("식당 추가 성공")
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @GetMapping("/knu/restaurant")
+    public ResponseEntity<CommonResponse> getAllRestaurants() {
+
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("식당 조회 성공")
+                .list(restaurantService.getAllRestaurants())
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
