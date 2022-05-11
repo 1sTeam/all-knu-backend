@@ -1,5 +1,6 @@
 package com.allknu.backend.entity;
 
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -22,4 +23,11 @@ public class StationTimetable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "station_name")
     private Station station;
+
+    @Builder
+    public StationTimetable(Station station ,Date stopTime){
+        this.station = station;
+        this.stopTime = stopTime;
+    }
+
 }
