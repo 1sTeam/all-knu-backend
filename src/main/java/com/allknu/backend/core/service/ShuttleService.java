@@ -11,4 +11,5 @@ public interface ShuttleService {
     void deleteStation(String stationName);
     void registerStationTimetable(String stationName, Date stopTime);
     List<ResponseStation.stationTime> getAllStationTimetable();
+    void deleteStationTimetable(String stationName, Date stopTime);
 }

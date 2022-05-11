@@ -4,6 +4,7 @@ import com.allknu.backend.core.service.ShuttleService;
 import com.allknu.backend.entity.Station;
 import com.allknu.backend.entity.StationTimetable;
 import com.allknu.backend.exception.errors.NotFoundStationException;
+import com.allknu.backend.exception.errors.NotFoundStationTimetableException;
 import com.allknu.backend.exception.errors.StationNameDuplicatedException;
 import com.allknu.backend.exception.errors.StationTimeDuplicatedException;
 import com.allknu.backend.repository.StationRepository;
@@ -106,5 +107,20 @@ public class ShuttleServiceImpl implements ShuttleService {
             }
         }
         return list;
+    }
+    @Transactional
+    @Override
+    public void deleteStationTimetable(String stationName, Date stopTime){
+        //정거장 엔티티 꺼내기
+        Station station = stationRepository.findByStation(stationName);
+        if(station == null){
+            throw new NotFoundStationException();
+        }
+        StationTimetable stationTime = stationTimetableRepository.findByStationAndStopTime(station, stopTime);
+        if(stationTime == null){// 존재하지 않는 시간일 경우
+            throw new NotFoundStationTimetableException();
+        }
+        //시간표 삭제
+        stationTimetableRepository.delete(stationTime);
     }
 }
