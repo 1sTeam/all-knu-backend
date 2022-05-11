@@ -4,13 +4,14 @@ pipeline {
         timeout(time: 1, unit: 'HOURS') // set timeout 1 hour
     }
     environment {
+        TIME_ZONE = 'Asia/Seoul'
         REPOSITORY_CREDENTIAL_ID = 'all-knu-backend-jenkins-github-key' // github repository credential name
         REPOSITORY_URL = 'git@github.com:1sTeam/all-knu-backend.git'
         TARGET_BRANCH = 'main'
         IMAGE_NAME = 'all-knu-backend'
         CONTAINER_NAME = 'all-knu-backend'
         PROFILE = 'prod'
-	DOCKER_NETWORK = 'haproxy-net'
+	    DOCKER_NETWORK = 'haproxy-net'
     }
     stages{
         stage('init') {
@@ -138,7 +139,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh 'docker run --name $CONTAINER_NAME -e "SPRING_PROFILES_ACTIVE=$PROFILE" --net $DOCKER_NETWORK -d -t $IMAGE_NAME'
+                sh 'docker run --name $CONTAINER_NAME -e "SPRING_PROFILES_ACTIVE=$PROFILE TZ=$TIME_ZONE" --net $DOCKER_NETWORK -d -t $IMAGE_NAME'
             }
             
             post {
