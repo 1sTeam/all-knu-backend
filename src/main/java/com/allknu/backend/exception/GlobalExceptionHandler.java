@@ -119,4 +119,16 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, errorCode.getStatus());
     }
+    @ExceptionHandler(StationTimeDuplicatedException.class)
+    protected ResponseEntity<ErrorResponse> handleStationTimeDuplicatedException(StationTimeDuplicatedException e) {
+        ErrorCode errorCode = ErrorCode.STATION_TIME_DUPLICATED;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
 }

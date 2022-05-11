@@ -24,4 +24,8 @@ public class Station {
     public Station(String station){
         this.station = station;
     }
+
+    public void addTimetable(StationTimetable stationTimetable){
+        this.stationTimetableList.add(stationTimetable);
+    }
 }

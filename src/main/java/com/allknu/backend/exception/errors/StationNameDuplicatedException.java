@@ -6,7 +6,7 @@ import com.allknu.backend.exception.ErrorCode;
 public class StationNameDuplicatedException extends RuntimeException {
 
     public StationNameDuplicatedException(){
-        super(ErrorCode.REGISTER_FAILED.getMessage());
+        super(ErrorCode.STATION_NAME_DUPLICATED.getMessage());
     }
 
     public StationNameDuplicatedException(Exception ex){
