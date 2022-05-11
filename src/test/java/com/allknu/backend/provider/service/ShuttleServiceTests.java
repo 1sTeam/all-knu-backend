@@ -89,6 +89,27 @@ public class ShuttleServiceTests {
         Station station2 = stationRepository.findByStation("기흥역");
         assertNull(station2);
     }
+    @DisplayName("정류장 삭제 성공 테스트(시간표가 있는 정류장 삭제할 경우)")
+    @Transactional
+    @Test
+    void deleteStationTestWhenExistTimetableStation()throws ParseException{
+        //정류장 등록
+        Station station = Station.builder()
+                .station("기흥역")
+                .build();
+        stationRepository.save(station);
+        //시간표 등록
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        Date time = format.parse("08:10:00");
+        RequestStationTimetable.stationTime stationTime = RequestStationTimetable.stationTime.builder()
+                .station("기흥역")
+                .time(time)
+                .build();
+        shuttleService.registerStationTimetable("기흥역", stationTime.getTime());
+        //정류장 삭제
+        shuttleService.deleteStation("기흥역");
+        assertNull(stationTimetableRepository.findByStopTime(time));
+    }
 
     @DisplayName("정류장 삭제 실패 테스트(정류장이 없을 경우)")
     @Transactional
