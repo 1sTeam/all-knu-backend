@@ -110,7 +110,7 @@ public class ShuttleServiceTests {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
         //시간표 등록
-        RequestStationTimetable.addStationTime stationTime = RequestStationTimetable.addStationTime.builder()
+        RequestStationTimetable.stationTime stationTime = RequestStationTimetable.stationTime.builder()
                 .station("기흥역")
                 .time(time)
                 .build();
@@ -132,7 +132,7 @@ public class ShuttleServiceTests {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
         //시간표 등록
-        RequestStationTimetable.addStationTime stationTime = RequestStationTimetable.addStationTime.builder()
+        RequestStationTimetable.stationTime stationTime = RequestStationTimetable.stationTime.builder()
                 .station("기흥역")
                 .time(time)
                 .build();
@@ -169,5 +169,28 @@ public class ShuttleServiceTests {
         //시간표 조회
         List<ResponseStation.stationTime> timeList = shuttleService.getAllStationTimetable();
         assertNotNull(timeList);
+    }
+    @DisplayName("시간표 삭제 성공 테스트")
+    @Transactional
+    @Test
+    void deleteTimetableTest() throws ParseException{
+        //정류장 등록
+        Station station = Station.builder()
+                .station("기흥역")
+                .build();
+        station = stationRepository.save(station);
+        //시간 입력
+        SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
+        Date time = format.parse("08:10:00");
+        StationTimetable stationTimetable = StationTimetable.builder()
+                .station(station)
+                .stopTime(time)
+                .build();
+        stationTimetableRepository.save(stationTimetable);
+        station.addTimetable(stationTimetable);
+        //시간표 조회
+        shuttleService.deleteStationTimetable("기흥역", time);
+        StationTimetable stationTime = stationTimetableRepository.findByStationAndStopTime(station,time);
+        assertNull(stationTime);
     }
 }

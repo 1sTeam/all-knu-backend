@@ -52,7 +52,7 @@ public class ShuttleController {
     }
 
     @PostMapping("/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> addStationTimetable(@RequestBody RequestStationTimetable.addStationTime requestDto){
+    public ResponseEntity<CommonResponse> addStationTimetable(@RequestBody RequestStationTimetable.stationTime requestDto){
         shuttleService.registerStationTimetable(requestDto.getStation(), requestDto.getTime());
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -72,4 +72,16 @@ public class ShuttleController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/knu/shuttle/timetable")
+    public ResponseEntity<CommonResponse> deleteStationTimetable(@RequestBody RequestStationTimetable.stationTime requestDto){
+        shuttleService.deleteStationTimetable(requestDto.getStation(), requestDto.getTime());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("달구지 정거장 시간표 삭제 성공")
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

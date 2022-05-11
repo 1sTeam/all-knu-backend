@@ -131,4 +131,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, errorCode.getStatus());
     }
+    @ExceptionHandler(NotFoundStationTimetableException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundStationTimetableException(NotFoundStationTimetableException e) {
+        ErrorCode errorCode = ErrorCode.NOT_FOUND_STATION_TIMETABLE;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+
 }
