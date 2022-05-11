@@ -139,7 +139,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh 'docker run --name $CONTAINER_NAME -e "SPRING_PROFILES_ACTIVE=$PROFILE TZ=$TIME_ZONE" --net $DOCKER_NETWORK -d -t $IMAGE_NAME'
+                sh 'docker run --name $CONTAINER_NAME -e "SPRING_PROFILES_ACTIVE=$PROFILE" -e "TZ=$TIME_ZONE" --net $DOCKER_NETWORK -d -t $IMAGE_NAME'
             }
             
             post {
