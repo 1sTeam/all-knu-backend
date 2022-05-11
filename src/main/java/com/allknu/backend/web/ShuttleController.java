@@ -52,7 +52,7 @@ public class ShuttleController {
     }
 
     @PostMapping("/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> addStationTimetable(@RequestBody RequestStationTimetable.stationTime requestDto){
+    public ResponseEntity<CommonResponse> addStationTimetable(@RequestBody RequestStationTimetable.StationTime requestDto){
         shuttleService.registerStationTimetable(requestDto.getStation(), requestDto.getTime());
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -63,7 +63,7 @@ public class ShuttleController {
 
     @GetMapping("/knu/shuttle/timetable")
     public ResponseEntity<CommonResponse> getAllStationTimetable(){
-        List<ResponseStation.stationTime> stationTimetables = shuttleService.getAllStationTimetable();
+        List<ResponseStation.StationTime> stationTimetables = shuttleService.getAllStationTimetable();
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -74,7 +74,7 @@ public class ShuttleController {
     }
 
     @DeleteMapping("/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> deleteStationTimetable(@RequestBody RequestStationTimetable.stationTime requestDto){
+    public ResponseEntity<CommonResponse> deleteStationTimetable(@RequestBody RequestStationTimetable.StationTime requestDto){
         shuttleService.deleteStationTimetable(requestDto.getStation(), requestDto.getTime());
 
         CommonResponse response = CommonResponse.builder()

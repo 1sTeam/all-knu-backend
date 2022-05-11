@@ -88,8 +88,8 @@ public class ShuttleServiceImpl implements ShuttleService {
 
     @Transactional
     @Override
-    public List<ResponseStation.stationTime> getAllStationTimetable(){
-        List<ResponseStation.stationTime> list = new ArrayList<>();
+    public List<ResponseStation.StationTime> getAllStationTimetable(){
+        List<ResponseStation.StationTime> list = new ArrayList<>();
         //정거장 엔티티 꺼내기
         List<Station> stationList = stationRepository.findAll();
         if(!stationList.isEmpty()){
@@ -99,7 +99,7 @@ public class ShuttleServiceImpl implements ShuttleService {
                 for(StationTimetable stationTimetable : times){
                     dates.add(stationTimetable.getStopTime());
                 }
-                ResponseStation.stationTime responseDto = ResponseStation.stationTime.builder()
+                ResponseStation.StationTime responseDto = ResponseStation.StationTime.builder()
                         .station(station.getStation())
                         .stopTime(dates)
                         .build();

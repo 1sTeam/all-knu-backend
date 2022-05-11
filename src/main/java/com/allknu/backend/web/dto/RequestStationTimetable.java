@@ -13,7 +13,7 @@ public class RequestStationTimetable {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class stationTime {
+    public static class StationTime {
         @NotNull(message = "정류장이 비었다")
         private String station;
 
