@@ -17,7 +17,7 @@ public class Station {
     @Column(name = "station_name")
     private String station;
 
-    @OneToMany(mappedBy = "station")
+    @OneToMany(mappedBy = "station", cascade = CascadeType.REMOVE, orphanRemoval = true)
     private List<StationTimetable> stationTimetableList = new ArrayList<>(); // 시간표 리스트
 
     @Builder
