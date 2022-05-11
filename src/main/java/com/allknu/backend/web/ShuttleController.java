@@ -1,45 +1,87 @@
 package com.allknu.backend.web;
 
+import com.allknu.backend.core.service.ShuttleService;
 import com.allknu.backend.web.dto.CommonResponse;
+import com.allknu.backend.web.dto.RequestStationTimetable;
+import com.allknu.backend.web.dto.ResponseStation;
+import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequiredArgsConstructor
 public class ShuttleController {
+    private final ShuttleService shuttleService;
 
-    @GetMapping("/knu/shuttle")
-    public ResponseEntity<CommonResponse> getAllStation(){
+    @PostMapping("/knu/shuttle")
+    public ResponseEntity<CommonResponse> addStation(@RequestBody Map<String, String>  station){
+        shuttleService.registerStation(station.get("station"));
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
-                .message("달구지 조회 성공")
-                .list(List.of("이공관","기흥역"))
+                .message("달구지 정거장 등록 성공")
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @GetMapping("/knu/shuttle")
+    public ResponseEntity<CommonResponse> listStation(){
+        List<String> stationList = shuttleService.getAllStation();
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("달구지 정거장 조회 성공")
+                .list(stationList)
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+    @DeleteMapping("/knu/shuttle")
+    public ResponseEntity<CommonResponse> deleteStation(@RequestBody Map<String, String>  station){
+        shuttleService.deleteStation(station.get("station"));
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("달구지 정거장 삭제 성공")
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
+    @PostMapping("/knu/shuttle/timetable")
+    public ResponseEntity<CommonResponse> addStationTimetable(@RequestBody RequestStationTimetable.StationTime requestDto){
+        shuttleService.registerStationTimetable(requestDto.getStation(), requestDto.getTime());
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("달구지 시간표 등록 성공")
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> getAllShuttleTimetable(){
-        Map<String, Object> t1 = new HashMap<>();
-        t1.put("station","기흥역");
-        t1.put("stopTime",List.of("08:10:00","08:20:00","08:25:00","08:30:00","08:35:00","08:40:00","08:45:00","08:50:00","17:00:00","17:25:00"));
-        Map<String, Object> t2 = new HashMap<>();
-        t2.put("station","이공관");
-        t2.put("stopTime",List.of("08:25:00","08:35:00","08:40:00","08:45:00","08:50:00","08:55:00","09:00:00","09:05:00","17:15:00","17:40:00"));
+    public ResponseEntity<CommonResponse> getAllStationTimetable(){
+        List<ResponseStation.StationTime> stationTimetables = shuttleService.getAllStationTimetable();
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
-                .message("달구지 조회 성공")
-                .list(List.of(t1,t2))
+                .message("달구지 정거장 시간표 조회 성공")
+                .list(stationTimetables)
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @DeleteMapping("/knu/shuttle/timetable")
+    public ResponseEntity<CommonResponse> deleteStationTimetable(@RequestBody RequestStationTimetable.StationTime requestDto){
+        shuttleService.deleteStationTimetable(requestDto.getStation(), requestDto.getTime());
+
+        CommonResponse response = CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("달구지 정거장 시간표 삭제 성공")
+                .build();
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
 }

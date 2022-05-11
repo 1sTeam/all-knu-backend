@@ -15,7 +15,11 @@ public enum ErrorCode {
     REGISTER_FAILED(HttpStatus.FORBIDDEN, "AUTH_003", "REGISTER_FAILED"),
     REQUEST_PARAMETER_BIND_FAILED(HttpStatus.BAD_REQUEST, "REQ_001", "PARAMETER_BIND_FAILED"),
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH004", "INVALID_JWT_TOKEN."),
-    KNU_API_FAILED(HttpStatus.FORBIDDEN, "AUTH_005", "knu api call failed");
+    KNU_API_FAILED(HttpStatus.FORBIDDEN, "AUTH_005", "knu api call failed"),
+    STATION_NAME_DUPLICATED(HttpStatus.FORBIDDEN, "SHUTTLE_001", "정거장 이름 중복됨"),
+    NOT_FOUND_STATION(HttpStatus.NOT_FOUND,"SHUTTLE_002","정거장이 없음."),
+    STATION_TIME_DUPLICATED(HttpStatus.FORBIDDEN, "SHUTTLE_003", "정거장 시간이 중복됨"),
+    NOT_FOUND_STATION_TIMETABLE(HttpStatus.NOT_FOUND, "SHUTTLE_004", "정거장 시간이 없음");
 
     private final String code;
     private final String message;
