@@ -10,6 +10,6 @@ public interface ShuttleService {
     List<String> getAllStation();
     void deleteStation(String stationName);
     void registerStationTimetable(String stationName, Date stopTime);
-    List<ResponseStation.stationTime> getAllStationTimetable();
+    List<ResponseStation.StationTime> getAllStationTimetable();
     void deleteStationTimetable(String stationName, Date stopTime);
 }

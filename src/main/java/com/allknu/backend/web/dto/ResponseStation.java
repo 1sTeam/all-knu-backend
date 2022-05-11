@@ -15,7 +15,7 @@ public class ResponseStation {
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
-    public static class stationTime {
+    public static class StationTime {
         private String station;
         private List<Date> stopTime;
     }

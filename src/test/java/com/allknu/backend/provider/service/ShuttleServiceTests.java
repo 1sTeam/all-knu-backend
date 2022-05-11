@@ -101,7 +101,7 @@ public class ShuttleServiceTests {
         //시간표 등록
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
-        RequestStationTimetable.stationTime stationTime = RequestStationTimetable.stationTime.builder()
+        RequestStationTimetable.StationTime stationTime = RequestStationTimetable.StationTime.builder()
                 .station("기흥역")
                 .time(time)
                 .build();
@@ -131,7 +131,7 @@ public class ShuttleServiceTests {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
         //시간표 등록
-        RequestStationTimetable.stationTime stationTime = RequestStationTimetable.stationTime.builder()
+        RequestStationTimetable.StationTime stationTime = RequestStationTimetable.StationTime.builder()
                 .station("기흥역")
                 .time(time)
                 .build();
@@ -153,7 +153,7 @@ public class ShuttleServiceTests {
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
         //시간표 등록
-        RequestStationTimetable.stationTime stationTime = RequestStationTimetable.stationTime.builder()
+        RequestStationTimetable.StationTime stationTime = RequestStationTimetable.StationTime.builder()
                 .station("기흥역")
                 .time(time)
                 .build();
@@ -188,7 +188,7 @@ public class ShuttleServiceTests {
         stationTimetableRepository.save(stationTimetable1);
         station.addTimetable(stationTimetable1);
         //시간표 조회
-        List<ResponseStation.stationTime> timeList = shuttleService.getAllStationTimetable();
+        List<ResponseStation.StationTime> timeList = shuttleService.getAllStationTimetable();
         assertNotNull(timeList);
     }
     @DisplayName("시간표 삭제 성공 테스트")
