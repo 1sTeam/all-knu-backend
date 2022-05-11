@@ -15,7 +15,11 @@ public enum ErrorCode {
     REGISTER_FAILED(HttpStatus.FORBIDDEN, "AUTH_003", "REGISTER_FAILED"),
     REQUEST_PARAMETER_BIND_FAILED(HttpStatus.BAD_REQUEST, "REQ_001", "PARAMETER_BIND_FAILED"),
     INVALID_JWT_TOKEN(HttpStatus.UNAUTHORIZED, "AUTH004", "INVALID_JWT_TOKEN."),
-    KNU_API_FAILED(HttpStatus.FORBIDDEN, "AUTH_005", "knu api call failed");
+    KNU_API_FAILED(HttpStatus.FORBIDDEN, "AUTH_005", "knu api call failed"),
+    RESTAURANT_NAME_DUPLICATED(HttpStatus.FORBIDDEN, "RESTAURANT_001", "식당 이름 중복됨"),
+    NOT_FOUND_RESTAURANT(HttpStatus.NOT_FOUND, "RESTAURANT_002", "식당이 존재하지 않음"),
+    NOT_FOUND_MENU(HttpStatus.NOT_FOUND, "MENU_001", "식당, 날짜, 타입이 같은 메뉴가 존재하지 않음");
+
 
     private final String code;
     private final String message;

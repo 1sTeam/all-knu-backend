@@ -4,6 +4,9 @@ import com.allknu.backend.core.service.RestaurantService;
 import com.allknu.backend.core.types.MealType;
 import com.allknu.backend.entity.Menu;
 import com.allknu.backend.entity.Restaurant;
+import com.allknu.backend.exception.errors.NotFoundMenuException;
+import com.allknu.backend.exception.errors.NotFoundRestaurantException;
+import com.allknu.backend.exception.errors.RestaurantNameDuplicatedException;
 import com.allknu.backend.repository.MenuRepository;
 import com.allknu.backend.repository.RestaurantRepository;
 import com.allknu.backend.web.dto.ResponseRestaurant;
@@ -25,16 +28,20 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional
     public void registerRestaurant(String restaurant){
         // 추후에 이미 식당이 등록되어 있을 경우 예외 처리 필요
-        Restaurant res = Restaurant.builder()
-                .restaurantName(restaurant)
-                .build();
-        restaurantRepository.save(res);
+        if(restaurantRepository.findByRestaurantName(restaurant)!=null) {
+            throw new RestaurantNameDuplicatedException();
+        }
+            Restaurant res = Restaurant.builder()
+                    .restaurantName(restaurant)
+                    .build();
+            restaurantRepository.save(res);
     }
 
     @Override
     @Transactional
     public void registerMenu(String restaurant, Date date, List<String> menu, MealType time){
         //추후에 메뉴가 이미 등록되어 있다면 예외처리 필요
+
         Restaurant res = restaurantRepository.findByRestaurantName(restaurant);
         for(int i=0;i<menu.size();i++) {
             Menu menu1 = Menu.builder()
@@ -44,6 +51,7 @@ public class RestaurantServiceImpl implements RestaurantService {
                     .restaurant(res)
                     .build();
             menuRepository.save(menu1);
+            res.addMenu(menu1);
         }
     }
 
@@ -89,5 +97,32 @@ public class RestaurantServiceImpl implements RestaurantService {
             list.add(itemBuilder.build());
         }
         return list;
+    }
+
+    @Transactional
+    @Override
+    public void deleteRestaurant(String restaurant) {
+        Restaurant res = restaurantRepository.findByRestaurantName(restaurant);
+        if(res == null){
+            throw new NotFoundRestaurantException();
+        }
+        restaurantRepository.delete(res);
+    }
+
+    @Override
+    @Transactional
+    public void deleteMenu(String restaurant, Date date, MealType time) {
+        List<Menu> menuList = menuRepository.findByRestaurantAndDateAndTime(restaurant, date, time);
+        if(menuList == null){
+            System.out.println("메뉴 없음");
+            throw new NotFoundMenuException();
+        }
+        for(int i = 0 ; i < menuList.size() ; i++) {
+            Menu menu = menuList.get(i);
+            menuRepository.delete(menu);
+        }
+        if(menuRepository.findAll()==null){
+            System.out.println("다 지워짐");
+        }
     }
 }
