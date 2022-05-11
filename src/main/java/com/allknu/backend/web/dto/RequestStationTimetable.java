@@ -2,13 +2,11 @@ package com.allknu.backend.web.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
-
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 public class RequestStationTimetable {
-    @ToString
+
     @Builder
     @Data
     @NoArgsConstructor
@@ -18,7 +16,7 @@ public class RequestStationTimetable {
         private String station;
 
         @NotNull(message = "시간이 비었다")
-        @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "HH:mm:ss", timezone = "Asia/Seoul")
+        @JsonFormat(pattern = "HH:mm:ss", timezone = "Asia/Seoul")
         private Date time;
     }
 }

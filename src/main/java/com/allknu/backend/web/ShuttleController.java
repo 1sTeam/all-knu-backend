@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -40,9 +41,9 @@ public class ShuttleController {
                 .build();
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-    @DeleteMapping("/knu/shuttle")
-    public ResponseEntity<CommonResponse> deleteStation(@RequestBody Map<String, String>  station){
-        shuttleService.deleteStation(station.get("station"));
+    @DeleteMapping("/knu/shuttle/{station}")
+    public ResponseEntity<CommonResponse> deleteStation(@PathVariable String station){
+        shuttleService.deleteStation(station);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -73,9 +74,10 @@ public class ShuttleController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> deleteStationTimetable(@RequestBody RequestStationTimetable.StationTime requestDto){
-        shuttleService.deleteStationTimetable(requestDto.getStation(), requestDto.getTime());
+    @DeleteMapping("/knu/shuttle/{station}/{time}")
+    public ResponseEntity<CommonResponse> deleteStationTimetable(@PathVariable String station,
+                                                                 @PathVariable @DateTimeFormat(pattern = "HH:mm:ss") Date time){
+        shuttleService.deleteStationTimetable(station, time);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())
