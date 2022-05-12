@@ -12,6 +12,8 @@ import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
@@ -22,6 +24,8 @@ import java.util.*;
 public class CrawlingServiceImpl implements CrawlingService {
 
     private ObjectMapper objectMapper;
+    private static final Logger log = LoggerFactory.getLogger(CrawlingServiceImpl.class);
+
 
     @PostConstruct
     void init() {
@@ -77,7 +81,7 @@ public class CrawlingServiceImpl implements CrawlingService {
             }
 
         } catch (IOException e) {
-            System.out.println(e);
+            log.error("학교공지 crawling error + " + e);
         }
 
         return Optional.ofNullable(lists);
@@ -128,7 +132,7 @@ public class CrawlingServiceImpl implements CrawlingService {
             }
         }
         catch (IOException e) {
-            System.out.println(e);
+            log.error("행사공지 error " + e);
         }
 
         return Optional.ofNullable(lists);
@@ -214,7 +218,7 @@ public class CrawlingServiceImpl implements CrawlingService {
             }
 
         } catch (IOException e) {
-            System.out.println(e);
+            log.error("학과공지 error " + e);
         }
         return Optional.ofNullable(lists);
     }
@@ -247,7 +251,7 @@ public class CrawlingServiceImpl implements CrawlingService {
             }
 
         }catch (IOException e){
-            System.out.println(e);
+            log.error("학사일정 error " + e);
         }
         return Optional.ofNullable(monthMap);
     }

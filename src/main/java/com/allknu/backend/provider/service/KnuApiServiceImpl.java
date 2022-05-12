@@ -5,6 +5,8 @@ import com.allknu.backend.exception.errors.LoginFailedException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,6 +16,8 @@ import java.util.Optional;
 
 @Service
 public class KnuApiServiceImpl implements KnuApiService {
+    private static final Logger log = LoggerFactory.getLogger(KnuApiServiceImpl.class);
+
     @Override
     public Optional<Map<String, String>> ssoLogin(String id, String password) {
         Map<String, String> cookies = null;
@@ -46,13 +50,15 @@ public class KnuApiServiceImpl implements KnuApiService {
                     .execute();
 
             cookies = ssoLoginRes.cookies();
+            log.info("sso 로그인 성공");
             //로그인 성공 시 sso_token을 받는다. 이를 통해 로그인 성공 여부 판단
             if(cookies.get("sso_token") == null) {
                 //로그인 실패
+                log.info("sso 로그인 실패");
                 throw new LoginFailedException();
             }
         } catch (IOException e) {
-            System.out.println(e);
+            log.error("sso login error " + e);
             throw new LoginFailedException();
         }
         return Optional.ofNullable(cookies);
