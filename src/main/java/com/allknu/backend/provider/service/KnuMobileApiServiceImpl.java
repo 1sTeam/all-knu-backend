@@ -7,6 +7,8 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.util.*;
 
 @Service
 public class KnuMobileApiServiceImpl implements KnuMobileApiService {
+    private static final Logger log = LoggerFactory.getLogger(KnuMobileApiServiceImpl.class);
 
     @Override
     public Optional<JsonNode> getKnuApiJsonData(String url, Map<String, String> cookies) {
@@ -36,10 +39,10 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
                 result = jsonNode;
             } else {
                 //로그인 쿠키가 맞지 않음
-                System.out.println("api 조회 실패");
+                log.info("로그인 쿠키가 맞지 않아 api 호출 실패");
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            log.error("getKnuApiJsonData() error " + e);
         }
         return Optional.ofNullable(result);
     }
@@ -59,14 +62,14 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
 
             if(jsonNode.get("result").toString().equals("\"success\"")) {
-                System.out.println("로그인 성공");
                 cookies = res.cookies();
+                log.info("모바일 로그인 성공");
             } else {
-                System.out.println("로그인 실패");
+                log.info("모바일 로그인 실패");
             }
 
         } catch (IOException e) {
-            System.out.println(e);
+            log.error("error in mobile login(): " + e);
         }
         return Optional.ofNullable(cookies);
     }
@@ -79,10 +82,11 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
         }
         if(getMyScholarship(cookies).isPresent()) {
             // 모바일 세션은 유효하므로 발급하지 않음
-            System.out.println("기존 것이 유효해서 발급하지 않음");
+            log.debug("기존 모바일 세션이 유효해서 발급하지 않음");
             return Optional.ofNullable(cookies);
         }
         // 기존 모바일 세션이 유효하지 않으므로 새로 발급
+        log.info("기존 모바일 세션이 유효하지않아 새로 발급");
         return login(id, password);
     }
 
@@ -97,7 +101,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
                     .userAgent("***REMOVED***")
                     .execute();
         } catch (IOException e) {
-            System.out.println(e);
+            log.error("mobile logout error " + e);
         }
     }
 
@@ -112,7 +116,6 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             if (knuData.get("data").isArray()) {
                 for (final JsonNode objNode : knuData.get("data")) {
                     //시간표 항목들
-                    System.out.println(objNode);
                     timeTableList.add(objNode);
                 }
             }
@@ -122,7 +125,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
         }
         else {
             //fail
-            System.out.println("시간표 조회 실패");
+            log.info("시간표 조회 실패");
         }
 
         return Optional.ofNullable(timeTable);
@@ -141,7 +144,6 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             if (knuData.get("data").isArray()) {
                 for (final JsonNode objNode : knuData.get("data")) {
                     //재학기간 항목들
-                    System.out.println(objNode);
                     periodList.add(objNode);
                 }
             }
@@ -150,7 +152,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
                     .build();
         } else {
             //fail
-            System.out.println("재학기간 조회 실패");
+            log.info("재학기간 조회 실패");
         }
         return Optional.ofNullable(responsePeriod);
     }
@@ -173,7 +175,6 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             if (knuData.get("data2").isArray()) {
                 for (final JsonNode objNode : knuData.get("data2")) {
                     //재학기간 항목들
-                    System.out.println(objNode);
                     detailList.add(objNode);
                 }
             }
@@ -184,7 +185,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
                     .build();
         } else {
             //fail
-            System.out.println("성적 조회 실패");
+            log.info("성적조회 실패");
         }
         return Optional.ofNullable(responseGrade);
     }
@@ -220,7 +221,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             }
         } else {
             //fail
-            System.out.println("학사일정 조회 실패");
+            log.info("학사일정 조회 실패");
         }
         return Optional.ofNullable(list);
     }
@@ -255,7 +256,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             }
         } else {
             //fail
-            System.out.println("장학금 조회 실패");
+            log.info("장학금조회 실패");
         }
         return Optional.ofNullable(list);
     }
@@ -293,7 +294,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             }
         } else {
             //fail
-            System.out.println("등록금 조회 실패");
+            log.info("등록금 조회 실패");
         }
         return Optional.ofNullable(tuition);
     }
@@ -328,7 +329,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             }
         } else {
             //fail
-            System.out.println("교직원 조회 실패");
+            log.error("교직원 조회 실패");
         }
         return Optional.ofNullable(list);
     }

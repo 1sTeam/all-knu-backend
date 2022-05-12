@@ -9,6 +9,8 @@ import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -19,6 +21,8 @@ import java.util.*;
 @Service
 //참인재시스템 verius 오타 아님 ㅎㅎ
 public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
+    private static final Logger logger = LoggerFactory.getLogger(KnuVeriusApiServiceImpl.class);
+
     public Optional<Map<String, String>> veriusLogin(Map<String, String> ssoCookies) {
         //sso쿠키로 참인재 로그인
         String url = "***REMOVED***";
@@ -31,9 +35,9 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
                     .userAgent("***REMOVED***")
                     .execute();
             veriusCookies = res.cookies();
-
+            logger.info("참인재 로그인 성공");
         }catch (IOException e) {
-            e.printStackTrace();
+            logger.error("veriusLogin() error: " + e);
             throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(veriusCookies);
@@ -59,9 +63,8 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
             result.put("id", dataList.get(1).text());
             result.put("major", dataList.get(3).text()); //전공
             result.put("topic", MajorNoticeType.findByMajor(dataList.get(3).text()).toString());
-
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error("getStudentInfo error " + e);
             throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(result);
@@ -139,7 +142,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
 
 
         } catch (IOException e) {
-            System.out.println(e);
+            logger.error("getMyVeriusSatisfactionInfo " + e);
             throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(list);
@@ -196,8 +199,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
                 lists.add(myVeriusProgram);
             }
         } catch (IOException | ParseException e){
-            System.out.println(e);
-
+            logger.error("getMyVeriusProgram " + e);
         }
         return Optional.ofNullable(lists);
     }
@@ -222,8 +224,9 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
                     item.put("2", 0);
                 }
                 item.put(td[1],Integer.valueOf(td[2]));
-            }}catch(IOException e){
-                System.out.println(e);
+            }
+        }catch(IOException e){
+                logger.error("getMileage " + e);
             }
             return Optional.ofNullable(response);
         }

@@ -12,6 +12,8 @@ import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -24,13 +26,17 @@ import java.util.Map;
 @RestController
 @RequiredArgsConstructor
 public class KnuApiController {
+    private static final Logger logger = LoggerFactory.getLogger(KnuApiController.class);
     private final KnuMobileApiService knuMobileApiService;
     private final KnuApiService knuApiService;
     private final KnuVeriusApiService knuVeriusApiService;
 
     @PostMapping("/knu/login")
     public ResponseEntity<CommonResponse> knuLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
-        if(loginDto.getId().charAt(0) == '1') throw new LoginFailedException(); // 사번이 1로 시작하는 교직원은 이용불가
+        if(loginDto.getId().charAt(0) == '1') {
+            logger.info("학번/사번이 1로 시작하는 사람이 로그인 시도");
+            throw new LoginFailedException(); // 사번이 1로 시작하는 교직원은 이용불가
+        }
         //모바일 로그인
         Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         //통합 SSO 로그인
@@ -120,7 +126,6 @@ public class KnuApiController {
     }
     @PostMapping("/knu/timetable")
     public ResponseEntity<CommonResponse> knuTimeTable(@RequestBody RequestKnu.Timetable timetableDto) {
-        System.out.println(timetableDto.getSessionInfo().getMobileCookies());
         ResponseKnu.TimeTable responseTimeTable
                 = knuMobileApiService.getTimeTable(timetableDto.getSessionInfo().getMobileCookies()).orElseThrow(()->new KnuApiCallFailedException());
 

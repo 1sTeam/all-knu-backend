@@ -10,6 +10,8 @@ import com.allknu.backend.repository.FirebaseLogRepository;
 import com.allknu.backend.web.dto.RequestFCMMessage;
 import com.allknu.backend.web.dto.ResponseFcm;
 import lombok.RequiredArgsConstructor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,8 @@ import java.util.*;
 @Service
 @RequiredArgsConstructor
 public class FCMApiServiceImpl implements FCMApiService {
+    private static final Logger log = LoggerFactory.getLogger(FCMApiServiceImpl.class);
+
     private final MessageProducer messageProducer; // FCM 마이크로서비스로 보내기 위한 카프카 프로듀서
     private final FirebaseLogRepository firebaseLogRepository;
 
@@ -38,6 +42,7 @@ public class FCMApiServiceImpl implements FCMApiService {
                 .link(message.getClickLink())
                 .build();
         firebaseLogRepository.save(log);
+        FCMApiServiceImpl.log.info("fcm 푸쉬 로그 기록, 전송자: " + email);
     }
 
     @Transactional
@@ -54,6 +59,7 @@ public class FCMApiServiceImpl implements FCMApiService {
                 .link(message.getClickLink())
                 .build();
         firebaseLogRepository.save(log);
+        FCMApiServiceImpl.log.info("fcm 푸쉬 로그 기록, 전송자: " + email);
     }
 
     @Override
