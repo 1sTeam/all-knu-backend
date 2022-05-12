@@ -8,6 +8,7 @@ import org.jsoup.Jsoup;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
 
@@ -26,22 +27,25 @@ public class KnuApiServiceImpl implements KnuApiService {
                     .userAgent("***REMOVED***")
                     .execute();
             Map<String, String> setLoginCookie = setLoginCookieRes.cookies();
+
             //그 쿠키를 이용해 ssoLogin jsp를 호출한다.
-            String ssoLoginUrl = "***REMOVED***?"
-                    +"gid=" + "gid_web"
-                    +"&returl=" + "***REMOVED***"
-                    +"&uid=" + id
-                    +"&password=" + password;
+            String ssoLoginUrl = "***REMOVED***";
+
+            Map<String, String> data = new HashMap<>();
+            data.put("uid", id);
+            data.put("password", password);
+            data.put("gid", "gid_web");
+            data.put("returl", "***REMOVED***");
 
             Connection.Response ssoLoginRes = Jsoup.connect(ssoLoginUrl)
-                    .method(Connection.Method.GET)
+                    .method(Connection.Method.POST)
                     .ignoreContentType(true)
                     .cookies(setLoginCookie)
+                    .data(data)
                     .userAgent("***REMOVED***")
                     .execute();
 
             cookies = ssoLoginRes.cookies();
-
             //로그인 성공 시 sso_token을 받는다. 이를 통해 로그인 성공 여부 판단
             if(cookies.get("sso_token") == null) {
                 //로그인 실패
