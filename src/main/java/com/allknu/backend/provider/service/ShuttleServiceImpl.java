@@ -94,7 +94,7 @@ public class ShuttleServiceImpl implements ShuttleService {
         List<Station> stationList = stationRepository.findAll();
         if(!stationList.isEmpty()){
             for(Station station :stationList){
-                List<StationTimetable> times = stationTimetableRepository.findByStation(station);
+                List<StationTimetable> times = stationTimetableRepository.findByStationOrderByStopTimeAsc(station);
                 List<Date> dates = new ArrayList<>();
                 for(StationTimetable stationTimetable : times){
                     dates.add(stationTimetable.getStopTime());
