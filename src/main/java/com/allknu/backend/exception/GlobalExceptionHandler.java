@@ -2,6 +2,8 @@ package com.allknu.backend.exception;
 
 
 import com.allknu.backend.exception.errors.*;
+
+import org.hibernate.annotations.NotFound;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
 import org.springframework.web.HttpMediaTypeNotSupportedException;
@@ -94,6 +96,39 @@ public class GlobalExceptionHandler {
                 .build();
 
         return new ResponseEntity<>(response, ErrorCode.KNU_API_FAILED.getStatus());
+    }
+    @ExceptionHandler(RestaurantNameDuplicatedException.class)
+    protected ResponseEntity<ErrorResponse> handleRestaurantNameDuplicateddException(RestaurantNameDuplicatedException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.RESTAURANT_NAME_DUPLICATED.getCode())
+                .message(ErrorCode.RESTAURANT_NAME_DUPLICATED.getMessage())
+                .status(ErrorCode.RESTAURANT_NAME_DUPLICATED.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, ErrorCode.RESTAURANT_NAME_DUPLICATED.getStatus());
+    }
+    @ExceptionHandler(NotFoundRestaurantException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundRestaurantException(NotFoundRestaurantException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.NOT_FOUND_RESTAURANT.getCode())
+                .message(ErrorCode.NOT_FOUND_RESTAURANT.getMessage())
+                .status(ErrorCode.NOT_FOUND_RESTAURANT.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, ErrorCode.NOT_FOUND_RESTAURANT.getStatus());
+    }
+    @ExceptionHandler(NotFoundMenuException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundMenuException(NotFoundMenuException e) {
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(ErrorCode.NOT_FOUND_MENU.getCode())
+                .message(ErrorCode.NOT_FOUND_MENU.getMessage())
+                .status(ErrorCode.NOT_FOUND_MENU.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, ErrorCode.NOT_FOUND_MENU.getStatus());
     }
     @ExceptionHandler(StationNameDuplicatedException.class)
     protected ResponseEntity<ErrorResponse> handleStationNameDuplicatedException(StationNameDuplicatedException e) {
