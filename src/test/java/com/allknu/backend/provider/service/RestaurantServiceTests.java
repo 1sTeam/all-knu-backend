@@ -5,9 +5,11 @@ import com.allknu.backend.core.types.MealType;
 import com.allknu.backend.entity.Menu;
 import com.allknu.backend.entity.Restaurant;
 import com.allknu.backend.exception.errors.LoginFailedException;
+import com.allknu.backend.exception.errors.RestaurantNameDuplicatedException;
 import com.allknu.backend.repository.MenuRepository;
 import com.allknu.backend.repository.RestaurantRepository;
 import com.allknu.backend.web.dto.ResponseRestaurant;
+import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,10 +49,8 @@ public class RestaurantServiceTests {
     @DisplayName("식당 추가 중복 오류 테스트")
     void registerRestaurantDuplicatedTest() {
         restaurantService.registerRestaurant("샬롬관 학식당");    //식당 저장
-        restaurantService.registerRestaurant("샬롬관 학식당");
-        Restaurant res = restaurantRepository.findByRestaurantName("샬롬관 학식당");
-        assertNotNull(res);
-        System.out.println(res.getRestaurantName());
+        assertThrows(RestaurantNameDuplicatedException.class, () ->   //식당 중복 예외가 발생하면 테스트 성공
+            restaurantService.registerRestaurant("샬롬관 학식당"));
     }
 
     @Test
