@@ -12,4 +12,6 @@ public interface RestaurantService {
    void registerMenu(String restaurant, Date date, List<String> menu, MealType time);
    List<String> getAllRestaurants();
    List<ResponseRestaurant.FindMenu> getAllMenuByDate(Date date);
+   void deleteRestaurant(String restaurant);
+   void deleteMenu(String restaurant, Date date, MealType time);
 }

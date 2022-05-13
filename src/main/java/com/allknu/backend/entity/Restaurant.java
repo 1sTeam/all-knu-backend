@@ -17,12 +17,16 @@ public class Restaurant {
     @Column(name = "restaurant_name")
     private String restaurantName;
 
-    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "restaurant", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Menu> menuList = new ArrayList<>();
 
     @Builder
     public Restaurant(String restaurantName) {
         this.restaurantName = restaurantName;
+    }
+
+    public void addMenu(Menu menu){
+        this.menuList.add(menu);
     }
 
 
