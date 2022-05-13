@@ -24,19 +24,18 @@ public class KnuApiServiceImpl implements KnuApiService {
         ObjectMapper mapper = new ObjectMapper();
         try {
             //ssoLogin jsp를 호출한다.
-            String ssoLoginUrl = "https://knusso.kangnam.ac.kr/sso/pmi-sso-login-uid-password.jsp";
-
             Map<String, String> data = new HashMap<>();
             data.put("uid", id);
             data.put("password", password);
             data.put("gid", "gid_web");
             data.put("returl", "https://web.kangnam.ac.kr/sso/index.jsp");
 
-            Connection.Response ssoLoginRes = Jsoup.connect(ssoLoginUrl)
+            Connection.Response ssoLoginRes = Jsoup.connect("https://knusso.kangnam.ac.kr/sso/pmi-sso-login-uid-password.jsp")
                     .method(Connection.Method.POST)
                     .ignoreContentType(true)
                     .data(data)
                     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
+                    .timeout(5000) // 5초
                     .execute();
 
             cookies = ssoLoginRes.cookies();

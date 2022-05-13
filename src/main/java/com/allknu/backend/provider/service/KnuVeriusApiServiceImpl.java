@@ -25,14 +25,14 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
 
     public Optional<Map<String, String>> veriusLogin(Map<String, String> ssoCookies) {
         //sso쿠키로 참인재 로그인
-        String url = "https://verius.kangnam.ac.kr/sso.do";
         Map<String, String> veriusCookies = null;
         try {
-            Connection.Response res = Jsoup.connect(url)
+            Connection.Response res = Jsoup.connect("https://verius.kangnam.ac.kr/sso.do")
                     .method(Connection.Method.GET)
                     .cookies(ssoCookies)
                     .ignoreContentType(true)
                     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
+                    .timeout(5000) // 5초
                     .execute();
             veriusCookies = res.cookies();
             logger.info("참인재 로그인 성공");

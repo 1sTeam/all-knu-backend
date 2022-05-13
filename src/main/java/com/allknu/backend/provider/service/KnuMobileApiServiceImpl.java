@@ -49,18 +49,18 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
 
     @Override
     public Optional<Map<String, String>> login(String id, String password) {
-        String url = "https://m.kangnam.ac.kr/knusmart/c/c001.do";
         Map<String, String> data = new HashMap<>();
         data.put("user_id", id);
         data.put("user_pwd", password);
 
         Map<String, String> cookies = null;
         try {
-            Connection.Response res = Jsoup.connect(url)
+            Connection.Response res = Jsoup.connect("https://m.kangnam.ac.kr/knusmart/c/c001.do")
                     .method(Connection.Method.POST)
                     .data(data)
                     .ignoreContentType(true)
                     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
+                    .timeout(5000) // 5초
                     .execute();
 
             ObjectMapper mapper = new ObjectMapper();
