@@ -11,6 +11,7 @@ import com.allknu.backend.repository.MenuRepository;
 import com.allknu.backend.repository.RestaurantRepository;
 import com.allknu.backend.web.dto.ResponseRestaurant;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -111,18 +112,12 @@ public class RestaurantServiceImpl implements RestaurantService {
 
     @Override
     @Transactional
-    public void deleteMenu(String restaurant, Date date, MealType time) {
-        List<Menu> menuList = menuRepository.findByRestaurantAndDateAndTime(restaurant, date, time);
-        if(menuList == null){
-            System.out.println("메뉴 없음");
+    public void deleteMenu(String restaurant, Date date, MealType type) {
+        List<Menu> menuList = menuRepository.findByRestaurantAndDateAndType(restaurant, date, type);
+        if(menuList.size() == 0){
             throw new NotFoundMenuException();
         }
-        for(int i = 0 ; i < menuList.size() ; i++) {
-            Menu menu = menuList.get(i);
-            menuRepository.delete(menu);
-        }
-        if(menuRepository.findAll()==null){
-            System.out.println("다 지워짐");
-        }
+        menuRepository.deleteMenuList(menuList);
+
     }
 }

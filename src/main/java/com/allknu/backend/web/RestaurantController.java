@@ -74,9 +74,9 @@ public class RestaurantController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @DeleteMapping("/knu/restaurant/menu/{restaurant}/{date}/{time}")
-    public ResponseEntity<CommonResponse> deleteMenu(@PathVariable("restaurant") String restaurant, @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable("time") MealType time){
+    public ResponseEntity<CommonResponse> deleteMenu(@PathVariable("restaurant") String restaurant, @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable("time") MealType type){
 
-        restaurantService.deleteMenu(restaurant, date, time);
+        restaurantService.deleteMenu(restaurant, date, type);
 
         CommonResponse response = CommonResponse.builder()
                 .status(HttpStatus.OK.value())

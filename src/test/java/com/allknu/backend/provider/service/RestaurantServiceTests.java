@@ -139,10 +139,7 @@ public class RestaurantServiceTests {
     @Transactional
     @DisplayName("메뉴 삭제 서비스 테스트")
     void deleteMenuTest(){
-        List<String> list = new ArrayList<>();
-        list.add("감자채 볶음");
-        list.add("꿀떡");
-        list.add("요구르트");
+        List<String> list = List.of("감자채 볶음", "꿀떡", "요구르트");
         Date date = new Date();
         //식당 등록
         Restaurant res = Restaurant.builder()
@@ -150,13 +147,15 @@ public class RestaurantServiceTests {
                 .build();
         restaurantRepository.save(res);
         //메뉴 등록
+        //식당 등록
         restaurantService.registerMenu("샬롬관 학식당", date, list, MealType.LUNCH);
+        restaurantService.registerMenu("샬롬관 학식당", date, list, MealType.DINNER);
         //식당 삭제
         restaurantService.deleteMenu("샬롬관 학식당",date,MealType.LUNCH);
-        List<Menu> menuList = menuRepository.findByMealDate(date);
-        System.out.println(menuList.get(0)+" "+menuList.get(1)+" "+menuList.get(2));
-
-
+        List<Menu> menuList = menuRepository.findByMealType(MealType.LUNCH);
+        List<Menu> menuList1 = menuRepository.findByMealType(MealType.DINNER);
+        assertEquals(menuList.size(), 0);
+        assertEquals(menuList1.size(), 3);
 
     }
 
