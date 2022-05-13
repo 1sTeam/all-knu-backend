@@ -2,6 +2,7 @@ package com.allknu.backend.exception;
 
 
 import com.allknu.backend.exception.errors.*;
+
 import org.hibernate.annotations.NotFound;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindException;
@@ -129,4 +130,53 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, ErrorCode.NOT_FOUND_MENU.getStatus());
     }
+    @ExceptionHandler(StationNameDuplicatedException.class)
+    protected ResponseEntity<ErrorResponse> handleStationNameDuplicatedException(StationNameDuplicatedException e) {
+        ErrorCode errorCode = ErrorCode.STATION_NAME_DUPLICATED;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+    @ExceptionHandler(NotFoundStationException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundStationException(NotFoundStationException e) {
+        ErrorCode errorCode = ErrorCode.NOT_FOUND_STATION;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+    @ExceptionHandler(StationTimeDuplicatedException.class)
+    protected ResponseEntity<ErrorResponse> handleStationTimeDuplicatedException(StationTimeDuplicatedException e) {
+        ErrorCode errorCode = ErrorCode.STATION_TIME_DUPLICATED;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+    @ExceptionHandler(NotFoundStationTimetableException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundStationTimetableException(NotFoundStationTimetableException e) {
+        ErrorCode errorCode = ErrorCode.NOT_FOUND_STATION_TIMETABLE;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
+
 }
