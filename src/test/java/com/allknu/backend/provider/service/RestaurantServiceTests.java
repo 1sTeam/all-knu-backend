@@ -85,7 +85,7 @@ public class RestaurantServiceTests {
                 .build();
         restaurantRepository.save(res);
         List<String> list = restaurantService.getAllRestaurants();
-        assertNotNull(list);
+        assertEquals(list.size(),2);
         System.out.println(list);
     }
 
@@ -104,7 +104,7 @@ public class RestaurantServiceTests {
         restaurantRepository.save(res);
         restaurantService.registerMenu("샬롬관 학식당", date, list, MealType.LUNCH);
         List<ResponseRestaurant.FindMenu> list1=restaurantService.getAllMenuByDate(date);
-        assertNotNull(list1);
+        assertEquals(list1.get(0).getLunch().size(), 3);
         for(int i=0;list1.size() > i;i++){      //날짜별 메뉴 모두 출력
             System.out.println(list1.get(i).getName()); //해당 학식당 이름 출력
             System.out.println("런치" + list1.get(i).getLunch()); //저장한 런치의 메뉴 리스트 출력
@@ -133,7 +133,7 @@ public class RestaurantServiceTests {
         restaurantService.registerMenu("샬롬관 학식당", date, list, MealType.LUNCH);
         //식당 삭제
         restaurantService.deleteRestaurant("샬롬관 학식당");
-        assertNull(menuRepository.findByMealDate(date));
+        assertEquals(menuRepository.findByMealDate(date).size(),0);
     }
     @Test
     @Transactional

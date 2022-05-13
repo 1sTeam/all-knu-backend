@@ -18,7 +18,7 @@ public enum ErrorCode {
     KNU_API_FAILED(HttpStatus.FORBIDDEN, "AUTH_005", "knu api call failed"),
     RESTAURANT_NAME_DUPLICATED(HttpStatus.FORBIDDEN, "RESTAURANT_001", "식당 이름 중복됨"),
     NOT_FOUND_RESTAURANT(HttpStatus.NOT_FOUND, "RESTAURANT_002", "식당이 존재하지 않음"),
-    NOT_FOUND_MENU(HttpStatus.NOT_FOUND, "MENU_001", "식당, 날짜, 타입이 같은 메뉴가 존재하지 않음");
+    NOT_FOUND_MENU(HttpStatus.NOT_FOUND, "MENU_001", "식당, 날짜, 타입이 같은 메뉴가 존재하지 않음"),
     STATION_NAME_DUPLICATED(HttpStatus.FORBIDDEN, "SHUTTLE_001", "정거장 이름 중복됨"),
     NOT_FOUND_STATION(HttpStatus.NOT_FOUND,"SHUTTLE_002","정거장이 없음."),
     STATION_TIME_DUPLICATED(HttpStatus.FORBIDDEN, "SHUTTLE_003", "정거장 시간이 중복됨"),
