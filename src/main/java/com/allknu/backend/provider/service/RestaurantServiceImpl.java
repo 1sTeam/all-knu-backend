@@ -45,14 +45,14 @@ public class RestaurantServiceImpl implements RestaurantService {
 
         Restaurant res = restaurantRepository.findByRestaurantName(restaurant);
         for(int i=0;i<menu.size();i++) {
-            Menu menu1 = Menu.builder()
+            Menu menuItem = Menu.builder()
                     .menuName(menu.get(i))
                     .mealDate(date)
                     .mealType(time)
                     .restaurant(res)
                     .build();
-            menuRepository.save(menu1);
-            res.addMenu(menu1);
+            menuRepository.save(menuItem);
+            res.addMenu(menuItem);
         }
     }
 
