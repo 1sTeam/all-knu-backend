@@ -23,16 +23,7 @@ public class KnuApiServiceImpl implements KnuApiService {
         Map<String, String> cookies = null;
         ObjectMapper mapper = new ObjectMapper();
         try {
-            //setLoginCookie.jsp에 학번만 넣어서 쿠키를 설정받는다.
-            String setLoginCookieUrl = "https://knusso.kangnam.ac.kr/setLoginCookie.jsp?id=" + id;
-            Connection.Response setLoginCookieRes = Jsoup.connect(setLoginCookieUrl)
-                    .method(Connection.Method.GET)
-                    .ignoreContentType(true)
-                    .userAgent("***REMOVED***")
-                    .execute();
-            Map<String, String> setLoginCookie = setLoginCookieRes.cookies();
-
-            //그 쿠키를 이용해 ssoLogin jsp를 호출한다.
+            //ssoLogin jsp를 호출한다.
             String ssoLoginUrl = "***REMOVED***";
 
             Map<String, String> data = new HashMap<>();
@@ -44,7 +35,6 @@ public class KnuApiServiceImpl implements KnuApiService {
             Connection.Response ssoLoginRes = Jsoup.connect(ssoLoginUrl)
                     .method(Connection.Method.POST)
                     .ignoreContentType(true)
-                    .cookies(setLoginCookie)
                     .data(data)
                     .userAgent("***REMOVED***")
                     .execute();
