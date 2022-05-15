@@ -37,12 +37,11 @@ public class CrawlingController {
 
         List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(page.orElseGet(()->1), realType).orElseGet(() -> null);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
                 .list(notices)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @GetMapping(value = {"/crawling/notice/event/{type}/{page}", "/crawling/notice/event/{type}"})
     // 학교 공지사항 크롤링 요청
@@ -55,12 +54,11 @@ public class CrawlingController {
         }
         List<ResponseCrawling.EventNotice> eventNotice = crawlingService.getEventNotice(page.orElseGet(() -> 1), realType).orElseGet(() -> null);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
                 .list(eventNotice)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
 
     }
     
@@ -73,34 +71,32 @@ public class CrawlingController {
         map.put("korean", type.getKorean());
         map.put("notices", notices);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
                 .list(map)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @GetMapping("/crawling/staff")
     public ResponseEntity<CommonResponse> getStaffList() {
         List<ResponseKnu.Staff> list = knuMobileApiService.getKnuStaffInfo().orElseGet(()->List.of());
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
                 .list(list)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
 
     @GetMapping("/crawling/calendar")
     public ResponseEntity<CommonResponse> getKnuCalendar(){
         Map<String,List<ResponseCrawling.Schedule>> map = crawlingService.getKnuCalendar().orElseGet(()->null);
-        CommonResponse response = CommonResponse.builder()
+
+        return  new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
                 .list(map)
-                .build();
-        return  new ResponseEntity<>(response,HttpStatus.OK);
+                .build(),HttpStatus.OK);
     }
 
 }

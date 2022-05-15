@@ -27,69 +27,60 @@ public class RestaurantController {
 
         restaurantService.registerRestaurant(restaurantDto.getRestaurant());
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("식당 추가 성공")
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @GetMapping("/knu/restaurant")
     public ResponseEntity<CommonResponse> getAllRestaurants() {
 
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("식당 조회 성공")
                 .list(restaurantService.getAllRestaurants())
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @DeleteMapping("/knu/restaurant/{restaurant}")
     public ResponseEntity<CommonResponse> deleteRestaurant(@PathVariable("restaurant") String restaurant){
 
         restaurantService.deleteRestaurant(restaurant);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("식당 삭제 성공")
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @PostMapping("/knu/restaurant/menu")
     public ResponseEntity<CommonResponse> RegisterMenu(@Valid @RequestBody RequestRestaurant.RegisterMenu menuDto){
 
         restaurantService.registerMenu(menuDto.getRestaurant(), menuDto.getDate(), menuDto.getMenu(), menuDto.getTime());
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("식단표 추가 성공")
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @GetMapping("/knu/restaurant/menu")
     public ResponseEntity<CommonResponse> findMenu(@DateTimeFormat(pattern = "yyyy-MM-dd") Date date){
 
-        /*
-        * 모바일 앱 1.5버전에서 파라미터로 date를 잘 넘겨주지 못하는 이슈가 있어 임시로 API 호출 시 무조건 오늘 날짜의 식단표를 반환하도록 한다.
-        * 모바일 앱 이용자들이 이 문제를 개선한 버전의 앱을 충분히 설치했다고 인지되는 시점에 다시 파라미터의 date를 조회하도록 하게 한다.
-        * */
-        List<ResponseRestaurant.FindMenu> info = restaurantService.getAllMenuByDate(new Date()); // 임시로 무조건 오늘날짜
-        CommonResponse response = CommonResponse.builder()
+        if(date == null) date = new Date();
+
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("식단표 조회 성공")
-                .list(info)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .list(restaurantService.getAllMenuByDate(date))
+                .build(), HttpStatus.OK);
     }
     @DeleteMapping("/knu/restaurant/menu/{restaurant}/{date}/{time}")
     public ResponseEntity<CommonResponse> deleteMenu(@PathVariable("restaurant") String restaurant, @PathVariable("date") @DateTimeFormat(pattern = "yyyy-MM-dd") Date date, @PathVariable("time") MealType type){
 
         restaurantService.deleteMenu(restaurant, date, type);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("식단표 삭제 성공")
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
 }
