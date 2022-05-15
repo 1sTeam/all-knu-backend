@@ -45,12 +45,11 @@ public class FCMApiController {
         FCMWebMessage fcmWebMessage = message.toFCMWebMessage();
         fcmApiService.pushToKafkaWebMessage(email, fcmWebMessage);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("fcm 마이크로서비스에 웹 푸쉬 알림 요청 성공")
                 .list(null)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @PostMapping("/fcm/push/mobile")
     public ResponseEntity<CommonResponse> requestPushNotificationToMobile(@RequestBody @Valid RequestFCMMessage.Mobile message, HttpServletRequest request) {
@@ -68,47 +67,43 @@ public class FCMApiController {
         FCMMobileMessage fcmMobileMessage = message.toFCMMobileMessage();
         fcmApiService.pushToKafkaMobileMessage(email, fcmMobileMessage);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("fcm 마이크로서비스에 mobile 푸쉬 알림 요청 성공")
                 .list(null)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @PostMapping("/dev/fcm/subscribe")
     public ResponseEntity<CommonResponse> requestSubscribe(@RequestBody @Valid RequestFCMMessage.Subscribe message) {
 
         fcmApiService.pushToKafkaSubscribeMessage(message);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("fcm 마이크로서비스에 구독 요청 성공")
                 .list(null)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @GetMapping("/fcm/log")
     public ResponseEntity<CommonResponse> getFcmLog(@PageableDefault Pageable pageable) {
         //admin 인터셉터 통과 상태, 전체 로그를 불러온다. 10개 아이템 단위로
         Page<ResponseFcm.Log> logs = fcmApiService.getAllFcmLog(pageable).orElseGet(()->null);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("fcm 로그 조회 요청 성공")
                 .list(logs)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
     @GetMapping(value = {"/knu/subscribe/{team}", "/knu/subscribe"})
     public ResponseEntity<CommonResponse> getSubscribeTypes(@PathVariable(value = "team", required = false) String team) {
 
         List<ResponseFcm.SubscribeType> list = fcmApiService.getAllKnuSubscribeTypes(team);
 
-        CommonResponse response = CommonResponse.builder()
+        return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("구독 토픽 조회 성공")
                 .list(list)
-                .build();
-        return new ResponseEntity<>(response, HttpStatus.OK);
+                .build(), HttpStatus.OK);
     }
 }
