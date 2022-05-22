@@ -178,5 +178,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, errorCode.getStatus());
     }
+    @ExceptionHandler(KnuReadTimeOutException.class)
+    protected ResponseEntity<ErrorResponse> handleKnuReadTimeOutException(KnuReadTimeOutException e) {
+        ErrorCode errorCode = ErrorCode.KNU_READ_TIMEOUT;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
 
 }

@@ -21,7 +21,6 @@ public class KnuApiServiceImpl implements KnuApiService {
     @Override
     public Optional<Map<String, String>> ssoLogin(String id, String password) {
         Map<String, String> cookies = null;
-        ObjectMapper mapper = new ObjectMapper();
         try {
             //ssoLogin jsp를 호출한다.
             Map<String, String> data = new HashMap<>();
@@ -48,7 +47,6 @@ public class KnuApiServiceImpl implements KnuApiService {
             }
         } catch (IOException e) {
             log.error("sso login error " + e);
-            throw new LoginFailedException();
         }
         return Optional.ofNullable(cookies);
     }

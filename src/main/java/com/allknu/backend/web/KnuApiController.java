@@ -4,10 +4,8 @@ import com.allknu.backend.core.service.KnuApiService;
 import com.allknu.backend.core.service.KnuMobileApiService;
 import com.allknu.backend.core.service.KnuVeriusApiService;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
+import com.allknu.backend.exception.errors.KnuReadTimeOutException;
 import com.allknu.backend.exception.errors.LoginFailedException;
-import com.allknu.backend.provider.service.KnuApiServiceImpl;
-import com.allknu.backend.provider.service.KnuMobileApiServiceImpl;
-import com.allknu.backend.provider.service.KnuVeriusApiServiceImpl;
 import com.allknu.backend.web.dto.CommonResponse;
 import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
@@ -40,9 +38,9 @@ public class KnuApiController {
         //모바일 로그인
         Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         //통합 SSO 로그인
-        Map<String, String> ssoCookies = knuApiService.ssoLogin(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
+        Map<String, String> ssoCookies = knuApiService.ssoLogin(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new KnuReadTimeOutException("sso"));
         // 참인재 로그인
-        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
+        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new KnuReadTimeOutException("verius"));
         //학생 정보 긁어오기
         Map<String, String> studentInfo = knuVeriusApiService.getStudentInfo(veriusCookies).orElseThrow(()->new KnuApiCallFailedException());
 
@@ -67,7 +65,7 @@ public class KnuApiController {
         //통합 SSO 로그인
         Map<String, String> ssoCookies = knuApiService.ssoLogin(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
         // 참인재 로그인
-        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
+        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new KnuReadTimeOutException("verius"));
 
         // 세션인포 정보 삽입
         Map<String, Object> sessionInfo = new HashMap<>();
@@ -89,9 +87,9 @@ public class KnuApiController {
         //모바일 로그인
         Map<String, String> mobileCookies = knuMobileApiService.refreshSession(refreshDto.getId(), refreshDto.getPassword(),refreshDto.getSessionInfo()).orElseThrow(()->new LoginFailedException());
         //통합 SSO 로그인
-        Map<String, String> ssoCookies = knuApiService.ssoLogin(refreshDto.getId(), refreshDto.getPassword()).orElseThrow(()->new LoginFailedException());
+        Map<String, String> ssoCookies = knuApiService.ssoLogin(refreshDto.getId(), refreshDto.getPassword()).orElseThrow(()->new KnuReadTimeOutException("sso"));
         // 참인재 로그인
-        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new LoginFailedException());
+        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new KnuReadTimeOutException("verius"));
 
 
         // 세션인포 정보 삽입
