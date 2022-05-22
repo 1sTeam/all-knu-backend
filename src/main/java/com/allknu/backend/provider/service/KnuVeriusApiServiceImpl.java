@@ -38,7 +38,6 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
             logger.info("참인재 로그인 성공");
         }catch (IOException e) {
             logger.error("veriusLogin() error: " + e);
-            throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(veriusCookies);
     }
