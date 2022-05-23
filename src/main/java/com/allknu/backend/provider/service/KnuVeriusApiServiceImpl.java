@@ -32,7 +32,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
                     .cookies(ssoCookies)
                     .ignoreContentType(true)
                     .userAgent("***REMOVED***")
-                    .timeout(5000) // 5초
+                    .timeout(10000) // 10초
                     .execute();
             veriusCookies = res.cookies();
             logger.info("참인재 로그인 성공");
