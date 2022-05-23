@@ -82,7 +82,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
             logger.error("getStudentInfo IOException error " + e);
             throw new KnuApiCallFailedException();
         } catch (IndexOutOfBoundsException e) {
-            logger.error("세션이 유효하지않아 학생정보 조회 실패 " + e);
+            logger.info("세션이 유효하지않아 학생정보 조회 실패 " + e);
             throw new KnuApiCallFailedException();
         } catch (Exception e) {
             logger.error("학생정보 조회 시 알수없는 에러 " + e);
@@ -237,18 +237,25 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
             while (target.hasNext()) {
                 String[] td = target.next().text().split(" ");
                 Map<String, Integer> item = response.get(td[0]);
-                if(item == null){
-                    response.put(td[0],new HashMap<>());
+                if(item == null) {
+                    response.put(td[0], new HashMap<>());
                     item = response.get(td[0]);
                     // default 0
                     item.put("1", 0);
                     item.put("2", 0);
                 }
-                item.put(td[1],Integer.valueOf(td[2]));
+                // 숫자 형변환 시도
+                Integer integer;
+                try {
+                    integer = Integer.valueOf(td[2]);
+                } catch (NumberFormatException numberFormatException) {
+                    integer = 0;
+                }
+                item.put(td[1], integer);
             }
-        }catch(IOException e){
+        }catch(IOException e) {
                 logger.error("getMileage " + e);
-            }
+        }
             return Optional.ofNullable(response);
         }
     }
