@@ -4,6 +4,7 @@ import com.allknu.backend.core.service.KnuVeriusApiService;
 import com.allknu.backend.core.types.MajorNoticeType;
 import com.allknu.backend.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.web.dto.ResponseKnu;
+import com.allknu.backend.web.dto.SessionInfo;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -41,6 +42,21 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
         }
         return Optional.ofNullable(veriusCookies);
     }
+
+    @Override
+    public Optional<Map<String, String>> refreshVeriusLogin(Map<String, String> ssoCookies, SessionInfo sessionInfo) {
+        try {
+            // 기존 세션이 유효한지 검사, getStudentInfo를 호출해서
+            if(getStudentInfo(sessionInfo.getVeriusCookies()).isPresent()) {
+                return Optional.ofNullable(sessionInfo.getVeriusCookies());
+            }
+        } catch (KnuApiCallFailedException e) {
+            logger.error("참인재 세션 갱신을 위해 getStudentInfo를 호출했으나 실패 " + e);
+        }
+        // 새로 로그인
+        return veriusLogin(ssoCookies);
+    }
+
     @Override
     public Optional<Map<String, String>> getStudentInfo(Map<String, String> veriusCookies) {
         //참인재시스템에서 학과, 학번, 이름 등 학생 정보를 긁어다 준다.
