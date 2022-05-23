@@ -51,7 +51,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
                 return Optional.ofNullable(sessionInfo.getVeriusCookies());
             }
         } catch (KnuApiCallFailedException e) {
-            logger.error("참인재 세션 갱신을 위해 getStudentInfo를 호출했으나 실패 " + e);
+            logger.info("참인재 세션 갱신을 위해 getStudentInfo를 호출했으나 실패, 세션을 새로 갱신" + e);
         }
         // 새로 로그인
         return veriusLogin(ssoCookies);
