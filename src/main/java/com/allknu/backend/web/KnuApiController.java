@@ -89,7 +89,7 @@ public class KnuApiController {
         //통합 SSO 로그인
         Map<String, String> ssoCookies = knuApiService.ssoLogin(refreshDto.getId(), refreshDto.getPassword()).orElseThrow(()->new KnuReadTimeOutException("sso"));
         // 참인재 로그인
-        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new KnuReadTimeOutException("verius"));
+        Map<String, String> veriusCookies = knuVeriusApiService.refreshVeriusLogin(ssoCookies, refreshDto.getSessionInfo()).orElseThrow(()->new KnuReadTimeOutException("verius"));
 
 
         // 세션인포 정보 삽입
