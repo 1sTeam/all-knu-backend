@@ -50,7 +50,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
             if(getStudentInfo(sessionInfo.getVeriusCookies()).isPresent()) {
                 return Optional.ofNullable(sessionInfo.getVeriusCookies());
             }
-        } catch (KnuApiCallFailedException e) {
+        } catch (Exception e) {
             logger.info("참인재 세션 갱신을 위해 getStudentInfo를 호출했으나 실패, 세션을 새로 갱신" + e);
         }
         // 새로 로그인
@@ -62,7 +62,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
         //참인재시스템에서 학과, 학번, 이름 등 학생 정보를 긁어다 준다.
         //해당 참인재 쿠키로 정보를 긁어온다.
         String url = "https://verius.kangnam.ac.kr/user/Std/MyHm010.do?CURRENT_MENU_CODE=MENU0264&TOP_MENU_CODE=MENU0010";
-        Map<String, String> result;
+        Map<String, String> result = null;
         try {
             Document res = Jsoup.connect(url)
                     .method(Connection.Method.GET)
@@ -79,7 +79,13 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
             result.put("major", dataList.get(3).text()); //전공
             result.put("topic", MajorNoticeType.findByMajor(dataList.get(3).text()).toString());
         } catch (IOException e) {
-            logger.error("getStudentInfo error " + e);
+            logger.error("getStudentInfo IOException error " + e);
+            throw new KnuApiCallFailedException();
+        } catch (IndexOutOfBoundsException e) {
+            logger.error("세션이 유효하지않아 학생정보 조회 실패 " + e);
+            throw new KnuApiCallFailedException();
+        } catch (Exception e) {
+            logger.error("학생정보 조회 시 알수없는 에러 " + e);
             throw new KnuApiCallFailedException();
         }
         return Optional.ofNullable(result);
