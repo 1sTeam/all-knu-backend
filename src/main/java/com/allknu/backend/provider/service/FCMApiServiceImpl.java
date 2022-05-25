@@ -19,6 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
+/*
+ * 관리자페이지 기능 -> 마이크로서비스 분리 대상
+ */
 @Service
 @RequiredArgsConstructor
 public class FCMApiServiceImpl implements FCMApiService {
