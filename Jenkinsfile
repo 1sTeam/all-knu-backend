@@ -11,7 +11,7 @@ pipeline {
         IMAGE_NAME = 'all-knu-backend'
         CONTAINER_NAME = 'all-knu-backend'
         PROFILE = 'prod'
-	    DOCKER_NETWORK = 'haproxy-net'
+	    DOCKER_NETWORK = 'all-knu-haproxy-net'
     }
     stages{
         stage('init') {
