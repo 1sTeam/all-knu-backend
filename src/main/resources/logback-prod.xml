@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- 이 곳에 추가할 기능을 넣는다. -->
-    <property name="LOGS_ABSOLUTE_PATH" value="./logs"/>
+    <property name="LOGS_ABSOLUTE_PATH" value="/var/log/all-knu/backend"/>
 
     <!-- appender(어디에 출력할 지)에서 콘솔에 출력되는 형식을 지정한다. -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -13,7 +13,7 @@
     <!-- Info 레벨의 이름을 가진 로그를 저장할 방식을 지정한다. -->
     <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-        <file>/var/log/all-knu/backend/info.log</file> <!-- 파일을 저장할 경로를 정한다, 도커 사용 시 볼륨매핑 해주어야함 -->
+        <file>${LOGS_ABSOLUTE_PATH}/info.log</file> <!-- 파일을 저장할 경로를 정한다, 도커 사용 시 볼륨매핑 해주어야함 -->
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>INFO</level>
             <onMatch>ACCEPT</onMatch> <!-- 해당 레벨만 기록한다. -->
@@ -23,7 +23,7 @@
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern> <!-- 해당 패턴 네이밍으로 현재 로그가 기록됨 -->
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/var/log/all-knu/backend/was-logs/info/info.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
+            <fileNamePattern>${LOGS_ABSOLUTE_PATH}/was-logs/info/info.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern> <!-- 해당 패턴 네이밍으로 이전 파일이 기록됨 -->
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize> <!-- 한 파일의 최대 용량 -->
             </timeBasedFileNamingAndTriggeringPolicy>
@@ -34,7 +34,7 @@
 
     <appender name="WARN_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
-        <file>/var/log/all-knu/backend/warn.log</file>
+        <file>${LOGS_ABSOLUTE_PATH}/warn.log</file>
         <filter class="ch.qos.logback.classic.filter.LevelFilter">
             <level>WARN</level>
             <onMatch>ACCEPT</onMatch>
@@ -44,7 +44,7 @@
             <pattern>[%d{yyyy-MM-dd HH:mm:ss}:%-3relative][%thread] %-5level %logger{35} - %msg%n</pattern>
         </encoder>
         <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
-            <fileNamePattern>/var/log/all-knu/backend/was-logs/warn/warn.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
+            <fileNamePattern>${LOGS_ABSOLUTE_PATH}/was-logs/warn/warn.%d{yyyy-MM-dd}.%i.log.gz</fileNamePattern>
             <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
                 <maxFileSize>100MB</maxFileSize>
             </timeBasedFileNamingAndTriggeringPolicy>
