@@ -12,6 +12,7 @@ pipeline {
         CONTAINER_NAME = 'all-knu-backend'
         PROFILE = 'prod'
 	    DOCKER_NETWORK = 'all-knu-haproxy-net'
+	    LOGGING_HOST_PATH = '/var/log'
     }
     stages{
         stage('init') {
@@ -139,7 +140,7 @@ pipeline {
         }
         stage('deploy') {
             steps {
-                sh 'docker run --name $CONTAINER_NAME -e "SPRING_PROFILES_ACTIVE=$PROFILE" -e "TZ=$TIME_ZONE" --net $DOCKER_NETWORK -d -t $IMAGE_NAME'
+                sh 'docker run --name $CONTAINER_NAME -v $LOGGING_HOST_PATH:/var/log -e "SPRING_PROFILES_ACTIVE=$PROFILE" -e "TZ=$TIME_ZONE" --net $DOCKER_NETWORK -d -t $IMAGE_NAME'
             }
             
             post {
