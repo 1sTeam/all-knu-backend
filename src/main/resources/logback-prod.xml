@@ -2,7 +2,6 @@
 <configuration>
     <!-- 이 곳에 추가할 properties를 넣는다. -->
     <property name="LOGS_ABSOLUTE_PATH" value="/var/log/all-knu/backend"/>
-    <property name="PACKAGE_NAME" value="com.allknu.backend"/>
 
     <!-- appender(어디에 출력할 지)에서 콘솔에 출력되는 형식을 지정한다. -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -55,7 +54,7 @@
     </appender>
 
     <!-- 패키지 네임 수정해서 로거추가 -->
-    <logger name="${PACKAGE_NAME}" level="DEBUG" additivity="false">
+    <logger name="com.allknu.backend" level="DEBUG" additivity="false">
         <appender-ref ref="STDOUT" />
         <appender-ref ref="FILE" />
     </logger>
