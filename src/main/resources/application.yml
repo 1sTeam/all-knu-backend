@@ -15,3 +15,6 @@ server:
   error:
     whitelabel:
       enabled: false
+
+logging:
+  absolute-path: /home/aunae/log/all-knu/backend
