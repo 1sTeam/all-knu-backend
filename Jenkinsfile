@@ -12,7 +12,7 @@ pipeline {
         CONTAINER_NAME = 'all-knu-backend'
         PROFILE = 'prod'
 	    DOCKER_NETWORK = 'all-knu-haproxy-net'
-	    LOGGING_HOST_PATH = '/var/log'
+	    LOGGING_HOST_PATH = '/home/aunae/all-knu-projects/log'
     }
     stages{
         stage('init') {

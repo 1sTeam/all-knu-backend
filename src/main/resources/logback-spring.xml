@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <configuration>
     <!-- 이 곳에 추가할 properties를 넣는다. -->
-    <springProperty name="LOGS_ABSOLUTE_PATH" source="logging.absolute-path"/> <!-- properties에서 가져온다 -->
+    <property name="LOGS_ABSOLUTE_PATH" value="/var/log"/> <!-- docker run 시 볼륨 매핑해주기 -->
 
     <!-- appender(어디에 출력할 지)에서 콘솔에 출력되는 형식을 지정한다. -->
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
@@ -10,7 +10,7 @@
         </layout>
     </appender>
 
-    <springProfile name="prod"><!-- profile prod 에서만 동작 -->
+    <springProfile name="prod"><!-- profile prod 에서만 동작해서 파일에 기록하도록 -->
         <!-- Info 레벨의 이름을 가진 로그를 저장할 방식을 지정한다. -->
         <appender name="INFO_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
 
