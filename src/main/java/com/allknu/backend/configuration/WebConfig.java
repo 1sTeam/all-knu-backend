@@ -10,8 +10,7 @@ public class WebConfig implements WebMvcConfigurer {
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         registry.addMapping("/**")
-                .allowedOriginPatterns("*") //cors 문제 해결
-                .allowCredentials(true)
+                .allowedOrigins("https://admin.all-knu.accongbox.com", "https://all-knu-admin.accongbox.com")
                 .allowedMethods(
                         HttpMethod.GET.name(),
                         HttpMethod.POST.name(),
