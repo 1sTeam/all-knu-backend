@@ -105,4 +105,10 @@ public class RequestKnu {
         @NotNull(message = "강남대 쿠키 넣어주세요")
         private SessionInfo sessionInfo;
     }
+    @Builder
+    @Data
+    public static class VeriusLogin{
+        @NotNull(message = "강남대 쿠키 넣어주세요")
+        private SessionInfo sessionInfo;
+    }
 }
