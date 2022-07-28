@@ -5,5 +5,4 @@ import java.util.Optional;
 
 public interface KnuApiService {
     Optional<Map<String, String>> ssoLogin(String id, String password);
-
 }
