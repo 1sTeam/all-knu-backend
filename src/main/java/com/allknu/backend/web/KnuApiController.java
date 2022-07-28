@@ -63,10 +63,8 @@ public class KnuApiController {
     @PostMapping("/api/v2/login/verius")
     public ResponseEntity<CommonResponse> knuStaffLogin(@Valid @RequestBody RequestKnu.VeriusLogin loginDto) {
         //강남대 sso쿠키 받아오기
-        Map<String, String> ssoCookies = new HashMap<>();
-        ssoCookies.put("ssoCookies", loginDto.getSsoCookies());
         //map형태의 sso쿠키로 인증받고 참인재 세션아이디 발급
-        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseThrow(()->new KnuReadTimeOutException("verius"));;
+        Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(loginDto.getSessionInfo().getSsoCookies()).orElseThrow(()->new KnuReadTimeOutException("verius"));;
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
