@@ -111,6 +111,6 @@ public class RequestKnu {
     @AllArgsConstructor
     public static class VeriusLogin{
         @NotNull(message = "강남대 쿠키 넣어주세요")
-        private String ssoCookies;
+        private SessionInfo sessionInfo;
     }
 }
