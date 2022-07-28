@@ -29,6 +29,11 @@ public class KnuApiController {
     private final KnuApiService knuApiService;
     private final KnuVeriusApiService knuVeriusApiService;
 
+    /**
+     * 레거시 로그인 API, v2로 대체 예정
+     * @param loginDto
+     * @return
+     */
     @PostMapping("/knu/login")
     public ResponseEntity<CommonResponse> knuLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
         if(loginDto.getId().charAt(0) == '1') {
@@ -60,7 +65,7 @@ public class KnuApiController {
                 .list(responseList)
                 .build(), HttpStatus.OK);
     }
-    @PostMapping("/api/v2/login/verius")
+    @PostMapping("/api/v2/knu/login/verius")
     public ResponseEntity<CommonResponse> knuStaffLogin(@Valid @RequestBody RequestKnu.VeriusLogin loginDto) {
         //map형태의 sso쿠키로 인증받고 참인재 세션아이디 발급
         Map<String, String> veriusCookies = knuVeriusApiService.veriusLogin(loginDto.getSessionInfo().getSsoCookies()).orElseThrow(()->new KnuReadTimeOutException("verius"));;
@@ -71,6 +76,20 @@ public class KnuApiController {
                 .list(veriusCookies)
                 .build(), HttpStatus.OK);
     }
+
+    // 아이디 비밀번호를 받아 모바일 로그인을 한다.
+    @PostMapping("/api/v2/knu/login/mobile")
+    public ResponseEntity<CommonResponse> knuMobileLogin(@Valid @RequestBody RequestKnu.MobileLogin loginDto) {
+
+        Map<String, String> mobileCookies = knuMobileApiService.login(loginDto.getId(), loginDto.getPassword()).orElseThrow(()->new LoginFailedException());
+
+        return new ResponseEntity<>(CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("참인재 세션 발급")
+                .list(mobileCookies)
+                .build(), HttpStatus.OK);
+    }
+
     @PostMapping("/knu/login/staff")
     public ResponseEntity<CommonResponse> knuStaffLogin(@Valid @RequestBody RequestKnu.Login loginDto) {
         //통합 SSO 로그인
@@ -92,6 +111,12 @@ public class KnuApiController {
                 .list(responseList)
                 .build(), HttpStatus.OK);
     }
+
+    /**
+     * 레거시 세션 갱신 API, v2로 대체 예정, 모바일 갱신은 v2 갱신 api를 사용하고 나머지는 v2 세션발급 api를 사용한다.
+     * @param refreshDto
+     * @return
+     */
     @PostMapping("/knu/refresh/session")
     public ResponseEntity<CommonResponse> knuRefreshSession(@Valid @RequestBody RequestKnu.Refresh refreshDto) {
         //모바일은 유효여부 판단 후 사용하고 나머지는 새로 만든다
@@ -116,6 +141,19 @@ public class KnuApiController {
                 .status(HttpStatus.OK.value())
                 .message("로그인 성공")
                 .list(responseList)
+                .build(), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/v2/knu/refresh/session/mobile")
+    public ResponseEntity<CommonResponse> knuRefreshMobileSession(@Valid @RequestBody RequestKnu.Refresh refreshDto) {
+        //모바일은 유효여부 판단 후 사용
+        //모바일 로그인
+        Map<String, String> mobileCookies = knuMobileApiService.refreshSession(refreshDto.getId(), refreshDto.getPassword(),refreshDto.getSessionInfo()).orElseThrow(()->new LoginFailedException());
+
+        return new ResponseEntity<>(CommonResponse.builder()
+                .status(HttpStatus.OK.value())
+                .message("모바일 갱신 성공")
+                .list(mobileCookies)
                 .build(), HttpStatus.OK);
     }
     @PostMapping("/knu/logout")
