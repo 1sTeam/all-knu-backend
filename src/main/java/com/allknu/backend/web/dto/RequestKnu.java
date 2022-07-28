@@ -107,8 +107,10 @@ public class RequestKnu {
     }
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class VeriusLogin{
         @NotNull(message = "강남대 쿠키 넣어주세요")
-        private SessionInfo sessionInfo;
+        private String ssoCookies;
     }
 }
