@@ -113,4 +113,14 @@ public class RequestKnu {
         @NotNull(message = "강남대 쿠키 넣어주세요")
         private SessionInfo sessionInfo;
     }
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class MobileLogin{
+        @NotNull(message = "아이디가 비었다")
+        private String id;
+        @NotNull(message = "비밀번호가 비었다")
+        private String password;
+    }
 }
