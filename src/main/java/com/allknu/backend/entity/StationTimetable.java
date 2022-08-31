@@ -24,10 +24,14 @@ public class StationTimetable {
     @JoinColumn(name = "station_name")
     private Station station;
 
+    @Column(name = "destination")
+    private String destination;
+
     @Builder
-    public StationTimetable(Station station ,Date stopTime){
+    public StationTimetable(Station station ,Date stopTime, String destination){
         this.station = station;
         this.stopTime = stopTime;
+        this.destination = destination;
     }
 
 }

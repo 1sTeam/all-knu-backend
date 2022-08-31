@@ -1,0 +1,1 @@
+ALTER TABLE station_timetable ADD COLUMN destination VARCHAR(63);
