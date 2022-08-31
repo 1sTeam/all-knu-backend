@@ -10,6 +10,7 @@ import com.allknu.backend.exception.errors.StationTimeDuplicatedException;
 import com.allknu.backend.repository.StationRepository;
 import com.allknu.backend.repository.StationTimetableRepository;
 import com.allknu.backend.web.dto.ResponseStation;
+import com.allknu.backend.web.dto.ResponseStationTimetable;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -91,6 +92,28 @@ public class ShuttleServiceImpl implements ShuttleService {
 
     @Transactional
     @Override
+    public void registerStationTimetable(String stationName, Date stopTime, String destination){
+        //정거장 엔티티 꺼내기
+        Station station = stationRepository.findByStation(stationName);
+        if(station == null){
+            throw new NotFoundStationException();
+        }
+        StationTimetable stationTime = stationTimetableRepository.findByStationAndStopTimeAndDestination(station, stopTime, destination);
+        if(stationTime != null){// 이미 있는 시간일 경우
+            throw new StationTimeDuplicatedException();
+        }
+        //시간 입력
+        StationTimetable stationTimetable = StationTimetable.builder()
+                .station(station)
+                .stopTime(stopTime)
+                .destination(destination)
+                .build();
+        stationTimetableRepository.save(stationTimetable);
+        station.addTimetable(stationTimetable);
+    }
+
+    @Transactional
+    @Override
     public List<ResponseStation.StationTime> getAllStationTimetable(){
         List<ResponseStation.StationTime> list = new ArrayList<>();
         //정거장 엔티티 꺼내기
@@ -111,6 +134,34 @@ public class ShuttleServiceImpl implements ShuttleService {
         }
         return list;
     }
+
+    @Transactional
+    @Override
+    public List<ResponseStation.getStationTime> getStationTimetable(){
+        List<ResponseStation.getStationTime> list = new ArrayList<>();
+        //정거장 엔티티 꺼내기
+        List<Station> stationList = stationRepository.findAll();
+        if(!stationList.isEmpty()){
+            for(Station station :stationList){
+                List<StationTimetable> times = stationTimetableRepository.findByStationOrderByStopTimeAsc(station);
+                List<ResponseStationTimetable> stopTimeList = new ArrayList<>();
+                for(StationTimetable stationTimetable : times){
+                    ResponseStationTimetable response = ResponseStationTimetable.builder()
+                            .time(stationTimetable.getStopTime())
+                            .destination(stationTimetable.getDestination())
+                            .build();
+                    stopTimeList.add(response);
+                }
+                ResponseStation.getStationTime responseDto = ResponseStation.getStationTime.builder()
+                        .station(station.getStation())
+                        .stopTime(stopTimeList)
+                        .build();
+                list.add(responseDto);
+            }
+        }
+        return list;
+    }
+
     @Transactional
     @Override
     public void deleteStationTimetable(String stationName, Date stopTime){
