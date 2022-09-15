@@ -19,4 +19,13 @@ public class ResponseStation {
         private String station;
         private List<Date> stopTime;
     }
+
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class getStationTime {
+        private String station;
+        private List<ResponseStationTimetable> stopTime;
+    }
 }
