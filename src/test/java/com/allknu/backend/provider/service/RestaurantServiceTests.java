@@ -1,28 +1,23 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.RestaurantService;
-import com.allknu.backend.core.types.MealType;
-import com.allknu.backend.entity.Menu;
-import com.allknu.backend.entity.Restaurant;
-import com.allknu.backend.exception.errors.LoginFailedException;
+import com.allknu.backend.domain.MealType;
+import com.allknu.backend.domain.Menu;
+import com.allknu.backend.domain.Restaurant;
 import com.allknu.backend.exception.errors.RestaurantNameDuplicatedException;
 import com.allknu.backend.repository.MenuRepository;
 import com.allknu.backend.repository.RestaurantRepository;
 import com.allknu.backend.web.dto.ResponseRestaurant;
-import io.jsonwebtoken.lang.Assert;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 

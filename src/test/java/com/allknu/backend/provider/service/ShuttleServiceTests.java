@@ -1,8 +1,8 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.ShuttleService;
-import com.allknu.backend.entity.Station;
-import com.allknu.backend.entity.StationTimetable;
+import com.allknu.backend.domain.Station;
+import com.allknu.backend.domain.StationTimetable;
 import com.allknu.backend.exception.errors.NotFoundStationException;
 import com.allknu.backend.exception.errors.StationTimeDuplicatedException;
 import com.allknu.backend.repository.StationRepository;

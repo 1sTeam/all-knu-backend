@@ -1,7 +1,7 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.FCMApiService;
-import com.allknu.backend.entity.FirebaseLog;
+import com.allknu.backend.domain.FirebaseLog;
 import com.allknu.backend.kafka.MessageProducer;
 import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMSubscribeMessage;

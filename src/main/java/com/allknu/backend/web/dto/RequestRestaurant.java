@@ -1,6 +1,6 @@
 package com.allknu.backend.web.dto;
 
-import com.allknu.backend.core.types.MealType;
+import com.allknu.backend.domain.MealType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

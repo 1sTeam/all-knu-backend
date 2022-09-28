@@ -1,14 +1,11 @@
-package com.allknu.backend.entity;
+package com.allknu.backend.domain;
 
-import com.allknu.backend.core.types.MealType;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
 @Table(name="menu")
 @Entity

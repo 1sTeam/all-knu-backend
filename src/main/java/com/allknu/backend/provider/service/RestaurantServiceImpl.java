@@ -1,9 +1,9 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.RestaurantService;
-import com.allknu.backend.core.types.MealType;
-import com.allknu.backend.entity.Menu;
-import com.allknu.backend.entity.Restaurant;
+import com.allknu.backend.domain.MealType;
+import com.allknu.backend.domain.Menu;
+import com.allknu.backend.domain.Restaurant;
 import com.allknu.backend.exception.errors.NotFoundMenuException;
 import com.allknu.backend.exception.errors.NotFoundRestaurantException;
 import com.allknu.backend.exception.errors.RestaurantNameDuplicatedException;
@@ -11,7 +11,6 @@ import com.allknu.backend.repository.MenuRepository;
 import com.allknu.backend.repository.RestaurantRepository;
 import com.allknu.backend.web.dto.ResponseRestaurant;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
