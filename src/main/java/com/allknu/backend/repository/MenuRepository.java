@@ -1,8 +1,7 @@
 package com.allknu.backend.repository;
 
-import com.allknu.backend.core.types.MealType;
-import com.allknu.backend.entity.Menu;
-import com.allknu.backend.entity.Restaurant;
+import com.allknu.backend.domain.MealType;
+import com.allknu.backend.domain.Menu;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;

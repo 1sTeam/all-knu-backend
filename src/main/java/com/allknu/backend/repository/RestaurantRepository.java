@@ -1,6 +1,6 @@
 package com.allknu.backend.repository;
 
-import com.allknu.backend.entity.Restaurant;
+import com.allknu.backend.domain.Restaurant;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 

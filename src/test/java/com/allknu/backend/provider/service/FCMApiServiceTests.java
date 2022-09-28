@@ -1,7 +1,7 @@
 package com.allknu.backend.provider.service;
 
 import com.allknu.backend.core.service.FCMApiService;
-import com.allknu.backend.entity.FirebaseLog;
+import com.allknu.backend.domain.FirebaseLog;
 import com.allknu.backend.repository.FirebaseLogRepository;
 import com.allknu.backend.web.dto.ResponseFcm;
 import org.junit.jupiter.api.DisplayName;

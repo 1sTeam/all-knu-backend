@@ -1,12 +1,9 @@
 package com.allknu.backend.web;
 
-import com.allknu.backend.core.service.KnuMobileApiService;
-import com.allknu.backend.core.types.MealType;
+import com.allknu.backend.domain.MealType;
 import com.allknu.backend.web.dto.CommonResponse;
-import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.RequestRestaurant;
 import com.allknu.backend.core.service.RestaurantService;
-import com.allknu.backend.web.dto.ResponseRestaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 import java.util.Date;
-import java.util.List;
 
 @RestController
 @RequiredArgsConstructor

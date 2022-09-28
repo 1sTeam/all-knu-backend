@@ -1,7 +1,7 @@
 package com.allknu.backend.core.service;
 
 
-import com.allknu.backend.core.types.MealType;
+import com.allknu.backend.domain.MealType;
 import com.allknu.backend.web.dto.ResponseRestaurant;
 
 import java.util.Date;

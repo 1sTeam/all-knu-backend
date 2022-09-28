@@ -1,4 +1,4 @@
-package com.allknu.backend.entity;
+package com.allknu.backend.domain;
 
 import lombok.Builder;
 import lombok.Getter;

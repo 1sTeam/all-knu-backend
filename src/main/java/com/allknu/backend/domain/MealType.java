@@ -1,4 +1,4 @@
-package com.allknu.backend.core.types;
+package com.allknu.backend.domain;
 
 public enum MealType {
     BREAKFAST, LUNCH, DINNER

@@ -1,7 +1,7 @@
 package com.allknu.backend.repository;
 
-import com.allknu.backend.entity.Station;
-import com.allknu.backend.entity.StationTimetable;
+import com.allknu.backend.domain.Station;
+import com.allknu.backend.domain.StationTimetable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Date;

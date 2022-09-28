@@ -1,6 +1,6 @@
 package com.allknu.backend.repository;
 
-import com.allknu.backend.entity.FirebaseLog;
+import com.allknu.backend.domain.FirebaseLog;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

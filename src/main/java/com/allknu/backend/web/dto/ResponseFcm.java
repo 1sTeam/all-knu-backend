@@ -1,6 +1,6 @@
 package com.allknu.backend.web.dto;
 
-import com.allknu.backend.entity.FirebaseLog;
+import com.allknu.backend.domain.FirebaseLog;
 import lombok.Builder;
 import lombok.Data;
 
