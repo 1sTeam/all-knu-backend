@@ -36,7 +36,7 @@ public class MapMarker {
     private GPSLocation gpsLocation;
 
     // time, phone처럼 운영 시간 관련 1대1 매핑 info
-    @OneToOne(mappedBy = "mapMarker", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST})
+    @OneToOne(mappedBy = "mapMarker", fetch = FetchType.EAGER, cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     private MapMarkerOperationInfo mapMarkerOperationInfo;
 
     @Builder
