@@ -4,6 +4,7 @@ import com.allknu.backend.core.service.MapService;
 import com.allknu.backend.domain.GPSLocation;
 import com.allknu.backend.domain.MapMarker;
 import com.allknu.backend.domain.MapMarkerOperationInfo;
+import com.allknu.backend.exception.errors.NotFoundMapMarkerException;
 import com.allknu.backend.repository.MapMarkerInfoRepository;
 import com.allknu.backend.repository.MapMarkerRepository;
 import com.allknu.backend.web.dto.RequestMap;
@@ -51,5 +52,15 @@ public class MapServiceImpl implements MapService {
 
         marker = mapMarkerRepository.save(marker);
         return marker.getId();
+    }
+    @Override
+    @Transactional
+    public void deleteMarker(String name) {
+        MapMarker mapMarker= mapMarkerRepository.findByName(name);
+
+        if(mapMarker == null){
+            throw new NotFoundMapMarkerException();
+        }
+        mapMarkerRepository.delete(mapMarker);
     }
 }

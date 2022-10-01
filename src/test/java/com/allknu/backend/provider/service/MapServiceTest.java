@@ -3,6 +3,7 @@ package com.allknu.backend.provider.service;
 import com.allknu.backend.core.service.MapService;
 import com.allknu.backend.domain.GPSLocation;
 import com.allknu.backend.domain.MapMarker;
+import com.allknu.backend.domain.MapMarkerOperationInfo;
 import com.allknu.backend.domain.MapMarkerType;
 import com.allknu.backend.repository.MapMarkerInfoRepository;
 import com.allknu.backend.repository.MapMarkerRepository;
@@ -14,6 +15,8 @@ import org.mockito.MockitoAnnotations;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.test.context.ActiveProfiles;
+
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -87,5 +90,37 @@ class MapServiceTest {
         assertEquals(marker.getIcon(), dto.getIcon());
         assertEquals(marker.getMapMarkerOperationInfo().getOperationTime(), dto.getOperationInfo().getOperationTime());
         assertNotNull(marker.getGpsLocation());
+    }
+    @Test
+    @DisplayName("맵 마커 삭제 성공 테스트")
+    void deleteMapMarker() {
+        //given
+        MapMarker mapMarker = MapMarker.builder()
+                .mapMarkerType(MapMarkerType.NORMAL)
+                .title("흡연장")
+                .subTitle("흡연장")
+                .name("샬롬관 흡연장")
+                .floor("5층")
+                .room("503호 강의실 뒷문 밖")
+                .icon("smoking")
+                .image("shalom_image")
+                .gpsLocation(GPSLocation.builder()
+                        .latitude(37.27545381952122)
+                        .longitude(127.13062209315156)
+                        .build())
+                .build();
+        MapMarkerOperationInfo mapMarkerOperationInfo = MapMarkerOperationInfo.builder()
+                .operationTime("평일 09:00 ~ 21:00 이외 무인 운영")
+                .phone("010")
+                .build();
+        mapMarker.mappingOperationInfo(mapMarkerOperationInfo);
+        mapMarkerRepository.save(mapMarker);
+        assertEquals(mapMarkerRepository.findAll().size(), 1);
+        assertEquals(mapMarkerInfoRepository.findAll().size(), 1);
+        //when
+        mapService.deleteMarker("샬롬관 흡연장");
+        //then
+        assertEquals(mapMarkerRepository.findAll().size(), 0);
+        assertEquals(mapMarkerInfoRepository.findAll().size(), 0);
     }
 }
