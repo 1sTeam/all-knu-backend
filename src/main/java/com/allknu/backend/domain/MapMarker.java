@@ -40,7 +40,8 @@ public class MapMarker {
     private MapMarkerOperationInfo mapMarkerOperationInfo;
 
     @Builder
-    public MapMarker(String title, String subTitle, String floor, String room, String name, String icon, String image, GPSLocation gpsLocation) {
+    public MapMarker(MapMarkerType mapMarkerType, String title, String subTitle, String floor, String room, String name, String icon, String image, GPSLocation gpsLocation) {
+        this.mapMarkerType = mapMarkerType;
         this.title = title;
         this.subTitle = subTitle;
         this.floor = floor;

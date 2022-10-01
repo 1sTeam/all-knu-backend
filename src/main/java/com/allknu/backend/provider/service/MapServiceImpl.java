@@ -26,6 +26,7 @@ public class MapServiceImpl implements MapService {
     public Long createMarker(RequestMap.CreateMarker createMarkerDto) {
         // 마커생성
         MapMarker marker = MapMarker.builder()
+                .mapMarkerType(createMarkerDto.getType())
                 .title(createMarkerDto.getTitle())
                 .floor(createMarkerDto.getFloor())
                 .icon(createMarkerDto.getIcon())
