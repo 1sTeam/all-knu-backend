@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface MapService {
     Long createMarker(RequestMap.CreateMarker createMarkerDto);
-    void deleteMarker(String name);
+    void deleteMarker(Long id);
     List<ResponseMap.GetMapMarker> getMapMarkers();
 
 }
