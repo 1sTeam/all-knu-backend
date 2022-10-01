@@ -24,6 +24,7 @@ public class MapServiceImpl implements MapService {
 
     /**
      * 맵 마커를 추가한다.
+     *
      * @param createMarkerDto
      */
     @Override
@@ -46,34 +47,37 @@ public class MapServiceImpl implements MapService {
                 .build();
 
         // 운영 시간 관련 정보가 담겨있는 경우, 1대1 매핑해준다.
-        if(createMarkerDto.getOperationInfo() != null) {
+        if (createMarkerDto.getOperationInfo() != null) {
             marker.mappingOperationInfo(MapMarkerOperationInfo
                     .builder()
-                            .operationTime(createMarkerDto.getOperationInfo().getOperationTime())
-                            .phone(createMarkerDto.getOperationInfo().getPhone())
+                    .operationTime(createMarkerDto.getOperationInfo().getOperationTime())
+                    .phone(createMarkerDto.getOperationInfo().getPhone())
                     .build());
         }
 
         marker = mapMarkerRepository.save(marker);
         return marker.getId();
-    }    @Override
-    @Transactional
-    public void deleteMarker(String name) {
-        MapMarker mapMarker= mapMarkerRepository.findByName(name);
-
-        if(mapMarker == null){
-            throw new NotFoundMapMarkerException();
-        }
-        mapMarkerRepository.delete(mapMarker);
+    }
 
     @Override
     @Transactional
-    public List<ResponseMap.GetMapMarker> getMapMarkers(){
+    public void deleteMarker(Long id) {
+        MapMarker mapMarker = mapMarkerRepository.getById(id);
+
+        if (mapMarker == null) {
+            throw new NotFoundMapMarkerException();
+        }
+        mapMarkerRepository.delete(mapMarker);
+    }
+
+    @Override
+    @Transactional
+    public List<ResponseMap.GetMapMarker> getMapMarkers() {
         List<ResponseMap.GetMapMarker> list = new ArrayList<>();
         List<MapMarker> mapMarkers = mapMarkerRepository.findAll();
-        for(MapMarker marker : mapMarkers){
+        for (MapMarker marker : mapMarkers) {
             ResponseMap.Info info = null;
-            if(marker.getMapMarkerOperationInfo() != null){// info 정보가 있을 때
+            if (marker.getMapMarkerOperationInfo() != null) {// info 정보가 있을 때
                 info = ResponseMap.Info.builder()
                         .time(marker.getMapMarkerOperationInfo().getOperationTime())
                         .phone(marker.getMapMarkerOperationInfo().getPhone())

@@ -31,14 +31,15 @@ public class MapController {
                 .message("추가 성공")
                 .build(), HttpStatus.OK);
     }
-    @DeleteMapping("/api/vi/knu/map/marker/{name}")
-    public ResponseEntity<CommonResponse> deleteMapMarker(@PathVariable("name") String name) {
-        mapService.deleteMarker(name);
+    @DeleteMapping("/api/vi/knu/map/marker/{id}")
+    public ResponseEntity<CommonResponse> deleteMapMarker(@PathVariable("id") Long id){
+            mapService.deleteMarker(id);
 
-        return new ResponseEntity<>(CommonResponse.builder()
-                .status(HttpStatus.OK.value())
-                .message("지도 마커 삭제 성공")
-                .build(), HttpStatus.OK);
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("지도 마커 삭제 성공")
+                    .build(), HttpStatus.OK);
+    }
 
     @GetMapping("/api/v1/knu/map/markers")
     public ResponseEntity<CommonResponse> getMapMarkers(){
