@@ -10,7 +10,7 @@ public class ResponseMap {
     @Data
     public static class GetMapMarker{
         private Long id;
-        private MapMarkerType type;
+        private String type;
         private String title;
         private String subTitle;
         private String floor;
