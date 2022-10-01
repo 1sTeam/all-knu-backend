@@ -31,7 +31,7 @@ public class MapController {
                 .message("추가 성공")
                 .build(), HttpStatus.OK);
     }
-    @DeleteMapping("/api/vi/knu/map/marker/{id}")
+    @DeleteMapping("/api/v1/knu/map/marker/{id}")
     public ResponseEntity<CommonResponse> deleteMapMarker(@PathVariable("id") Long id){
             mapService.deleteMarker(id);
 
