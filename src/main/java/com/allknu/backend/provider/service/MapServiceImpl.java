@@ -72,7 +72,7 @@ public class MapServiceImpl implements MapService {
             }
             ResponseMap.GetMapMarker response = ResponseMap.GetMapMarker.builder()
                     .id(marker.getId())
-                    .type(marker.getMapMarkerType())
+                    .type(marker.getMapMarkerType().getValue())
                     .title(marker.getTitle())
                     .subTitle(marker.getSubTitle())
                     .floor(marker.getFloor())
