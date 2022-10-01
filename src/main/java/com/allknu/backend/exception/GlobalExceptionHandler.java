@@ -190,5 +190,17 @@ public class GlobalExceptionHandler {
 
         return new ResponseEntity<>(response, errorCode.getStatus());
     }
+    @ExceptionHandler(NotFoundMapMarkerException.class)
+    protected ResponseEntity<ErrorResponse> handleNotFoundMapMarkerException(NotFoundMapMarkerException e) {
+        ErrorCode errorCode = ErrorCode.NOT_FOUND_MAP_MARKER;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
 
 }

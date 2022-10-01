@@ -7,6 +7,7 @@ import com.allknu.backend.web.dto.ResponseMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +30,15 @@ public class MapController {
                 .status(HttpStatus.OK.value())
                 .message("추가 성공")
                 .build(), HttpStatus.OK);
+    }
+    @DeleteMapping("/api/vi/knu/map/marker/{id}")
+    public ResponseEntity<CommonResponse> deleteMapMarker(@PathVariable("id") Long id){
+            mapService.deleteMarker(id);
+
+            return new ResponseEntity<>(CommonResponse.builder()
+                    .status(HttpStatus.OK.value())
+                    .message("지도 마커 삭제 성공")
+                    .build(), HttpStatus.OK);
     }
 
     @GetMapping("/api/v1/knu/map/markers")

@@ -92,10 +92,42 @@ class MapServiceTest {
         assertEquals(marker.getMapMarkerOperationInfo().getOperationTime(), dto.getOperationInfo().getOperationTime());
         assertNotNull(marker.getGpsLocation());
     }
-
+    @Test
+    @DisplayName("맵 마커 삭제 성공 테스트")
+    void deleteMapMarker() {
+        //given
+        MapMarker mapMarker = MapMarker.builder()
+                .mapMarkerType(MapMarkerType.NORMAL)
+                .title("흡연장")
+                .subTitle("흡연장")
+                .name("샬롬관 흡연장")
+                .floor("5층")
+                .room("503호 강의실 뒷문 밖")
+                .icon("smoking")
+                .image("shalom_image")
+                .gpsLocation(GPSLocation.builder()
+                        .latitude(37.27545381952122)
+                        .longitude(127.13062209315156)
+                        .build())
+                .build();
+        MapMarkerOperationInfo mapMarkerOperationInfo = MapMarkerOperationInfo.builder()
+                .operationTime("평일 09:00 ~ 21:00 이외 무인 운영")
+                .phone("010")
+                .build();
+        mapMarker.mappingOperationInfo(mapMarkerOperationInfo);
+        mapMarker = mapMarkerRepository.save(mapMarker);
+        assertEquals(mapMarkerRepository.findAll().size(), 1);
+        assertEquals(mapMarkerInfoRepository.findAll().size(), 1);
+        //when
+        mapService.deleteMarker(mapMarkerRepository.findAll().get(0).getId());
+        //then
+        assertEquals(mapMarkerRepository.findAll().size(), 0);
+        assertEquals(mapMarkerInfoRepository.findAll().size(), 0);
+    }
     @Test
     @DisplayName("맵 마커 조회 테스트")
     void getMarkerTest(){
+        //추가
         //추가
         MapMarker marker = MapMarker.builder()
                 .mapMarkerType(MapMarkerType.NORMAL)
@@ -118,11 +150,10 @@ class MapServiceTest {
         info = mapMarkerInfoRepository.save(info);
         marker.mappingOperationInfo(info);
         //조회
-       List<ResponseMap.GetMapMarker> list =  mapService.getMapMarkers();
-       for(ResponseMap.GetMapMarker res : list){
-           assertNotNull(res.getInfo());
-           assertNotNull(res.getTitle());
-       }
-
+        List<ResponseMap.GetMapMarker> list =  mapService.getMapMarkers();
+        for(ResponseMap.GetMapMarker res : list){
+            assertNotNull(res.getInfo());
+            assertNotNull(res.getTitle());
+        }
     }
 }
