@@ -7,9 +7,13 @@ import com.allknu.backend.domain.MapMarkerOperationInfo;
 import com.allknu.backend.repository.MapMarkerInfoRepository;
 import com.allknu.backend.repository.MapMarkerRepository;
 import com.allknu.backend.web.dto.RequestMap;
+import com.allknu.backend.web.dto.ResponseMap;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -50,5 +54,40 @@ public class MapServiceImpl implements MapService {
 
         marker = mapMarkerRepository.save(marker);
         return marker.getId();
+    }
+
+    @Override
+    @Transactional
+    public List<ResponseMap.GetMapMarker> getMapMarkers(){
+        List<ResponseMap.GetMapMarker> list = new ArrayList<>();
+        List<MapMarker> mapMarkers = mapMarkerRepository.findAll();
+        for(MapMarker marker : mapMarkers){
+            ResponseMap.Info info = null;
+            if(marker.getMapMarkerOperationInfo() != null){// info 정보가 있을 때
+                info = ResponseMap.Info.builder()
+                        .time(marker.getMapMarkerOperationInfo().getOperationTime())
+                        .phone(marker.getMapMarkerOperationInfo().getPhone())
+                        .build();
+            }
+            ResponseMap.GetMapMarker response = ResponseMap.GetMapMarker.builder()
+                    .id(marker.getId())
+                    .type(marker.getMapMarkerType())
+                    .title(marker.getTitle())
+                    .subTitle(marker.getSubTitle())
+                    .floor(marker.getFloor())
+                    .room(marker.getRoom())
+                    .name(marker.getName())
+                    .icon(marker.getIcon())
+                    .image(marker.getImage())
+                    .location(ResponseMap.Location.builder()
+                            .lat(marker.getGpsLocation().getLatitude())
+                            .lon(marker.getGpsLocation().getLongitude())
+                            .build())
+                    .info(info)
+                    .build();
+
+            list.add(response);
+        }
+        return list;
     }
 }
