@@ -8,6 +8,7 @@ import com.allknu.backend.domain.MapMarkerType;
 import com.allknu.backend.repository.MapMarkerInfoRepository;
 import com.allknu.backend.repository.MapMarkerRepository;
 import com.allknu.backend.web.dto.RequestMap;
+import com.allknu.backend.web.dto.ResponseMap;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -100,6 +101,15 @@ class MapServiceTest {
                 .title("흡연장")
                 .subTitle("흡연장")
                 .name("샬롬관 흡연장")
+
+    @Test
+    @DisplayName("맵 마커 조회 테스트")
+    void getMarkerTest(){
+        //추가
+        MapMarker marker = MapMarker.builder()
+                .mapMarkerType(MapMarkerType.NORMAL)
+                .title("흡연장")
+                .subTitle("흡연장")
                 .floor("5층")
                 .room("503호 강의실 뒷문 밖")
                 .icon("smoking")
@@ -122,5 +132,22 @@ class MapServiceTest {
         //then
         assertEquals(mapMarkerRepository.findAll().size(), 0);
         assertEquals(mapMarkerInfoRepository.findAll().size(), 0);
+                        .latitude(37.1123)
+                        .longitude(127.213213)
+                        .build())
+                .build();
+        marker = mapMarkerRepository.save(marker);
+        MapMarkerOperationInfo info = MapMarkerOperationInfo.builder()
+                .operationTime("평일 09:00 ~ 21:00 이외 무인 운영")
+                .phone("010")
+                .build();
+        info = mapMarkerInfoRepository.save(info);
+        marker.mappingOperationInfo(info);
+        //조회
+       List<ResponseMap.GetMapMarker> list =  mapService.getMapMarkers();
+       for(ResponseMap.GetMapMarker res : list){
+           assertNotNull(res.getInfo());
+           assertNotNull(res.getTitle());
+       }
     }
 }
