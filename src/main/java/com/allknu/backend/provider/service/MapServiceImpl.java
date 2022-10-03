@@ -98,6 +98,7 @@ public class MapServiceImpl implements MapService {
                             .lon(marker.getGpsLocation().getLongitude())
                             .build())
                     .more(info)
+                    .info(info)
                     .build();
 
             list.add(response);
