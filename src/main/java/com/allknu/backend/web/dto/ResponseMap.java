@@ -20,6 +20,7 @@ public class ResponseMap {
         private String image;
         private ResponseMap.Location location;
         private ResponseMap.Info more;
+        private ResponseMap.Info info;
 
     }
 
