@@ -19,7 +19,7 @@ public class ResponseMap {
         private String icon;
         private String image;
         private ResponseMap.Location location;
-        private ResponseMap.Info info;
+        private ResponseMap.Info more;
 
     }
 

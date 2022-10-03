@@ -152,7 +152,7 @@ class MapServiceTest {
         //조회
         List<ResponseMap.GetMapMarker> list =  mapService.getMapMarkers();
         for(ResponseMap.GetMapMarker res : list){
-            assertNotNull(res.getInfo());
+            assertNotNull(res.getMore());
             assertNotNull(res.getTitle());
         }
     }
