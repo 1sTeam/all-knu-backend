@@ -71,10 +71,10 @@ public class MapServiceImpl implements MapService {
     }
 
     @Override
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ResponseMap.GetMapMarker> getMapMarkers() {
         List<ResponseMap.GetMapMarker> list = new ArrayList<>();
-        List<MapMarker> mapMarkers = mapMarkerRepository.findAll();
+        List<MapMarker> mapMarkers = mapMarkerRepository.findAllMapMarker();
         for (MapMarker marker : mapMarkers) {
             ResponseMap.Info info = null;
             if (marker.getMapMarkerOperationInfo() != null) {// info 정보가 있을 때

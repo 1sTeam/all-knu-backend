@@ -128,6 +128,26 @@ class MapServiceTest {
     @DisplayName("맵 마커 조회 테스트")
     void getMarkerTest(){
         //추가
+        MapMarker marker1 = MapMarker.builder()
+                .mapMarkerType(MapMarkerType.NORMAL)
+                .title("흡연장1")
+                .subTitle("흡연장1")
+                .floor("5층")
+                .room("503호 강의실 뒷문 밖")
+                .icon("smoking")
+                .image("shalom_image")
+                .gpsLocation(GPSLocation.builder()
+                        .latitude(37.1123)
+                        .longitude(127.213213)
+                        .build())
+                .build();
+        marker1 = mapMarkerRepository.save(marker1);
+        MapMarkerOperationInfo info1 = MapMarkerOperationInfo.builder()
+                .operationTime("평일 09:00 ~ 21:00 이외 무인 운영")
+                .phone("010")
+                .build();
+        info1 = mapMarkerInfoRepository.save(info1);
+        marker1.mappingOperationInfo(info1);
         //추가
         MapMarker marker = MapMarker.builder()
                 .mapMarkerType(MapMarkerType.NORMAL)
