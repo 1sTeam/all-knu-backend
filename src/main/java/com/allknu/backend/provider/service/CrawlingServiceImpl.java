@@ -116,7 +116,8 @@ public class CrawlingServiceImpl implements CrawlingService {
                 String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
                 String link = "***REMOVED***?scrtWrtiYn=false&encMenuSeq="
                         + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
-                String writer = span.get(0).text().substring(4, span.get(0).text().length()); // 작성자
+
+                String writer = span.get(0).text().substring(3, span.get(0).text().length()); // 작성자
                 String date = span.get(1).text().substring(4, span.get(1).text().length()); // date
                 String views = span.get(2).text().substring(4,span.get(2).text().length()); // views
 
