@@ -227,7 +227,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
     @Override
     public Optional<Map<String,Map<String,Integer>>> getMileage(Map<String, String> veriusCookies){
     Map<String,Map<String,Integer>> response = new HashMap<>();
-    String url = "https://verius.kangnam.ac.kr/user/Std/MyHm0501.do?CURRENT_MENU_CODE=MENU0284&TOP_MENU_CODE=MENU0010";
+    String url = "https://verius.kangnam.ac.kr/user/Std/MyHm0501.do?CURRENT_MENU_CODE=MENU0046&TOP_MENU_CODE=MENU0020";
         try {//크롤링
             Document doc = Jsoup.connect(url)
                     .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
