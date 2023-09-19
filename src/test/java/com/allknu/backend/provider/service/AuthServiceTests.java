@@ -1,7 +1,8 @@
 package com.allknu.backend.provider.service;
 
-import com.allknu.backend.core.service.KnuApiService;
+import com.allknu.backend.core.service.AuthService;
 import com.allknu.backend.exception.errors.LoginFailedException;
+import com.allknu.backend.web.dto.RequestKnu;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 @SpringBootTest
 @ActiveProfiles("test") // 테스트서버 프로파일 적용
 @TestPropertySource("classpath:/secrets/personal-account-secrets.properties")
-public class KnuApiServiceTests {
+public class AuthServiceTests {
     @Autowired
-    private KnuApiService knuApiService;
+    private AuthService authService;
 
     @Value("${knu.id}")
     private String id;
@@ -29,10 +30,27 @@ public class KnuApiServiceTests {
     @Test
     @DisplayName("sso login 테스트")
     void ssoLoginTest() {
-        Map<String, String> cookies = knuApiService.ssoLogin(id,password).orElseThrow(()->new LoginFailedException());
+        Map<String, String> cookies = authService.knuSsoLogin(id,password).orElseThrow(()->new LoginFailedException());
         for( Map.Entry<String, String> elem : cookies.entrySet() ){
             System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
         }
         assertNotNull(cookies);
+    }
+
+    @Test
+    @DisplayName("mobile 로그인 테스트")
+    void loginTest() {
+        RequestKnu.Login login = RequestKnu.Login.builder()
+                .id(id)
+                .password(password)
+                .build();
+
+        Map<String, String> loginCookies = authService.knuMobileLogin(login.getId(), login.getPassword()).orElseGet(()->null);
+
+        if(loginCookies != null) {
+            for( Map.Entry<String, String> elem : loginCookies.entrySet() ){
+                System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
+            }
+        }
     }
 }

@@ -1,4 +1,6 @@
 spring:
+  profiles:
+    active: local # 기본적으로 local 적용
   mvc:
     static-path-pattern: /static/**
     view:

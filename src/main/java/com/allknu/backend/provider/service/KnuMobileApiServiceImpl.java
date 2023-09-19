@@ -48,69 +48,6 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
     }
 
     @Override
-    public Optional<Map<String, String>> login(String id, String password) {
-        Map<String, String> data = new HashMap<>();
-        data.put("user_id", id);
-        data.put("user_pwd", password);
-
-        Map<String, String> cookies = null;
-        try {
-            Connection.Response res = Jsoup.connect("***REMOVED***")
-                    .method(Connection.Method.POST)
-                    .data(data)
-                    .ignoreContentType(true)
-                    .userAgent("***REMOVED***")
-                    .timeout(5000) // 5초
-                    .execute();
-
-            ObjectMapper mapper = new ObjectMapper();
-            JsonNode jsonNode = mapper.readTree(res.body()); // json mapper
-
-            if(jsonNode.get("result").toString().equals("\"success\"")) {
-                cookies = res.cookies();
-                log.info("모바일 로그인 성공");
-            } else {
-                log.info("모바일 로그인 실패");
-            }
-
-        } catch (IOException e) {
-            log.error("error in mobile login(): " + e);
-        }
-        return Optional.ofNullable(cookies);
-    }
-
-    @Override
-    public Optional<Map<String, String>> refreshSession(String id, String password, SessionInfo sessionInfo) {
-        Map<String, String> cookies = null;
-        if(sessionInfo != null) {
-            cookies = sessionInfo.getMobileCookies();
-        }
-        if(getMyScholarship(cookies).isPresent()) {
-            // 모바일 세션은 유효하므로 발급하지 않음
-            log.debug("기존 모바일 세션이 유효해서 발급하지 않음");
-            return Optional.ofNullable(cookies);
-        }
-        // 기존 모바일 세션이 유효하지 않으므로 새로 발급
-        log.info("기존 모바일 세션이 유효하지않아 새로 발급");
-        return login(id, password);
-    }
-
-    @Override
-    public void logout(Map<String, String> cookies) {
-        String url = "***REMOVED***";
-        try {
-            Connection.Response res = Jsoup.connect(url)
-                    .method(Connection.Method.GET)
-                    .ignoreContentType(true)
-                    .cookies(cookies)
-                    .userAgent("***REMOVED***")
-                    .execute();
-        } catch (IOException e) {
-            log.error("mobile logout error " + e);
-        }
-    }
-
-    @Override
     public Optional<ResponseKnu.TimeTable> getTimeTable(Map<String, String> cookies) {
         ResponseKnu.TimeTable timeTable = null;
 

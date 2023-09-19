@@ -22,7 +22,7 @@ public class KnuVeriusApiServiceTests {
     @Autowired
     private KnuVeriusApiService knuVeriusApiService;
     @Autowired
-    private KnuApiServiceImpl knuApiService;
+    private AuthServiceImpl authService;
     @Value("${knu.id}")
     private String id;
     @Value("${knu.password}")
@@ -32,9 +32,9 @@ public class KnuVeriusApiServiceTests {
     @BeforeAll
     void beforeAll() {
         //testInstance덕에 static 아니여도 됨
-        Map<String, String> ssoCookies = knuApiService.ssoLogin(id,password).orElseGet(()->null);
+        Map<String, String> ssoCookies = authService.knuSsoLogin(id,password).orElseGet(()->null);
         assertNotNull(ssoCookies);
-        veriusCookies = knuVeriusApiService.veriusLogin(ssoCookies).orElseGet(()->null);
+        veriusCookies = authService.veriusLogin(ssoCookies).orElseGet(()->null);
         assertNotNull(veriusCookies);
     }
     @AfterAll

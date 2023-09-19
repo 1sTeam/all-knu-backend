@@ -26,7 +26,7 @@ spring:
         format_sql: true
 
   kafka:
-    bootstrap-servers: 3.38.64.244:9092
+    bootstrap-servers: 127.0.0.1:9092 # test 서버 카프카 구축 필요
     consumer:
       group-id: all-knu-backend
       auto-offset-reset: latest
