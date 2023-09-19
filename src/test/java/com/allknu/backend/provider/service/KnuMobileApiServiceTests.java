@@ -1,5 +1,6 @@
 package com.allknu.backend.provider.service;
 
+import com.allknu.backend.core.service.AuthService;
 import com.allknu.backend.core.service.KnuMobileApiService;
 import com.allknu.backend.web.dto.RequestKnu;
 import com.allknu.backend.web.dto.ResponseKnu;
@@ -24,6 +25,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class KnuMobileApiServiceTests {
     @Autowired
     private KnuMobileApiService knuMobileApiService;
+    @Autowired
+    private AuthService authService;
     @Value("${knu.id}")
     private String id;
     @Value("${knu.password}")
@@ -36,22 +39,11 @@ public class KnuMobileApiServiceTests {
                 .id(id)
                 .password(password)
                 .build();
-        loginCookies = knuMobileApiService.login(login.getId(), login.getPassword()).orElseGet(()->null);
+        loginCookies = authService.knuMobileLogin(login.getId(), login.getPassword()).orElseGet(()->null);
     }
     @AfterAll
     void after() {
-        knuMobileApiService.logout(loginCookies); // 로그아웃
-    }
-
-    @Test
-    @DisplayName("로그인 테스트")
-    void loginTest() {
-        if(loginCookies != null) {
-            for( Map.Entry<String, String> elem : loginCookies.entrySet() ){
-                System.out.println( String.format("키 : %s, 값 : %s", elem.getKey(), elem.getValue()) );
-            }
-        }
-        assertNotNull(loginCookies);
+        authService.knuMobileLogout(loginCookies); // 로그아웃
     }
 
     @Test

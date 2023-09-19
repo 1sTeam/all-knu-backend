@@ -24,39 +24,6 @@ import java.util.*;
 public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
     private static final Logger logger = LoggerFactory.getLogger(KnuVeriusApiServiceImpl.class);
 
-    public Optional<Map<String, String>> veriusLogin(Map<String, String> ssoCookies) {
-        //sso쿠키로 참인재 로그인
-        Map<String, String> veriusCookies = null;
-        try {
-            Connection.Response res = Jsoup.connect("https://verius.kangnam.ac.kr/sso.do")
-                    .method(Connection.Method.GET)
-                    .cookies(ssoCookies)
-                    .ignoreContentType(true)
-                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/94.0.4606.61 Safari/537.36")
-                    .timeout(10000) // 10초
-                    .execute();
-            veriusCookies = res.cookies();
-            logger.info("참인재 로그인 성공");
-        }catch (IOException e) {
-            logger.error("veriusLogin() error: " + e);
-        }
-        return Optional.ofNullable(veriusCookies);
-    }
-
-    @Override
-    public Optional<Map<String, String>> refreshVeriusLogin(Map<String, String> ssoCookies, SessionInfo sessionInfo) {
-        try {
-            // 기존 세션이 유효한지 검사, getStudentInfo를 호출해서
-            if(getStudentInfo(sessionInfo.getVeriusCookies()).isPresent()) {
-                return Optional.ofNullable(sessionInfo.getVeriusCookies());
-            }
-        } catch (Exception e) {
-            logger.info("참인재 세션 갱신을 위해 getStudentInfo를 호출했으나 실패, 세션을 새로 갱신" + e);
-        }
-        // 새로 로그인
-        return veriusLogin(ssoCookies);
-    }
-
     @Override
     public Optional<Map<String, String>> getStudentInfo(Map<String, String> veriusCookies) {
         //참인재시스템에서 학과, 학번, 이름 등 학생 정보를 긁어다 준다.
