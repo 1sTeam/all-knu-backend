@@ -1,25 +1,25 @@
 # all-knu-backend
 
-## maven run
-프로파일과 실행 포트 지정
-```bash
-./mvnw spring-boot:run -Dspring-boot.run.profiles=local -Dspring-boot.run.jvmArguments='-Dserver.port=8080'
+## 기본 secret 환경 구성
+### resources/secrets/jwt-secrets.properties
+```properties
+jwt.secret={secret}
+```
+### resources/secrets/personal-account-secrets.properties
+```properties
+knu.id={secret}
+knu.password={secret}
 ```
 
-## maven build
+## gradle build
 ```bash
-./mvnw clean package
-```
-### option
-테스트 스킵
-```bash
--DskipTests
+./gradlew bootJar -x test
 ```
 
 ## docker build
 이미지 이름을 지정, java.security 이슈 때문에 지정된 자바 버전 사용..!
 ```bash
-maven build 후 진행
+gradle build 후 진행
 docker build -t all-knu-backend .
 ```
 
@@ -31,5 +31,3 @@ docker run -e "SPRING_PROFILES_ACTIVE=local" -d -p 8080:8080 -t all-knu-backend
 ### option
 - 컨테이너 이름 지정 `--name`
 - docker network 지정 `--net`
-
-![포스터 (2)](https://user-images.githubusercontent.com/35598710/146746726-6032219a-f47d-4c1e-b996-ec7f5252adb7.png)
