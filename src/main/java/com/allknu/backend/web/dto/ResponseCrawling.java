@@ -1,13 +1,17 @@
 package com.allknu.backend.web.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotNull;
 
 public class ResponseCrawling {
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class UnivNotice {
         private String title;
         private String link;
@@ -19,6 +23,8 @@ public class ResponseCrawling {
     }
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class EventNotice {
         private String title;
         private String link;
@@ -26,8 +32,10 @@ public class ResponseCrawling {
         private String date;
         private String views;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Schedule {
         private String date;
         private String content;

@@ -1,38 +1,50 @@
 package com.allknu.backend.web.dto;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 import java.util.List;
 
 public class ResponseKnu {
 
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class TimeTable {
         private Object data;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class PeriodUniv {
         private Object data;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Grade {
         private Object data;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class CalendarItem {
         private String year;
         private String start;
         private String end;
         private String describe;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class ScholarshipItem {
         private String amount;
         private String department;
@@ -41,8 +53,10 @@ public class ResponseKnu {
         private String semester;
         private String describe;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Tuition {
         private String date;
         private String bank;
@@ -52,8 +66,10 @@ public class ResponseKnu {
         private String dividedAmount;
         private String dividedPay;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class VeriusSatisfaction {
         private String number;
         private String name;
@@ -62,8 +78,10 @@ public class ResponseKnu {
         private String status;
         private String link;
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class MyVeriusProgram {
         private String number;                  //번호(fnDetail, 식별자)
         private String title;                   //제목
@@ -73,8 +91,10 @@ public class ResponseKnu {
         private String department;              //부서
         private String link;                    //제목 링크
     }
-    @Data
     @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Staff {
         private String workOn;
         private String userName;

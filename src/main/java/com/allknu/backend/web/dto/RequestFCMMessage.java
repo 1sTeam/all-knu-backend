@@ -7,8 +7,10 @@ import com.allknu.backend.core.types.firebase.ApnsPushType;
 import com.allknu.backend.kafka.dto.FCMMobileMessage;
 import com.allknu.backend.kafka.dto.FCMSubscribeMessage;
 import com.allknu.backend.kafka.dto.FCMWebMessage;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -19,6 +21,8 @@ public class RequestFCMMessage {
 
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Web {
         private List<SubscribeType> subscribeTypes; //보내고자하는 구독 유형 리스트
         @NotEmpty(message = "제목이 비어있다.")
@@ -39,6 +43,8 @@ public class RequestFCMMessage {
     }
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Mobile {
         private List<SubscribeType> subscribeTypes; //보내고자하는 구독 유형 리스트
         @NotEmpty(message = "제목이 비어있다.")
@@ -66,6 +72,8 @@ public class RequestFCMMessage {
 
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Subscribe {
         @NotEmpty(message = "토큰이 비어있습니다")
         private String token; // 토큰

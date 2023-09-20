@@ -1,13 +1,17 @@
 package com.allknu.backend.web.dto;
 
 import com.allknu.backend.domain.MapMarkerType;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 
 public class ResponseMap {
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class GetMapMarker{
         private Long id;
         private String type;
@@ -26,6 +30,8 @@ public class ResponseMap {
 
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Location {
         private Double lat;
         private Double lon;
@@ -33,6 +39,8 @@ public class ResponseMap {
 
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Info {
         private String time;
         private String phone;
