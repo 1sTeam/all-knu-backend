@@ -1,8 +1,10 @@
 package com.allknu.backend.web.dto;
 
 import com.allknu.backend.domain.FirebaseLog;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.Date;
 
@@ -10,6 +12,8 @@ public class ResponseFcm {
 
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class Log {
         private Long id;
         private String adminEmail;
@@ -33,6 +37,8 @@ public class ResponseFcm {
 
     @Builder
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class SubscribeType {
         private String topic;
         private String korean;
