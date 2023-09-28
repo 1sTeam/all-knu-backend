@@ -49,16 +49,6 @@ public class ShuttleController {
                 .build(), HttpStatus.OK);
     }
 
-    @PostMapping("/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> addStationTimetable(@RequestBody RequestStationTimetable.StationTime requestDto){
-        shuttleService.registerStationTimetable(requestDto.getStation(), requestDto.getTime());
-
-        return new ResponseEntity<>(CommonResponse.builder()
-                .status(HttpStatus.OK.value())
-                .message("달구지 시간표 등록 성공")
-                .build(), HttpStatus.OK);
-    }
-
     @PostMapping("/api/v2/knu/shuttle/timetable")
     public ResponseEntity<CommonResponse> registerStationTimetable(@RequestBody RequestStationTimetable.registerStationTime requestDto){
         shuttleService.registerStationTimetable(requestDto.getStation(), requestDto.getTime(), requestDto.getDestination());
@@ -66,17 +56,6 @@ public class ShuttleController {
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("달구지 시간표 등록 성공")
-                .build(), HttpStatus.OK);
-    }
-
-    @GetMapping("/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> getAllStationTimetable(){
-        List<ResponseStation.StationTime> stationTimetables = shuttleService.getAllStationTimetable();
-
-        return new ResponseEntity<>(CommonResponse.builder()
-                .status(HttpStatus.OK.value())
-                .message("달구지 정거장 시간표 조회 성공")
-                .list(stationTimetables)
                 .build(), HttpStatus.OK);
     }
 

@@ -71,27 +71,6 @@ public class ShuttleServiceImpl implements ShuttleService {
 
     @Transactional
     @Override
-    public void registerStationTimetable(String stationName, Date stopTime){
-        //정거장 엔티티 꺼내기
-        Station station = stationRepository.findByStation(stationName);
-        if(station == null){
-            throw new NotFoundStationException();
-        }
-        StationTimetable stationTime = stationTimetableRepository.findByStationAndStopTime(station, stopTime);
-        if(stationTime != null){// 이미 있는 시간일 경우
-            throw new StationTimeDuplicatedException();
-        }
-        //시간 입력
-        StationTimetable stationTimetable = StationTimetable.builder()
-                .station(station)
-                .stopTime(stopTime)
-                .build();
-        stationTimetableRepository.save(stationTimetable);
-        station.addTimetable(stationTimetable);
-    }
-
-    @Transactional
-    @Override
     public void registerStationTimetable(String stationName, Date stopTime, String destination){
         //정거장 엔티티 꺼내기
         Station station = stationRepository.findByStation(stationName);
@@ -110,29 +89,6 @@ public class ShuttleServiceImpl implements ShuttleService {
                 .build();
         stationTimetableRepository.save(stationTimetable);
         station.addTimetable(stationTimetable);
-    }
-
-    @Transactional
-    @Override
-    public List<ResponseStation.StationTime> getAllStationTimetable(){
-        List<ResponseStation.StationTime> list = new ArrayList<>();
-        //정거장 엔티티 꺼내기
-        List<Station> stationList = stationRepository.findAll();
-        if(!stationList.isEmpty()){
-            for(Station station :stationList){
-                List<StationTimetable> times = stationTimetableRepository.findByStationOrderByStopTimeAsc(station);
-                List<Date> dates = new ArrayList<>();
-                for(StationTimetable stationTimetable : times){
-                    dates.add(stationTimetable.getStopTime());
-                }
-                ResponseStation.StationTime responseDto = ResponseStation.StationTime.builder()
-                        .station(station.getStation())
-                        .stopTime(dates)
-                        .build();
-                list.add(responseDto);
-            }
-        }
-        return list;
     }
 
     @Transactional
