@@ -26,6 +26,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final RestaurantRepository restaurantRepository;
     private final MenuRepository menuRepository;
 
+    /**
+     *
+     * @param restaurant
+     * @author kymokim
+     */
     @Override
     @Transactional
     public void registerRestaurant(String restaurant){
@@ -39,6 +44,14 @@ public class RestaurantServiceImpl implements RestaurantService {
             restaurantRepository.save(res);
     }
 
+    /**
+     *
+     * @param restaurant
+     * @param date
+     * @param menu
+     * @param time
+     * @author kymokim
+     */
     @Override
     @Transactional
     public void registerMenu(String restaurant, Date date, List<String> menu, MealType time){
@@ -57,6 +70,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         }
     }
 
+    /**
+     *
+     * @return List<String> listDto
+     * @author kymokim
+     */
     @Transactional(readOnly = true)
     @Override
     public List<String> getAllRestaurants() {
@@ -68,6 +86,13 @@ public class RestaurantServiceImpl implements RestaurantService {
         return listDto;
     }
 
+    /**
+     * itemBuilder로 List<ResponseRestaurant.FindMenu> list 만든 후 return
+     *
+     * @param date
+     * @return List<ResponseRestaurant.FindMenu> list
+     * @author kymokim
+     */
     @Transactional(readOnly = true)
     @Override
     public List<ResponseRestaurant.FindMenu> getAllMenuByDate(Date date) {
@@ -101,6 +126,11 @@ public class RestaurantServiceImpl implements RestaurantService {
         return list;
     }
 
+    /**
+     *
+     * @param restaurant
+     * @author kymokim
+     */
     @Transactional
     @Override
     public void deleteRestaurant(String restaurant) {
@@ -111,6 +141,13 @@ public class RestaurantServiceImpl implements RestaurantService {
         restaurantRepository.delete(res);
     }
 
+    /**
+     *
+     * @param restaurant
+     * @param date
+     * @param type
+     * @author kymokim
+     */
     @Override
     @Transactional
     public void deleteMenu(String restaurant, Date date, MealType type) {
