@@ -27,6 +27,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     private final MenuRepository menuRepository;
 
     /**
+     * restaurantName으로 안 찾아질 경우 RestaurantNameDuplicatedException(), 403 반환
+     * 추후에 이미 등록되어있는 경우 예외 처리도 추가해야 함
      *
      * @param restaurant
      * @author kymokim
@@ -45,6 +47,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     /**
+     * 마찬가지로 이미 등록된 메뉴에 대한 예외처리 필요
+     * menu의 개수만큼 for문을 돌려 menu 빌드, 저장, 식당에 추가 진행
      *
      * @param restaurant
      * @param date
@@ -71,6 +75,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     /**
+     * repository에서 전체 가져온 후 이름만 뽑아 listDto에 저장 후 반환
      *
      * @return List<String> listDto
      * @author kymokim
@@ -87,7 +92,7 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     /**
-     * itemBuilder로 List<ResponseRestaurant.FindMenu> list 만든 후 return
+     * 식당 전체를 가져와 restaurants에 저장, 아침/점심/저녁을 각각 리스트에 저장 후 itemBuilder로 build하여 반환
      *
      * @param date
      * @return List<ResponseRestaurant.FindMenu> list
@@ -127,6 +132,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     /**
+     * 식당이름으로 검색 후 없으면 NotFoundRestaurantException(), 404 반환
+     * 있으면 식당 삭제
      *
      * @param restaurant
      * @author kymokim
@@ -142,6 +149,8 @@ public class RestaurantServiceImpl implements RestaurantService {
     }
 
     /**
+     * restaurant, date, type으로 메뉴 찾은 후, 없으면 NotFoundMenuException(), 404 반환
+     * 있으면 메뉴리스트 삭제
      *
      * @param restaurant
      * @param date
