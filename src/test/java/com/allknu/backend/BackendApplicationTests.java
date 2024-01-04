@@ -21,7 +21,7 @@ class BackendApplicationTests {
 
 	@Test
 	void crawlingTest() {
-		String url = "***REMOVED***?paginationInfo.currentPageNo="
+		String url = "https://web.kangnam.ac.kr/menu/f19069e6134f8f8aa7f689a4a675e66f.do?paginationInfo.currentPageNo="
 				+1+"&searchMenuSeq=0&searchType=&searchValue=";
 
 		try {

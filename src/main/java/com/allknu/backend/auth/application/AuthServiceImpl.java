@@ -1,5 +1,6 @@
 package com.allknu.backend.auth.application;
 
+import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.knuapi.application.KnuMobileApiService;
 import com.allknu.backend.knuapi.application.KnuVeriusApiService;
 import com.allknu.backend.global.exception.errors.LoginFailedException;
@@ -25,7 +26,9 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
+
     private static final Logger logger = LoggerFactory.getLogger(AuthServiceImpl.class);
+    private final ApiEndpointSecretProperties apiEndpointSecretProperties;
     private final KnuMobileApiService knuMobileApiService;
     private final KnuVeriusApiService knuVeriusApiService;
 
@@ -38,13 +41,13 @@ public class AuthServiceImpl implements AuthService {
             data.put("uid", id);
             data.put("password", password);
             data.put("gid", "gid_web");
-            data.put("returl", "***REMOVED***");
+            data.put("returl", apiEndpointSecretProperties.getCrawling().getSsoRetUrl());
 
-            Connection.Response ssoLoginRes = Jsoup.connect("***REMOVED***")
+            Connection.Response ssoLoginRes = Jsoup.connect(apiEndpointSecretProperties.getCrawling().getSsoLogin())
                     .method(Connection.Method.POST)
                     .ignoreContentType(true)
                     .data(data)
-                    .userAgent("***REMOVED***")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .timeout(5000) // 5초
                     .execute();
 
@@ -70,11 +73,11 @@ public class AuthServiceImpl implements AuthService {
 
         Map<String, String> cookies = null;
         try {
-            Connection.Response res = Jsoup.connect("***REMOVED***")
+            Connection.Response res = Jsoup.connect(apiEndpointSecretProperties.getMobile().getLogin())
                     .method(Connection.Method.POST)
                     .data(data)
                     .ignoreContentType(true)
-                    .userAgent("***REMOVED***")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .timeout(5000) // 5초
                     .execute();
 
@@ -112,13 +115,13 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void knuMobileLogout(Map<String, String> cookies) {
-        String url = "***REMOVED***";
+        String url = apiEndpointSecretProperties.getMobile().getLogout();
         try {
             Connection.Response res = Jsoup.connect(url)
                     .method(Connection.Method.GET)
                     .ignoreContentType(true)
                     .cookies(cookies)
-                    .userAgent("***REMOVED***")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .execute();
         } catch (IOException e) {
             logger.error("mobile logout error " + e);
@@ -130,11 +133,11 @@ public class AuthServiceImpl implements AuthService {
         //sso쿠키로 참인재 로그인
         Map<String, String> veriusCookies = null;
         try {
-            Connection.Response res = Jsoup.connect("***REMOVED***")
+            Connection.Response res = Jsoup.connect(apiEndpointSecretProperties.getCrawling().getVeriusSsoLogin())
                     .method(Connection.Method.GET)
                     .cookies(ssoCookies)
                     .ignoreContentType(true)
-                    .userAgent("***REMOVED***")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .timeout(10000) // 10초
                     .execute();
             veriusCookies = res.cookies();
@@ -164,11 +167,11 @@ public class AuthServiceImpl implements AuthService {
         //sso쿠키로 종합정보시스템 로그인
         Map<String, String> knuInfoSystemCookies = null;
         try {
-            Connection.Response res = Jsoup.connect("***REMOVED***")
+            Connection.Response res = Jsoup.connect(apiEndpointSecretProperties.getCrawling().getKnuInfoSystemLogin())
                     .method(Connection.Method.GET)
                     .cookies(ssoCookies)
                     .ignoreContentType(true)
-                    .userAgent("***REMOVED***")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .timeout(5000) // 5초
                     .execute();
             knuInfoSystemCookies = res.cookies();

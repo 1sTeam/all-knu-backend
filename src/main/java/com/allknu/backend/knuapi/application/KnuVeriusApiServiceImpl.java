@@ -1,8 +1,10 @@
 package com.allknu.backend.knuapi.application;
 
+import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.knuapi.domain.MajorNoticeType;
 import com.allknu.backend.global.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.knuapi.application.dto.ResponseKnu;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
@@ -18,21 +20,22 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Service
-//참인재시스템 verius 오타 아님 ㅎㅎ
+@RequiredArgsConstructor
 public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
     private static final Logger logger = LoggerFactory.getLogger(KnuVeriusApiServiceImpl.class);
+    private final ApiEndpointSecretProperties apiEndpointSecretProperties;
 
     @Override
     public Optional<Map<String, String>> getStudentInfo(Map<String, String> veriusCookies) {
         //참인재시스템에서 학과, 학번, 이름 등 학생 정보를 긁어다 준다.
         //해당 참인재 쿠키로 정보를 긁어온다.
-        String url = "***REMOVED***?CURRENT_MENU_CODE=MENU0028&TOP_MENU_CODE=MENU0017";
+        String url = apiEndpointSecretProperties.getCrawling().getVeriusStaffInfo() + "?CURRENT_MENU_CODE=MENU0028&TOP_MENU_CODE=MENU0017";
         Map<String, String> result = null;
         try {
             Document res = Jsoup.connect(url)
                     .method(Connection.Method.GET)
                     .cookies(veriusCookies)
-                    .userAgent("***REMOVED***")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .get();
 
             Elements tableViews = res.select("div.tableView tbody"); // tableView tbody를 리스트로 가져온다.
@@ -61,14 +64,14 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
         if(page <= 0) page = 1;
 
         //해당 참인재 쿠키로 정보를 긁어온다.
-        String url = "***REMOVED***?CURRENT_MENU_CODE=MENU0052&TOP_MENU_CODE=MENU0010&CURR_PAGE=" + page;
+        String url = apiEndpointSecretProperties.getCrawling().getVeriusMySatisfactionInfo() + "?CURRENT_MENU_CODE=MENU0052&TOP_MENU_CODE=MENU0010&CURR_PAGE=" + page;
         List<ResponseKnu.VeriusSatisfaction> list = new ArrayList<>();
 
         try {
             Document res = Jsoup.connect(url)
                     .method(Connection.Method.GET)
                     .cookies(veriusCookies)
-                    .userAgent("***REMOVED***")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .get();
 
             Elements views = res.select("div.bbsListLot tbody"); // bbsListLot tbody를 리스트로 가져온다.
@@ -100,10 +103,9 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
                     for(int i = 0 ; i < params.length ; i++) {
                         params[i] = params[i].replace("'", "");
                     }
-                    link = "***REMOVED***?CURRENT_MENU_CODE=MENU0052&TOP_MENU_CODE=MENU0010" +
+                    link = apiEndpointSecretProperties.getCrawling().getVeriusMySatisfactionSurvey() + "?CURRENT_MENU_CODE=MENU0052&TOP_MENU_CODE=MENU0010" +
                             "&SURVEY_SEQ=" + params[0] + "&SURVEY_GB=" + params[1] + "&INPUT_SEQ=" + params[2];
                 }
-
 
                 // 더 효율적인 방법이 있능가
                 // 앞에 strong 태그 내용 삭제
@@ -138,11 +140,11 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
     public Optional<List<ResponseKnu.MyVeriusProgram>> getMyVeriusProgram(Map<String, String> veriusCookies, int page) {
         List<ResponseKnu.MyVeriusProgram> lists = new ArrayList<>();
 
-        String url = "***REMOVED***?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&CURR_PAGE="+page;
+        String url = apiEndpointSecretProperties.getCrawling().getVeriusMyProgram() + "?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&CURR_PAGE="+page;
         //크롤링하기
         try{
             Document doc = Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .cookies(veriusCookies)
                     .get();
 
@@ -160,10 +162,12 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
                 String[] operationPeriod = td.get(4).text().split("~");     //운영기간
                 String department = td.get(5).text();
                 String link = null;         //제목 링크
-                if("P" == number[3]){
-                    link = "***REMOVED***?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&PRM_SEQ="+number[1];
+                if("P".equals(number[3])){
+                    link = apiEndpointSecretProperties.getCrawling().getVeriusMyProgramLinkTypeOne()
+                            + "?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&PRM_SEQ="+number[1];
                 }else{
-                    link = "***REMOVED***?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&PRM_SEQ="+number[1];
+                    link = apiEndpointSecretProperties.getCrawling().getVeriusMyProgramLinkTypeTwo()
+                            + "?CURRENT_MENU_CODE=MENU0049&TOP_MENU_CODE=MENU0010&PRM_SEQ="+number[1];
                 }
 
                 SimpleDateFormat operationFormatter = new SimpleDateFormat("yyyy.MM.dd HH:mm");
@@ -192,10 +196,10 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
     @Override
     public Optional<Map<String,Map<String,Integer>>> getMileage(Map<String, String> veriusCookies){
     Map<String,Map<String,Integer>> response = new HashMap<>();
-    String url = "***REMOVED***?CURRENT_MENU_CODE=MENU0046&TOP_MENU_CODE=MENU0020";
+    String url = apiEndpointSecretProperties.getCrawling().getVeriusMyMileage() + "?CURRENT_MENU_CODE=MENU0046&TOP_MENU_CODE=MENU0020";
         try {//크롤링
             Document doc = Jsoup.connect(url)
-                    .userAgent("Mozilla/5.0 (Macintosh; Intel Mac OS X 10_9_2) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/33.0.1750.152 Safari/537.36")
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent())
                     .cookies(veriusCookies)
                     .get();
             Iterator<Element> target = doc.select("#right > div.user_sub_data > div:nth-child(2) > table > tbody > tr").iterator();

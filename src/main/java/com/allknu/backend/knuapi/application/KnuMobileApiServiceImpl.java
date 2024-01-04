@@ -1,8 +1,10 @@
 package com.allknu.backend.knuapi.application;
 
+import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.knuapi.application.dto.ResponseKnu;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.slf4j.Logger;
@@ -13,8 +15,10 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class KnuMobileApiServiceImpl implements KnuMobileApiService {
     private static final Logger log = LoggerFactory.getLogger(KnuMobileApiServiceImpl.class);
+    private final ApiEndpointSecretProperties apiEndpointSecretProperties;
 
     @Override
     public Optional<JsonNode> getKnuApiJsonData(String url, Map<String, String> cookies) {
@@ -24,7 +28,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
             Connection connection = Jsoup.connect(url)
                     .method(Connection.Method.GET)
                     .ignoreContentType(true)
-                    .userAgent("***REMOVED***");
+                    .userAgent(apiEndpointSecretProperties.getCrawling().getUserAgent());
             if(cookies != null) connection.cookies(cookies);
 
             Connection.Response res = connection.execute();
@@ -49,7 +53,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
     public Optional<ResponseKnu.TimeTable> getTimeTable(Map<String, String> cookies) {
         ResponseKnu.TimeTable timeTable = null;
 
-        JsonNode knuData = getKnuApiJsonData("***REMOVED***", cookies).orElseGet(()->null);
+        JsonNode knuData = getKnuApiJsonData(apiEndpointSecretProperties.getMobile().getTimetable(), cookies).orElseGet(()->null);
         if(knuData != null) {
             //시간표 가져오기 성공
             List<Object> timeTableList = new ArrayList<>();
@@ -76,7 +80,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
         //학교 재학 년도, 학기 구하기
         ResponseKnu.PeriodUniv responsePeriod = null;
 
-        JsonNode knuData = getKnuApiJsonData("***REMOVED***", cookies).orElseGet(()->null);
+        JsonNode knuData = getKnuApiJsonData(apiEndpointSecretProperties.getMobile().getPeriodUniv(), cookies).orElseGet(()->null);
         if(knuData != null) {
             //success
             List<Object> periodList = new ArrayList<>();
@@ -102,7 +106,8 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
         //년도, 학기 넣어서 성적 구하기
         ResponseKnu.Grade responseGrade = null;
 
-        JsonNode knuData = getKnuApiJsonData("***REMOVED***?schl_year=" + year + "&schl_smst=" + semester, cookies).orElseGet(()->null);
+        JsonNode knuData = getKnuApiJsonData(apiEndpointSecretProperties.getMobile().getGrade()
+                + "?schl_year=" + year + "&schl_smst=" + semester, cookies).orElseGet(()->null);
         if(knuData != null) {
             //success
             Map<String, Object> result = new HashMap<>();
@@ -133,7 +138,8 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
     @Override
     public Optional<List<ResponseKnu.CalendarItem>> getKnuCalendar() {
         //gubn이 1이면 학생용, 2면 교수용인듯
-        JsonNode knuData = getKnuApiJsonData("***REMOVED***?cors_gubn=1", Map.of()).orElseGet(()->null);
+        JsonNode knuData = getKnuApiJsonData(apiEndpointSecretProperties.getMobile().getKnuCalendar() + "?cors_gubn=1", Map.of())
+                .orElseGet(()->null);
 
         List<ResponseKnu.CalendarItem> list = null;
         if(knuData != null) {
@@ -168,7 +174,8 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
 
     @Override
     public Optional<List<ResponseKnu.ScholarshipItem>> getMyScholarship(Map<String, String> cookies) {
-        JsonNode knuData = getKnuApiJsonData("***REMOVED***", cookies).orElseGet(()->null);
+        JsonNode knuData = getKnuApiJsonData(apiEndpointSecretProperties.getMobile().getMyScholarship(), cookies)
+                .orElseGet(()->null);
 
         List<ResponseKnu.ScholarshipItem> list = null;
         if(knuData != null) {
@@ -203,7 +210,8 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
 
     @Override
     public Optional<ResponseKnu.Tuition> getMyTuition(Map<String, String> cookies, Integer year, Integer semester) {
-        JsonNode knuData = getKnuApiJsonData("***REMOVED***?schl_year=" + year + "&schl_smst=" + semester, cookies).orElseGet(()->null);
+        JsonNode knuData = getKnuApiJsonData(apiEndpointSecretProperties.getMobile().getMyTuition() + "?schl_year=" + year + "&schl_smst=" + semester, cookies)
+                .orElseGet(()->null);
 
         ResponseKnu.Tuition tuition = null;
         if(knuData != null) {
@@ -241,7 +249,8 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
 
     @Override
     public Optional<List<ResponseKnu.Staff>> getKnuStaffInfo() {
-        JsonNode knuData = getKnuApiJsonData("***REMOVED***", Map.of()).orElseGet(()->null);
+        JsonNode knuData = getKnuApiJsonData(apiEndpointSecretProperties.getMobile().getKnuStaffInfo(), Map.of())
+                .orElseGet(()->null);
 
         List<ResponseKnu.Staff> list = new ArrayList<>();
         if(knuData != null) {

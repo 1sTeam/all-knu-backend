@@ -68,6 +68,27 @@ pipeline {
 		}
 	   }
 	}
+	stage('create api endpoint secret file by aws parameter store') {
+    		steps {
+    			dir('src/main/resources/secrets') {
+    				withAWSParameterStore(credentialsId: 'aws-all-knu',
+                   				path: "/all-knu/api-endpoint",
+                   				naming: 'basename',
+                   				regionName: 'ap-northeast-2') {
+                                    writeFile file: 'api-endpoint-secrets.yml', text: "${env.KNU}"
+                		   }
+    			}
+               }
+    	   post {
+    		success {
+    		   echo 'success create secret file'
+    		}
+    		failure {
+    		   slackSend (channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
+    		   error 'fail create secret file'
+    		}
+    	   }
+    	}
 	stage('create application-${env.PROFILE} properties by aws parameter store') {
     		steps {
     			dir('src/main/resources') {

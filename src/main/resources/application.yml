@@ -1,4 +1,6 @@
 spring:
+  config:
+    import: classpath:secrets/api-endpoint-secrets.yml # 크롤링 경로, API 경로 등 비밀정보
   profiles:
     active: local # 기본적으로 local 적용
   mvc:

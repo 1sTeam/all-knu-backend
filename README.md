@@ -11,6 +11,11 @@ knu.id={secret}
 knu.password={secret}
 ```
 
+### resources/secrets/api-endpoint-secrets.properties
+```properties
+제공받은 파일 주입
+```
+
 ## gradle build
 ```bash
 ./gradlew bootJar -x test

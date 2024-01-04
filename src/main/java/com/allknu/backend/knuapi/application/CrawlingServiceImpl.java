@@ -1,11 +1,13 @@
 package com.allknu.backend.knuapi.application;
 
+import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.knuapi.domain.EventNoticeType;
 import com.allknu.backend.knuapi.domain.MajorNoticeType;
 import com.allknu.backend.knuapi.domain.UnivNoticeType;
 import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import lombok.RequiredArgsConstructor;
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
@@ -20,23 +22,19 @@ import java.io.IOException;
 import java.util.*;
 
 @Service
+@RequiredArgsConstructor
 public class CrawlingServiceImpl implements CrawlingService {
 
-    private ObjectMapper objectMapper;
     private static final Logger log = LoggerFactory.getLogger(CrawlingServiceImpl.class);
-
-
-    @PostConstruct
-    void init() {
-        objectMapper = new ObjectMapper();
-    }
+    private final ObjectMapper objectMapper;
+    private final ApiEndpointSecretProperties apiEndpointSecretProperties;
 
     @Override
     public Optional<List<ResponseCrawling.UnivNotice>> getUnivNotice(int pageNum, UnivNoticeType type) {
         List<ResponseCrawling.UnivNotice> lists = new ArrayList<>();
 
         //type에 따라 전체, 학사, 장학, 학습/상담, 취창업 공지 크롤링
-        String url = "***REMOVED***?paginationInfo.currentPageNo="
+        String url = apiEndpointSecretProperties.getCrawling().getUnivNotice() + "?paginationInfo.currentPageNo="
                 +pageNum+"&searchMenuSeq=" + type.getSearchMenuNumber() + "&searchType=&searchValue=";
 
         try {
@@ -57,7 +55,7 @@ public class CrawlingServiceImpl implements CrawlingService {
                 JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
                 String encMenuSeq = jsonNode.get("encMenuSeq").asText();
                 String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
-                String link = "***REMOVED***?scrtWrtiYn=false&encMenuSeq="
+                String link = apiEndpointSecretProperties.getCrawling().getUnivNoticeItem() + "?scrtWrtiYn=false&encMenuSeq="
                         + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
 
                 String title = linkElement.text();
@@ -90,7 +88,7 @@ public class CrawlingServiceImpl implements CrawlingService {
         List<ResponseCrawling.EventNotice> lists = new ArrayList<>();
 
         //type에 따라 전체, 학사, 장학, 학습/상담, 취창업 공지 크롤링
-        String url = "***REMOVED***?paginationInfo.currentPageNo="
+        String url = apiEndpointSecretProperties.getCrawling().getEventNotice() + "?paginationInfo.currentPageNo="
                 +pageNum+"&searchMenuSeq=" + type.getSearchMenuNumber() + "&searchType=&searchValue=";
 
         try {
@@ -113,7 +111,7 @@ public class CrawlingServiceImpl implements CrawlingService {
                 JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
                 String encMenuSeq = jsonNode.get("encMenuSeq").asText();
                 String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
-                String link = "***REMOVED***?scrtWrtiYn=false&encMenuSeq="
+                String link = apiEndpointSecretProperties.getCrawling().getEventNoticeItem() + "?scrtWrtiYn=false&encMenuSeq="
                         + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
 
                 String writer = span.get(0).text().substring(3, span.get(0).text().length()); // 작성자
@@ -225,7 +223,7 @@ public class CrawlingServiceImpl implements CrawlingService {
     @Override
     public Optional<Map<String, List<ResponseCrawling.Schedule>>> getKnuCalendar(){
         Map<String, List<ResponseCrawling.Schedule>> monthMap = new LinkedHashMap<>();
-        String url = "***REMOVED***?tab=2";
+        String url = apiEndpointSecretProperties.getCrawling().getKnuCalendar() + "?tab=2";
         String[] month = {"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
         int idx =0;
         try{
