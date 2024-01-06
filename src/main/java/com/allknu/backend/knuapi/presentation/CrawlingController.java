@@ -3,6 +3,7 @@ package com.allknu.backend.knuapi.presentation;
 
 import com.allknu.backend.knuapi.application.CrawlingService;
 import com.allknu.backend.knuapi.application.KnuMobileApiService;
+import com.allknu.backend.knuapi.application.dto.CalendarResponseDto;
 import com.allknu.backend.knuapi.domain.EventNoticeType;
 import com.allknu.backend.knuapi.domain.MajorNoticeType;
 import com.allknu.backend.knuapi.domain.UnivNoticeType;
@@ -90,13 +91,12 @@ public class CrawlingController {
 
     @GetMapping("/crawling/calendar")
     public ResponseEntity<CommonResponse> getKnuCalendar(){
-        Map<String,List<ResponseCrawling.Schedule>> map = crawlingService.getKnuCalendar().orElseGet(()->null);
+        CalendarResponseDto response = crawlingService.getKnuCalendar();
 
         return  new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
-                .list(map)
+                .list(response.getCalendarMap())
                 .build(),HttpStatus.OK);
     }
-
 }

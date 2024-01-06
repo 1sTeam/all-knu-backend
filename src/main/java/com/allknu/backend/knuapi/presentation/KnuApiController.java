@@ -4,6 +4,7 @@ import com.allknu.backend.knuapi.application.KnuMobileApiService;
 import com.allknu.backend.knuapi.application.KnuVeriusApiService;
 import com.allknu.backend.global.exception.errors.KnuApiCallFailedException;
 import com.allknu.backend.global.dto.CommonResponse;
+import com.allknu.backend.knuapi.application.dto.KnuVeriusSatisfactionSurveyResponseDto;
 import com.allknu.backend.knuapi.application.dto.RequestKnu;
 import com.allknu.backend.knuapi.application.dto.ResponseKnu;
 import lombok.RequiredArgsConstructor;
@@ -93,13 +94,13 @@ public class KnuApiController {
     @PostMapping("/knu/verius/satisfaction")
     public ResponseEntity<CommonResponse> getKnuVeriusSatisfaction(@RequestBody RequestKnu.VeriusSatisfaction veriusSatisfaction) {
 
-        List<ResponseKnu.VeriusSatisfaction> list
-                = knuVeriusApiService.getMyVeriusSatisfactionInfo(veriusSatisfaction.getSessionInfo().getVeriusCookies(), veriusSatisfaction.getPage()).orElseThrow(()->new KnuApiCallFailedException());
+        KnuVeriusSatisfactionSurveyResponseDto responseDto = knuVeriusApiService.getMyVeriusSatisfactionInfo(
+                veriusSatisfaction.getSessionInfo().getVeriusCookies(), veriusSatisfaction.getPage());
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("조회 성공")
-                .list(list)
+                .list(responseDto.getItems())
                 .build(), HttpStatus.OK);
     }
     @PostMapping("/knu/verius/program/participate")

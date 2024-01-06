@@ -5,8 +5,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.validation.constraints.NotNull;
-
 public class ResponseCrawling {
     @Builder
     @Data
@@ -31,13 +29,5 @@ public class ResponseCrawling {
         private String writer;
         private String date;
         private String views;
-    }
-    @Builder
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class Schedule {
-        private String date;
-        private String content;
     }
 }

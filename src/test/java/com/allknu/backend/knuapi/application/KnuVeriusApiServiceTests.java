@@ -2,6 +2,7 @@ package com.allknu.backend.knuapi.application;
 
 import com.allknu.backend.auth.application.AuthServiceImpl;
 import com.allknu.backend.knuapi.application.KnuVeriusApiService;
+import com.allknu.backend.knuapi.application.dto.KnuVeriusSatisfactionSurveyResponseDto;
 import com.allknu.backend.knuapi.application.dto.ResponseKnu;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -60,10 +61,10 @@ public class KnuVeriusApiServiceTests {
     @DisplayName("만족도 조사 참여 현황 테스트")
     void getSatisfactionTest() {
         //get student info
-        List<ResponseKnu.VeriusSatisfaction> list = knuVeriusApiService.getMyVeriusSatisfactionInfo(veriusCookies, 1).orElseGet(()->null);
-        assertNotNull(list);
+        KnuVeriusSatisfactionSurveyResponseDto responseDto = knuVeriusApiService.getMyVeriusSatisfactionInfo(veriusCookies, 1);
+
         System.out.println("정보출력");
-        for( ResponseKnu.VeriusSatisfaction elem : list ){
+        for (KnuVeriusSatisfactionSurveyResponseDto.VeriusSatisfactionItemDto elem : responseDto.getItems()){
             System.out.println(elem.getName()+" "+elem.getNumber()+" "+elem.getSatisfactionEndDate()+" "+elem.getOperationEndDate()+" "+elem.getStatus() + " " + elem.getLink());
         }
     }
