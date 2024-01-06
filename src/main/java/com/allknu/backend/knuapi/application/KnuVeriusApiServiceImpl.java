@@ -29,7 +29,7 @@ public class KnuVeriusApiServiceImpl implements KnuVeriusApiService {
     public Optional<Map<String, String>> getStudentInfo(Map<String, String> veriusCookies) {
         //참인재시스템에서 학과, 학번, 이름 등 학생 정보를 긁어다 준다.
         //해당 참인재 쿠키로 정보를 긁어온다.
-        String url = apiEndpointSecretProperties.getCrawling().getVeriusStaffInfo() + "?CURRENT_MENU_CODE=MENU0028&TOP_MENU_CODE=MENU0017";
+        String url = apiEndpointSecretProperties.getCrawling().getVeriusStudentInfo() + "?CURRENT_MENU_CODE=MENU0028&TOP_MENU_CODE=MENU0017";
         Map<String, String> result = null;
         try {
             Document res = Jsoup.connect(url)

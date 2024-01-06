@@ -28,7 +28,7 @@ public class ApiEndpointSecretProperties {
         private final String eventNotice;
         private final String eventNoticeItem;
         private final String knuCalendar;
-        private final String veriusStaffInfo;
+        private final String veriusStudentInfo;
         private final String veriusMySatisfactionInfo;
         private final String veriusMySatisfactionSurvey;
         private final String veriusMyProgram;
