@@ -1,10 +1,12 @@
 package com.allknu.backend.knuapi.application;
 
 import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
-import com.allknu.backend.knuapi.domain.EventNoticeType;
-import com.allknu.backend.knuapi.domain.MajorNoticeType;
-import com.allknu.backend.knuapi.domain.UnivNoticeType;
+import com.allknu.backend.knuapi.application.dto.CalendarResponseDto;
+import com.allknu.backend.knuapi.domain.*;
 import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
+import com.allknu.backend.knuapi.domain.scraper.KnuCalenderScraper;
+import com.allknu.backend.global.crawling.Scraper;
+import com.allknu.backend.knuapi.domain.scraper.dto.KnuCalenderScraperResponseDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +19,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import javax.annotation.PostConstruct;
 import java.io.IOException;
 import java.util.*;
 
@@ -220,37 +221,19 @@ public class CrawlingServiceImpl implements CrawlingService {
         }
         return Optional.ofNullable(lists);
     }
+
     @Override
-    public Optional<Map<String, List<ResponseCrawling.Schedule>>> getKnuCalendar(){
-        Map<String, List<ResponseCrawling.Schedule>> monthMap = new LinkedHashMap<>();
-        String url = apiEndpointSecretProperties.getCrawling().getKnuCalendar() + "?tab=2";
-        String[] month = {"jan","feb","mar","apr","may","jun","jul","aug","sep","oct","nov","dec"};
-        int idx =0;
-        try{
-            Document doc = Jsoup.connect(url).get();
-            Iterator<Element> rows = doc.select(".cal_list").iterator();
-            while(rows.hasNext()){
-                List<ResponseCrawling.Schedule> scheduleList = new ArrayList<>();
-                //월별 날짜와 일정 내용
-                Iterator<Element> trs = rows.next().select("div.tbl.typeA.calendal_list > table > tbody > tr").iterator();
-                while(trs.hasNext()){
-                    Element target = trs.next();
-                    String th = target.select("th").text();
-                    String td = target.select("td").text();
+    public CalendarResponseDto getKnuCalendar(){
+        Scraper<KnuCalenderScraperResponseDto> scraper = KnuCalenderScraper.builder()
+                .apiEndpointSecretProperties(apiEndpointSecretProperties)
+                .build();
 
-                    ResponseCrawling.Schedule schedule = ResponseCrawling.Schedule.builder()
-                            .date(th)
-                            .content(td)
-                            .build();
-                    scheduleList.add(schedule);
-
-                }
-                monthMap.put(month[idx++],scheduleList);
-            }
-
-        }catch (IOException e){
-            log.error("학사일정 error " + e);
+        try {
+            KnuCalenderScraperResponseDto knuCalenderScraperResponseDto = scraper.scrap();
+            return CalendarResponseDto.from(knuCalenderScraperResponseDto);
+        } catch (IOException e) {
+            log.error("knu calender 크롤링 실패");
+            return CalendarResponseDto.empty();
         }
-        return Optional.ofNullable(monthMap);
     }
 }

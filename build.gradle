@@ -31,7 +31,7 @@ dependencies {
 
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.springframework.kafka:spring-kafka'
-    implementation 'org.jsoup:jsoup:1.13.1'
+    implementation 'org.jsoup:jsoup:1.17.2'
 
     implementation 'org.flywaydb:flyway-core:7.5.1'
     implementation 'mysql:mysql-connector-java:8.0.26'

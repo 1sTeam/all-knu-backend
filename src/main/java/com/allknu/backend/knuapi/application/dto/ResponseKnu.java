@@ -66,18 +66,7 @@ public class ResponseKnu {
         private String dividedAmount;
         private String dividedPay;
     }
-    @Builder
-    @Data
-    @NoArgsConstructor
-    @AllArgsConstructor
-    public static class VeriusSatisfaction {
-        private String number;
-        private String name;
-        private String operationEndDate;
-        private String satisfactionEndDate;
-        private String status;
-        private String link;
-    }
+
     @Builder
     @Data
     @NoArgsConstructor
