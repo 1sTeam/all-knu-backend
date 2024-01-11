@@ -32,8 +32,15 @@ public class CrawlingServiceImpl implements CrawlingService {
     @Override
     public Optional<List<ResponseCrawling.UnivNotice>> getUnivNotice(int pageNum, UnivNoticeType type) {
 
-        Iterator<Element> rows = downloader.generalDownloader(pageNum, type);
-        List<ResponseCrawling.UnivNotice> lists = knuNoticeScraper.scrapKnuNotice(rows);
+        Document doc = downloader.generalDownloader(pageNum, type);
+        Iterator<Element> rows = doc.select("div.tbody > ul").iterator();
+        List<ResponseCrawling.UnivNotice> lists = new ArrayList<>();
+        while(rows.hasNext()) {
+            Element target = rows.next();
+            Elements li = target.select("li"); // ul 안의 li들
+            ResponseCrawling.UnivNotice notice = knuNoticeScraper.scrapKnuNotice(li);
+            lists.add(notice);
+        }
         return Optional.ofNullable(lists);
     }
     @Override
