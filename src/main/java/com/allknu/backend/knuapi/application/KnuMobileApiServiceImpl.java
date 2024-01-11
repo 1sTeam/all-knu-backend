@@ -150,7 +150,7 @@ public class KnuMobileApiServiceImpl implements KnuMobileApiService {
                     //캘린더 항목들
                     String start = objNode.get("used_sdat").toString().substring(
                             objNode.get("used_sdat").toString().indexOf(">") + 1,
-                            objNode.get("used_sdat").toString().indexOf('일') + 1
+                            objNode.get("used_sdat").toString().indexOf("일") + 1
                     ); // 문자열 자르기로 시작날짜 가져오기
                     String end = objNode.get("used_edat").asText();
                     String describe = objNode.get("used_desc").asText();
