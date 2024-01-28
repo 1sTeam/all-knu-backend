@@ -5,14 +5,16 @@ import com.allknu.backend.knuapi.domain.EventNoticeType;
 import com.allknu.backend.knuapi.domain.MajorNoticeType;
 import com.allknu.backend.knuapi.domain.UnivNoticeType;
 import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
+import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeResponseDto;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface CrawlingService {
-    Optional<List<ResponseCrawling.UnivNotice>> getUnivNotice(int pageNum, UnivNoticeType type);
+    UnivNoticeResponseDto getUnivNotice(int pageNum, UnivNoticeType type);
     Optional<List<ResponseCrawling.UnivNotice>> getMajorDefaultTemplateNotice(int pageNum, MajorNoticeType type);
     CalendarResponseDto getKnuCalendar();
-    Optional<List<ResponseCrawling.EventNotice>> getEventNotice(int pageNum, EventNoticeType type);
+    EventNoticeResponseDto getEventNotice(int pageNum, EventNoticeType type);
 
 }

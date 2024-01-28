@@ -4,12 +4,17 @@ import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.knuapi.application.dto.CalendarResponseDto;
 import com.allknu.backend.knuapi.domain.*;
 import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
+import com.allknu.backend.knuapi.domain.scraper.EventNoticeScraper;
 import com.allknu.backend.knuapi.domain.scraper.KnuCalenderScraper;
 import com.allknu.backend.global.crawling.Scraper;
+import com.allknu.backend.knuapi.domain.scraper.UnivNoticeScraper;
+import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeResponseDto;
 import com.allknu.backend.knuapi.domain.scraper.dto.KnuCalenderScraperResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeResponseDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
+
 import org.jsoup.Jsoup;
 import org.jsoup.internal.StringUtil;
 import org.jsoup.nodes.Document;
@@ -31,111 +36,51 @@ public class CrawlingServiceImpl implements CrawlingService {
     private final ApiEndpointSecretProperties apiEndpointSecretProperties;
 
     @Override
-    public Optional<List<ResponseCrawling.UnivNotice>> getUnivNotice(int pageNum, UnivNoticeType type) {
-        List<ResponseCrawling.UnivNotice> lists = new ArrayList<>();
-
-        //type에 따라 전체, 학사, 장학, 학습/상담, 취창업 공지 크롤링
-        String url = apiEndpointSecretProperties.getCrawling().getUnivNotice() + "?paginationInfo.currentPageNo="
-                +pageNum+"&searchMenuSeq=" + type.getSearchMenuNumber() + "&searchType=&searchValue=";
+    public UnivNoticeResponseDto getUnivNotice(int pageNum, UnivNoticeType type) {
+        UnivNoticeScraper scraper = new UnivNoticeScraper(objectMapper, apiEndpointSecretProperties);
 
         try {
-            Document doc = Jsoup.connect(url).get();
+            // 웹 페이지의 URL을 생성합니다.
+            String url = apiEndpointSecretProperties.getCrawling().getUnivNotice()
+                    + "?paginationInfo.currentPageNo=" + pageNum
+                    + "&searchMenuSeq=" + type.getSearchMenuNumber()
+                    + "&searchType=&searchValue=";
 
-            Iterator<Element> rows = doc.select("div.tbody > ul").iterator();
-            while(rows.hasNext()) {
-                Element target = rows.next();
-                Elements li = target.select("li"); // ul 안의 li들
+            // URL로부터 Document 객체를 생성합니다.
+            Document document = Jsoup.connect(url).get();
 
-                String number = li.get(0).text(); // 게시글번호 li
-                if(!StringUtil.isNumeric(number)) {
-                    //넘버가 숫자가 아니라면 필독공지임 이거는 패스
-                    continue;
-                }
-
-                Element linkElement = li.get(1).selectFirst("a.detailLink"); // 링크li
-                JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
-                String encMenuSeq = jsonNode.get("encMenuSeq").asText();
-                String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
-                String link = apiEndpointSecretProperties.getCrawling().getUnivNoticeItem() + "?scrtWrtiYn=false&encMenuSeq="
-                        + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
-
-                String title = linkElement.text();
-                String writeType = li.get(2).text(); //구분 li
-                String writer = li.get(4).text(); // 작성자
-                String date = li.get(5).text(); // date
-                String views = li.get(6).text(); // views
-
-                ResponseCrawling.UnivNotice notice = ResponseCrawling.UnivNotice.builder()
-                        .link(link)
-                        .date(date)
-                        .number(number)
-                        .writer(writer)
-                        .type(writeType)
-                        .views(views)
-                        .title(title)
-                        .build();
-
-                lists.add(notice);
-            }
-
-        } catch (IOException e) {
-            log.error("학교공지 crawling error + " + e);
+            // Document 객체를 매개변수로 scrape 메서드를 호출합니다.
+            return scraper.scrape(document);
+        } catch (Exception e) {
+            log.error("학교공지 crawling error ", e);
+            return new UnivNoticeResponseDto(new LinkedHashMap<>());
         }
-
-        return Optional.ofNullable(lists);
     }
+
     @Override
-    public Optional<List<ResponseCrawling.EventNotice>> getEventNotice(int pageNum, EventNoticeType type) {
-        List<ResponseCrawling.EventNotice> lists = new ArrayList<>();
-
-        //type에 따라 전체, 학사, 장학, 학습/상담, 취창업 공지 크롤링
-        String url = apiEndpointSecretProperties.getCrawling().getEventNotice() + "?paginationInfo.currentPageNo="
-                +pageNum+"&searchMenuSeq=" + type.getSearchMenuNumber() + "&searchType=&searchValue=";
+    public EventNoticeResponseDto getEventNotice(int pageNum, EventNoticeType type) {
+        EventNoticeScraper scraper = new EventNoticeScraper(objectMapper, apiEndpointSecretProperties);
 
         try {
-            Document doc = Jsoup.connect(url).get();
+            // 웹 페이지의 URL을 생성합니다.
+            String url = apiEndpointSecretProperties.getCrawling().getEventNotice()
+                    + "?paginationInfo.currentPageNo=" + pageNum
+                    + "&searchMenuSeq=" + type.getSearchMenuNumber()
+                    + "&searchType=&searchValue=";
 
-            Iterator<Element> rows = doc.select("div.tbody > ul > li").iterator();
-            while (rows.hasNext()) {
-                Element target = rows.next();
-                String noResult = target.attr("class");
-                if(noResult.equals("NO_RESULT")){   //page에 조회 자료가 없는 경우
-                    break;
-                }
-                Elements dl = target.select("div > dl"); // li안에 div안에 dl들
-                Elements dt = dl.select("dt");  //title
-                Elements span = dl.select("dd > span");  //작성자, 등록일, 조회수
+            // URL로부터 Document 객체를 생성합니다.
+            Document document = Jsoup.connect(url).get();
 
-                String title = dt.get(0).text(); // 제목 title
-
-                Element linkElement = dt.get(0).selectFirst("a.detailLink"); // 링크li
-                JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
-                String encMenuSeq = jsonNode.get("encMenuSeq").asText();
-                String encMenuBoardSeq = jsonNode.get("encMenuBoardSeq").asText();
-                String link = apiEndpointSecretProperties.getCrawling().getEventNoticeItem() + "?scrtWrtiYn=false&encMenuSeq="
-                        + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
-
-                String writer = span.get(0).text().substring(3, span.get(0).text().length()); // 작성자
-                String date = span.get(1).text().substring(4, span.get(1).text().length()); // date
-                String views = span.get(2).text().substring(4,span.get(2).text().length()); // views
-
-                ResponseCrawling.EventNotice eventNotice = ResponseCrawling.EventNotice.builder()
-                        .link(link)
-                        .date(date)
-                        .writer(writer)
-                        .views(views)
-                        .title(title)
-                        .build();
-
-                lists.add(eventNotice);
-            }
+            // Document 객체를 매개변수로 scrape 메서드를 호출합니다.
+            return scraper.scrape(document);
+        } catch (Exception e) {
+            log.error("행사공지 error ", e);
+            return new EventNoticeResponseDto(new LinkedHashMap<>());
         }
-        catch (IOException e) {
-            log.error("행사공지 error " + e);
-        }
-
-        return Optional.ofNullable(lists);
     }
+
+
+
     @Override
     public Optional<List<ResponseCrawling.UnivNotice>> getMajorDefaultTemplateNotice(int pageNum, MajorNoticeType type) {
         List<ResponseCrawling.UnivNotice> lists = new ArrayList<>();
@@ -227,7 +172,6 @@ public class CrawlingServiceImpl implements CrawlingService {
         Scraper<KnuCalenderScraperResponseDto> scraper = KnuCalenderScraper.builder()
                 .apiEndpointSecretProperties(apiEndpointSecretProperties)
                 .build();
-
         try {
             KnuCalenderScraperResponseDto knuCalenderScraperResponseDto = scraper.scrap();
             return CalendarResponseDto.from(knuCalenderScraperResponseDto);

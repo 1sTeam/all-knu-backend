@@ -5,6 +5,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 public class ResponseCrawling {
     @Builder
     @Data
@@ -19,11 +21,20 @@ public class ResponseCrawling {
         private String views;
         private String number;
     }
+
     @Builder
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     public static class EventNotice {
+        private List<EventDetail> eventDetails;
+    }
+
+    @Builder
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    public static class EventDetail {
         private String title;
         private String link;
         private String writer;
