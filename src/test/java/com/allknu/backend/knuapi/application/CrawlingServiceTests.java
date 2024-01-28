@@ -6,6 +6,8 @@ import com.allknu.backend.knuapi.domain.EventNoticeType;
 import com.allknu.backend.knuapi.domain.MajorNoticeType;
 import com.allknu.backend.knuapi.domain.UnivNoticeType;
 import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
+import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,6 +17,7 @@ import org.springframework.test.context.ActiveProfiles;
 
 import java.util.EnumSet;
 import java.util.List;
+import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -28,23 +31,29 @@ public class CrawlingServiceTests {
     @Test
     @DisplayName("공지사항 크롤링 테스트")
     void getUnivNoticeTest() {
-        List<ResponseCrawling.UnivNotice> notices = crawlingService.getUnivNotice(1, UnivNoticeType.ALL).orElseGet(()->null);
-        for(int i = 0 ; i < notices.size() ; i++) {
-            ResponseCrawling.UnivNotice notice = notices.get(i);
-            System.out.println(notice.getTitle() + notice.getDate() + notice.getViews() + notice.getLink());
+        UnivNoticeResponseDto univNotice = crawlingService.getUnivNotice(1, UnivNoticeType.ALL);
+
+        for (Map.Entry<String, List<UnivNoticeResponseDto.UnivNoticeDto>> entry : univNotice.getUnivNoticeMap().entrySet()) {
+            for (UnivNoticeResponseDto.UnivNoticeDto notice : entry.getValue()) {
+                System.out.println(notice.getTitle() + notice.getDate() + notice.getViews() + notice.getLink());
+            }
         }
+
+        Assertions.assertNotEquals(0, univNotice.getUnivNoticeMap().size());
     }
     @Test
     @DisplayName("행사/안내 크롤링 테스트")
     void getEventNoticeTest() {
-        List<ResponseCrawling.EventNotice> eventNotice = crawlingService.getEventNotice(1, EventNoticeType.ALL).orElseGet(()->null);
-        for(int i = 0 ; i < eventNotice.size() ; i++) {
-            ResponseCrawling.EventNotice eventNoticeResult = eventNotice.get(i);
-            System.out.println(eventNoticeResult.getTitle()+ "\n" + eventNoticeResult.getDate() + "\n" + eventNoticeResult.getViews() + "\n" + eventNoticeResult.getLink()
-                    + "\n" + eventNoticeResult.getWriter());
-        }
-    }
+        EventNoticeResponseDto eventNotice = crawlingService.getEventNotice(1, EventNoticeType.ALL);
 
+        for (Map.Entry<String, List<EventNoticeResponseDto.EventDetail>> entry : eventNotice.getEventNoticeMap().entrySet()) {
+            for (EventNoticeResponseDto.EventDetail notice : entry.getValue()) {
+                System.out.println(notice.getTitle() + "\n" + notice.getDate() + "\n" + notice.getViews() + "\n" + notice.getLink() + "\n" + notice.getWriter());
+            }
+        }
+
+        Assertions.assertNotEquals(0, eventNotice.getEventNoticeMap().size());
+    }
     @Test
     @DisplayName("기본 강남대 템플릿을 사용하는 학과 공지사항 크롤링 테스트")
     void getMajorNoticeTest() {
