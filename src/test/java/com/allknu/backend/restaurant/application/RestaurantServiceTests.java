@@ -1,5 +1,6 @@
 package com.allknu.backend.restaurant.application;
 
+import com.allknu.backend.global.exception.errors.InvalidRestaurantNameException;
 import com.allknu.backend.restaurant.application.RestaurantService;
 import com.allknu.backend.restaurant.domain.MealType;
 import com.allknu.backend.restaurant.domain.Menu;
@@ -18,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -35,10 +37,10 @@ public class RestaurantServiceTests {
     @DisplayName("식당 추가 서비스 테스트")
     void registerRestaurantTest() {
         restaurantService.registerRestaurant("샬롬관 학식당");    //식당 저장
-        Restaurant res = restaurantRepository.findByRestaurantName("샬롬관 학식당");
-        assertNotNull(res);
-        System.out.println(res.getRestaurantName());
-        }
+        Optional<Restaurant> res = restaurantRepository.findByRestaurantName("샬롬관 학식당");
+        assertTrue(res.isPresent());
+        System.out.println(res.get().getRestaurantName());
+    }
     @Test
     @Transactional
     @DisplayName("식당 추가 중복 오류 테스트")
@@ -47,6 +49,25 @@ public class RestaurantServiceTests {
         assertThrows(RestaurantNameDuplicatedException.class, () ->   //식당 중복 예외가 발생하면 테스트 성공
             restaurantService.registerRestaurant("샬롬관 학식당"));
     }
+    @Test
+    @Transactional
+    @DisplayName("식당 이름이 null인 경우 테스트")
+    void registerRestaurantNullTest() {
+        Exception exception = assertThrows(InvalidRestaurantNameException.class, () ->
+                restaurantService.registerRestaurant(null));
+        System.out.println(exception.getMessage());
+    }
+
+    @Test
+    @Transactional
+    @DisplayName("식당 이름이 공백인 경우 테스트")
+    void registerRestaurantEmptyTest() {
+        Exception exception = assertThrows(InvalidRestaurantNameException.class, () ->
+                restaurantService.registerRestaurant(" "));
+        System.out.println(exception.getMessage());
+    }
+
+
 
     @Test
     @Transactional

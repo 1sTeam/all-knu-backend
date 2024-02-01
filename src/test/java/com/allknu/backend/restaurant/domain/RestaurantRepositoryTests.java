@@ -13,8 +13,10 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @ActiveProfiles("test")
@@ -33,9 +35,9 @@ public class RestaurantRepositoryTests {
                         .build();
                 restaurant = restaurantRepository.save(restaurant);
 
-                Restaurant restaurantAdd = restaurantRepository.findByRestaurantName(restaurant.getRestaurantName());
-                assertNotNull(restaurantAdd);
-                System.out.println(restaurantAdd.getRestaurantName());
+                Optional<Restaurant> restaurantAdd = restaurantRepository.findByRestaurantName(restaurant.getRestaurantName());
+                assertTrue(restaurantAdd.isPresent());
+                System.out.println(restaurantAdd.get().getRestaurantName());
         }
         @Transactional
         @DisplayName("메뉴 추가 테스트")

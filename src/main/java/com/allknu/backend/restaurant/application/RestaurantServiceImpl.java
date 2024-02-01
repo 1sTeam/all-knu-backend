@@ -1,5 +1,6 @@
 package com.allknu.backend.restaurant.application;
 
+import com.allknu.backend.global.exception.errors.InvalidRestaurantNameException;
 import com.allknu.backend.restaurant.domain.MealType;
 import com.allknu.backend.restaurant.domain.Menu;
 import com.allknu.backend.restaurant.domain.Restaurant;
@@ -12,10 +13,13 @@ import com.allknu.backend.restaurant.application.dto.ResponseRestaurant;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.ArrayList;
+import java.util.Optional;
 import java.util.Date;
 import java.util.List;
+
 
 /*
  * 관리자페이지 기능 -> 마이크로서비스 분리 대상
@@ -29,31 +33,42 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Override
     @Transactional
     public void registerRestaurant(String restaurant){
-        // 추후에 이미 식당이 등록되어 있을 경우 예외 처리 필요
-        if(restaurantRepository.findByRestaurantName(restaurant)!=null) {
-            throw new RestaurantNameDuplicatedException();
+        // 식당 이름이 공백인지 검증
+        if(!StringUtils.hasText(restaurant)) {
+            throw new InvalidRestaurantNameException();
         }
-            Restaurant res = Restaurant.builder()
-                    .restaurantName(restaurant)
-                    .build();
-            restaurantRepository.save(res);
+
+        // 이미 식당이 등록되어 있을 경우 예외 처리
+        restaurantRepository.findByRestaurantName(restaurant)
+                .ifPresent(r -> {
+                    throw new RestaurantNameDuplicatedException();
+                });
+
+        Restaurant res = Restaurant.builder()
+                .restaurantName(restaurant)
+                .build();
+        restaurantRepository.save(res);
     }
+
 
     @Override
     @Transactional
     public void registerMenu(String restaurant, Date date, List<String> menu, MealType time){
         //추후에 메뉴가 이미 등록되어 있다면 예외처리 필요
 
-        Restaurant res = restaurantRepository.findByRestaurantName(restaurant);
+        Optional<Restaurant> res = restaurantRepository.findByRestaurantName(restaurant);
+        if(!res.isPresent()){
+            throw new NotFoundRestaurantException();
+        }
         for(int i=0;i<menu.size();i++) {
             Menu menuItem = Menu.builder()
                     .menuName(menu.get(i))
                     .mealDate(date)
                     .mealType(time)
-                    .restaurant(res)
+                    .restaurant(res.get())
                     .build();
             menuRepository.save(menuItem);
-            res.addMenu(menuItem);
+            res.get().addMenu(menuItem);
         }
     }
 
@@ -104,11 +119,11 @@ public class RestaurantServiceImpl implements RestaurantService {
     @Transactional
     @Override
     public void deleteRestaurant(String restaurant) {
-        Restaurant res = restaurantRepository.findByRestaurantName(restaurant);
-        if(res == null){
+        Optional<Restaurant> res = restaurantRepository.findByRestaurantName(restaurant);
+        if(!res.isPresent()){
             throw new NotFoundRestaurantException();
         }
-        restaurantRepository.delete(res);
+        restaurantRepository.delete(res.get());
     }
 
     @Override
