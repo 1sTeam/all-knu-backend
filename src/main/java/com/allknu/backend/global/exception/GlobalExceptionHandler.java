@@ -201,4 +201,16 @@ public class GlobalExceptionHandler {
         return new ResponseEntity<>(response, errorCode.getStatus());
     }
 
+    @ExceptionHandler(FcmClientFailedException.class)
+    protected ResponseEntity<ErrorResponse> handleFcmClientFailedException(FcmClientFailedException e) {
+        ErrorCode errorCode = ErrorCode.FCM_CLIENT_FAILED;
+
+        ErrorResponse response = ErrorResponse.builder()
+                .code(errorCode.getCode())
+                .message(errorCode.getMessage())
+                .status(errorCode.getStatus().value())
+                .build();
+
+        return new ResponseEntity<>(response, errorCode.getStatus());
+    }
 }

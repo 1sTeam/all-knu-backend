@@ -1,6 +1,5 @@
 package com.allknu.backend.fcmapi.application;
 
-import com.allknu.backend.fcmapi.application.FCMApiService;
 import com.allknu.backend.fcmapi.domain.FirebaseLog;
 import com.allknu.backend.fcmapi.domain.FirebaseLogRepository;
 import com.allknu.backend.fcmapi.application.dto.ResponseFcm;
@@ -18,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @SpringBootTest
 @ActiveProfiles("test") // 테스트서버 프로파일 적용
-public class FCMApiServiceTests {
+public class FcmApiServiceTests {
     @Autowired
-    private FCMApiService fcmApiService;
+    private FcmApiService fcmApiService;
     @Autowired
     private FirebaseLogRepository firebaseLogRepository;
 
@@ -65,7 +64,7 @@ public class FCMApiServiceTests {
         firebaseLogRepository.save(log);
 
         Pageable pageable = PageRequest.of(0, 2);
-        Page<ResponseFcm.Log> logs = fcmApiService.getAllFcmLog(pageable).orElseGet(()->null);
+        Page<ResponseFcm.Log> logs = fcmApiService.getAllFcmLog(pageable);
         assertNotNull(logs);
 
         for(ResponseFcm.Log item : logs) {
