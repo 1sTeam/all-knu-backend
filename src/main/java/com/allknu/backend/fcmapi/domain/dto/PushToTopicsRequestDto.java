@@ -1,6 +1,9 @@
 package com.allknu.backend.fcmapi.domain.dto;
 
 import com.allknu.backend.fcmapi.domain.SubscribeType;
+import com.allknu.backend.fcmapi.domain.AndroidPriority;
+import com.allknu.backend.fcmapi.domain.ApnsPriority;
+import com.allknu.backend.fcmapi.domain.ApnsPushType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -12,11 +15,15 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MLRequestMessage {
+public class PushToTopicsRequestDto {
+
     private List<SubscribeType> subscribeTypes; //보내고자하는 구독 유형 리스트
-    private Integer predict;
     private String title;
-    //바디가 없네..?
+    private String body;
     private String clickLink;
-    private String time;
+
+    private ApnsPushType apnsPushType;
+    private ApnsPriority apnsPriority;
+    private AndroidPriority androidPriority;
 }
+

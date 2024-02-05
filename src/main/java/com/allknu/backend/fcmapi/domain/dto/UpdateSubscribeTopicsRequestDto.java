@@ -12,7 +12,8 @@ import java.util.List;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FCMSubscribeMessage {
+public class UpdateSubscribeTopicsRequestDto {
+
     private String token;
     private List<SubscribeType> subscribes;
 }
