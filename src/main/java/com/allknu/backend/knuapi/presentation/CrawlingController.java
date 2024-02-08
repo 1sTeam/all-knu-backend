@@ -3,15 +3,12 @@ package com.allknu.backend.knuapi.presentation;
 
 import com.allknu.backend.knuapi.application.CrawlingService;
 import com.allknu.backend.knuapi.application.KnuMobileApiService;
-import com.allknu.backend.knuapi.application.dto.CalendarResponseDto;
+import com.allknu.backend.knuapi.application.dto.*;
 import com.allknu.backend.knuapi.domain.EventNoticeType;
 import com.allknu.backend.knuapi.domain.MajorNoticeType;
 import com.allknu.backend.knuapi.domain.UnivNoticeType;
 import com.allknu.backend.global.dto.CommonResponse;
-import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
-import com.allknu.backend.knuapi.application.dto.ResponseKnu;
-import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeResponseDto;
-import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeScraperResponseDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -31,7 +28,6 @@ public class CrawlingController {
 
 
     @GetMapping(value = {"/crawling/notice/univ/{type}/{page}", "/crawling/notice/univ/{type}"})
-    // 학교 공지사항 크롤링 요청
     public ResponseEntity<CommonResponse> getUnivNotice(@PathVariable String type, @PathVariable(required = false) Optional<Integer> page) {
 
         UnivNoticeType realType = null;
@@ -46,9 +42,10 @@ public class CrawlingController {
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
-                .list(univNotice.getUnivNoticeMap())  // UnivNoticeResponseDto 객체에서 Map 객체를 가져옵니다.
+                .list(univNotice.getUnivNoticeList())
                 .build(), HttpStatus.OK);
     }
+
     @GetMapping(value = {"/crawling/notice/event/{type}/{page}", "/crawling/notice/event/{type}"})
     public ResponseEntity<CommonResponse> getEventNotice(@PathVariable String type, @PathVariable(required = false) Optional<Integer> page) {
         // 학교 공지사항 크롤링
@@ -63,10 +60,9 @@ public class CrawlingController {
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
                 .message("성공")
-                .list(eventNotice.getEventNoticeMap())  // EventNoticeResponseDto 객체에서 Map 객체를 가져옵니다.
+                .list(eventNotice.getEventNoticeList())
                 .build(), HttpStatus.OK);
     }
-
 
     @GetMapping("/crawling/notice/major")
     public ResponseEntity<CommonResponse> getMajorNotice(@RequestParam(required = false, defaultValue = "1") int page, @RequestParam(value = "type", required = true, defaultValue = "SOFTWARE") MajorNoticeType type) {
