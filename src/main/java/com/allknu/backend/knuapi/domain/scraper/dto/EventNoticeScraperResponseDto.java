@@ -9,18 +9,16 @@ import java.util.Map;
 
 @Getter
 @AllArgsConstructor
-public class EventNoticeResponseDto {
+public class EventNoticeScraperResponseDto {
 
-    private Map<String, List<EventDetail>> eventNoticeMap;
-
-
+    private List<ScraperEventDetail> eventNoticeList;
     @Getter
     @Builder
-    public static class EventDetail{
+    public static class ScraperEventDetail{
+        private String title;
         private String link;
         private String date;
         private String writer;
         private String views;
-        private String title;
     }
 }

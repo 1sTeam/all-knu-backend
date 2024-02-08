@@ -2,12 +2,13 @@ package com.allknu.backend.knuapi.application;
 
 
 import com.allknu.backend.knuapi.application.dto.CalendarResponseDto;
+import com.allknu.backend.knuapi.application.dto.EventNoticeResponseDto;
+import com.allknu.backend.knuapi.application.dto.UnivNoticeResponseDto;
 import com.allknu.backend.knuapi.domain.EventNoticeType;
 import com.allknu.backend.knuapi.domain.MajorNoticeType;
 import com.allknu.backend.knuapi.domain.UnivNoticeType;
 import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
-import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeResponseDto;
-import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeScraperResponseDto;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -33,27 +34,25 @@ public class CrawlingServiceTests {
     void getUnivNoticeTest() {
         UnivNoticeResponseDto univNotice = crawlingService.getUnivNotice(1, UnivNoticeType.ALL);
 
-        for (Map.Entry<String, List<UnivNoticeResponseDto.UnivNoticeDto>> entry : univNotice.getUnivNoticeMap().entrySet()) {
-            for (UnivNoticeResponseDto.UnivNoticeDto notice : entry.getValue()) {
-                System.out.println(notice.getTitle() + notice.getDate() + notice.getViews() + notice.getLink());
-            }
+        for (UnivNoticeResponseDto.UnivNoticeDto notice : univNotice.getUnivNoticeList()) {
+            System.out.println(notice.getTitle() + "\n" + notice.getDate() + "\n" + notice.getViews() + "\n" + notice.getLink() + "\n" + notice.getType() + "\n" + notice.getWriter() + "\n" + notice.getNumber());
         }
 
-        Assertions.assertNotEquals(0, univNotice.getUnivNoticeMap().size());
+        Assertions.assertNotEquals(0, univNotice.getUnivNoticeList().size());
     }
+
     @Test
     @DisplayName("행사/안내 크롤링 테스트")
     void getEventNoticeTest() {
         EventNoticeResponseDto eventNotice = crawlingService.getEventNotice(1, EventNoticeType.ALL);
 
-        for (Map.Entry<String, List<EventNoticeResponseDto.EventDetail>> entry : eventNotice.getEventNoticeMap().entrySet()) {
-            for (EventNoticeResponseDto.EventDetail notice : entry.getValue()) {
-                System.out.println(notice.getTitle() + "\n" + notice.getDate() + "\n" + notice.getViews() + "\n" + notice.getLink() + "\n" + notice.getWriter());
-            }
+        for (EventNoticeResponseDto.EventDetail notice : eventNotice.getEventNoticeList()) {
+            System.out.println(notice.getTitle() + "\n" + notice.getDate() + "\n" + notice.getViews() + "\n" + notice.getLink() + "\n" + notice.getWriter());
         }
 
-        Assertions.assertNotEquals(0, eventNotice.getEventNoticeMap().size());
+        Assertions.assertNotEquals(0, eventNotice.getEventNoticeList().size());
     }
+
     @Test
     @DisplayName("기본 강남대 템플릿을 사용하는 학과 공지사항 크롤링 테스트")
     void getMajorNoticeTest() {
