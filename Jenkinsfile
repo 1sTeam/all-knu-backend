@@ -112,10 +112,9 @@ pipeline {
     }
     stage('building by gradle') {
       steps {
-        sh ''
-        '
-        . / gradlew bootJar - x test ''
-        '
+        sh '''
+        ./gradlew bootJar -x test
+        '''
       }
       post {
         success {
@@ -145,9 +144,8 @@ pipeline {
     }
     stage('rm container') {
       steps {
-        echo 'rm container stage'
         sh '''
-        docker rm - f $CONTAINER_NAME
+        docker rm -f $CONTAINER_NAME
         '''
       }
       post {
