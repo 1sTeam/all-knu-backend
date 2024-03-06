@@ -3,10 +3,8 @@ package com.allknu.backend.global.asset;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.ConstructorBinding;
 
 @Getter
-@ConstructorBinding
 @AllArgsConstructor
 @ConfigurationProperties(prefix = "api-endpoint")
 public class ApiEndpointSecretProperties {
