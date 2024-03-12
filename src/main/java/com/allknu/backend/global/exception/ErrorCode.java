@@ -25,6 +25,7 @@ public enum ErrorCode {
     NOT_FOUND_STATION(HttpStatus.NOT_FOUND,"SHUTTLE_002","정거장이 없음."),
     STATION_TIME_DUPLICATED(HttpStatus.FORBIDDEN, "SHUTTLE_003", "정거장 시간이 중복됨"),
     NOT_FOUND_STATION_TIMETABLE(HttpStatus.NOT_FOUND, "SHUTTLE_004", "정거장 시간이 없음"),
+    NOT_FOUND_DAY(HttpStatus.NOT_FOUND,"SHUTTLE_005","해당 시간표 요일이 없음"),
     NOT_FOUND_MAP_MARKER(HttpStatus.NOT_FOUND, "MAP_MARKER_001", "마커가 존재하지 않음"),
 
     FCM_CLIENT_FAILED(HttpStatus.INTERNAL_SERVER_ERROR, "FCM_001", "FCM Failed"),

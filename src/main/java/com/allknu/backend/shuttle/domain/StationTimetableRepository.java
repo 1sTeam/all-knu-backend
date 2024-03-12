@@ -11,6 +11,8 @@ public interface StationTimetableRepository extends JpaRepository<StationTimetab
     List<StationTimetable> findByStation(Station station);
     List<StationTimetable> findByStationOrderByStopTimeAsc(Station station);
     StationTimetable findByStationAndStopTime(Station station, Date stopTime);
-    StationTimetable findByStationAndStopTimeAndDestination(Station station, Date stopTime, String destination);
+    StationTimetable findByStationAndDayAndStopTimeAndDestination(Station station, Day day, Date stopTime, String destination);
+    List<StationTimetable> findByStationAndDayOrderByStopTimeAsc(Station station, Day day);
     StationTimetable findByStopTime(Date stopTime);
+    StationTimetable findByStationAndDayAndStopTime(Station station, Day day, Date stopTime);
 }

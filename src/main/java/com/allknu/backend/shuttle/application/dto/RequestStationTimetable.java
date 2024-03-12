@@ -32,6 +32,9 @@ public class RequestStationTimetable {
         @JsonFormat(pattern = "HH:mm:ss", timezone = "Asia/Seoul")
         private Date time;
 
+        @NotNull(message = "날짜가 비었다")
+        private String day;
+
         @NotNull(message = "도착지가 비었다")
         private String destination;
     }
