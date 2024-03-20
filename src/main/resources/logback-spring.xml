@@ -37,7 +37,7 @@
 
     <springProfile name="prod">
         <appender name="WARN_OR_MORE_LOG" class="ch.qos.logback.core.rolling.RollingFileAppender">
-            <file>${LOGS_ABSOLUTE_PATHwarn-or-more.log</file>
+            <file>${LOGS_ABSOLUTE_PATH}/warn-or-more.log</file>
             <filter class="ch.qos.logback.classic.filter.ThresholdFilter">
                 <level>WARN</level>
             </filter>
