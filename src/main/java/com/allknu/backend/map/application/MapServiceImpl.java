@@ -61,11 +61,9 @@ public class MapServiceImpl implements MapService {
     @Override
     @Transactional
     public void deleteMarker(Long id) {
-        MapMarker mapMarker = mapMarkerRepository.getById(id);
+        MapMarker mapMarker = mapMarkerRepository.findById(id)
+                .orElseThrow(NotFoundMapMarkerException::new);
 
-        if (mapMarker == null) {
-            throw new NotFoundMapMarkerException();
-        }
         mapMarkerRepository.delete(mapMarker);
     }
 

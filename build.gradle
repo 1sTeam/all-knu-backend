@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '2.5.4'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 repositories {
@@ -11,12 +11,16 @@ repositories {
 group = 'com.allknu'
 version = '0.0.1-SNAPSHOT'
 description = 'backend'
-java.sourceCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = '21'
 
 configurations {
     compileOnly {
         extendsFrom annotationProcessor
     }
+}
+
+compileJava {
+    options.compilerArgs << '-parameters'
 }
 
 test {
@@ -29,15 +33,17 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-webflux' // weblcient 대체 시 제거
     implementation 'org.springframework.boot:spring-boot-starter-validation'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    annotationProcessor "org.springframework.boot:spring-boot-configuration-processor"
 
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.jsoup:jsoup:1.17.2'
 
-    implementation 'org.flywaydb:flyway-core:7.5.1'
+    implementation 'org.flywaydb:flyway-core'
     implementation 'mysql:mysql-connector-java:8.0.26'
-    runtimeOnly 'com.h2database:h2:1.4.200'
+    runtimeOnly 'com.h2database:h2'
 
     implementation 'io.jsonwebtoken:jjwt-api:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.2'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.2'
+
 }
