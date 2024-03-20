@@ -7,7 +7,7 @@ pipeline {
     TIME_ZONE = 'Asia/Seoul'
     REPOSITORY_CREDENTIAL_ID = 'all-knu-backend-jenkins-github-key' // github repository credential name
     REPOSITORY_URL = 'git@github.com:1sTeam/all-knu-backend.git'
-    TARGET_BRANCH = 'main'
+    TARGET_BRANCH = 'develop'
     IMAGE_NAME = 'all-knu-backend-develop'
     CONTAINER_NAME = 'all-knu-backend-develop'
     PROFILE = 'develop'
@@ -107,22 +107,6 @@ pipeline {
         failure {
           slackSend(channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
           error 'fail create secret file'
-        }
-      }
-    }
-    stage('building by gradle') {
-      steps {
-        sh '''
-        ./gradlew bootJar -x test
-        '''
-      }
-      post {
-        success {
-          echo 'success build'
-        }
-        failure {
-          slackSend(channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
-          error 'fail build'
         }
       }
     }

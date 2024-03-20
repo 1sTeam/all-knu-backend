@@ -110,22 +110,6 @@ pipeline {
         }
       }
     }
-    stage('building by gradle') {
-      steps {
-        sh '''
-        ./gradlew bootJar -x test
-        '''
-      }
-      post {
-        success {
-          echo 'success build'
-        }
-        failure {
-          slackSend(channel: '#jenkins-notification', color: '#FF0000', message: "${env.CONTAINER_NAME} CI / CD 파이프라인 구동 실패, 젠킨스 확인 해주세요")
-          error 'fail build'
-        }
-      }
-    }
     stage('dockerizing by Dockerfile') {
       steps {
         sh '''
