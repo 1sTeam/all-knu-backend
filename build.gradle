@@ -38,7 +38,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.jsoup:jsoup:1.17.2'
 
-    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-core:8.4.4'
+    implementation 'org.flywaydb:flyway-mysql:8.4.4'
     implementation 'mysql:mysql-connector-java:8.0.26'
     runtimeOnly 'com.h2database:h2'
 
