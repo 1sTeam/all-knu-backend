@@ -1,7 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.2.1'
-    id 'io.spring.dependency-management' version '1.1.0'
+    id 'org.springframework.boot' version '3.2.3'
+    id 'io.spring.dependency-management' version '1.1.4'
 }
 
 repositories {
@@ -11,7 +11,8 @@ repositories {
 group = 'com.allknu'
 version = '0.0.1-SNAPSHOT'
 description = 'backend'
-sourceCompatibility = '17'
+
+sourceCompatibility = '21'
 
 configurations {
     compileOnly {
@@ -38,7 +39,8 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     implementation 'org.jsoup:jsoup:1.17.2'
 
-    implementation 'org.flywaydb:flyway-core'
+    implementation 'org.flywaydb:flyway-core:8.4.4'
+    implementation 'org.flywaydb:flyway-mysql:8.4.4'
     implementation 'mysql:mysql-connector-java:8.0.26'
     runtimeOnly 'com.h2database:h2'
 

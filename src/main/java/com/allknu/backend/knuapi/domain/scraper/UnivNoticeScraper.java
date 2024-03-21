@@ -2,7 +2,7 @@ package com.allknu.backend.knuapi.domain.scraper;
 
 import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.global.scraper.Scraper;
-import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeScraperResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,16 +15,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.*;
 
-
 @RequiredArgsConstructor
-public class UnivNoticeScraper implements Scraper<UnivNoticeResponseDto> {
+public class UnivNoticeScraper implements Scraper<UnivNoticeScraperResponseDto> {
     private final ObjectMapper objectMapper;
     private final ApiEndpointSecretProperties apiEndpointSecretProperties;
     private static final Logger log = LoggerFactory.getLogger(UnivNoticeScraper.class);
 
     @Override
-    public UnivNoticeResponseDto scrape(Document document) throws Exception {
-        Map<String, List<UnivNoticeResponseDto.UnivNoticeDto>> univNoticeMap = new LinkedHashMap<>();
+    public UnivNoticeScraperResponseDto scrape(Document document) throws Exception {
+        List<UnivNoticeScraperResponseDto.ScraperUnivNoticeDto> univNoticeList = new ArrayList<>();
 
         Iterator<Element> rows = document.select("div.tbody > ul").iterator();
         if (!rows.hasNext()) {
@@ -33,15 +32,15 @@ public class UnivNoticeScraper implements Scraper<UnivNoticeResponseDto> {
 
         while (rows.hasNext()) {
             Element target = rows.next();
-            Elements li = target.select("li"); // ul 안의 li들
+            Elements li = target.select("li");
 
-            String number = li.get(0).text(); // 게시글번호 li
+            String number = li.get(0).text();
             if (!StringUtil.isNumeric(number)) {
-                //넘버가 숫자가 아니라면 필독공지임 이거는 패스
+                //넘버가 숫자가 아니라면 필독공지
                 continue;
             }
 
-            Element linkElement = li.get(1).selectFirst("a.detailLink"); // 링크li
+            Element linkElement = li.get(1).selectFirst("a.detailLink");
             String encMenuSeq, encMenuBoardSeq;
             try {
                 JsonNode jsonNode = objectMapper.readTree(linkElement.attr("data-params"));
@@ -56,12 +55,12 @@ public class UnivNoticeScraper implements Scraper<UnivNoticeResponseDto> {
                     + encMenuSeq + "&encMenuBoardSeq=" + encMenuBoardSeq;
 
             String title = linkElement.text();
-            String writeType = li.get(2).text(); //구분 li
-            String writer = li.get(4).text(); // 작성자
-            String date = li.get(5).text(); // date
-            String views = li.get(6).text(); // views
+            String writeType = li.get(2).text();
+            String writer = li.get(4).text();
+            String date = li.get(5).text();
+            String views = li.get(6).text();
 
-            UnivNoticeResponseDto.UnivNoticeDto notice = UnivNoticeResponseDto.UnivNoticeDto.builder()
+            UnivNoticeScraperResponseDto.ScraperUnivNoticeDto notice = UnivNoticeScraperResponseDto.ScraperUnivNoticeDto.builder()
                     .link(link)
                     .date(date)
                     .number(number)
@@ -71,13 +70,9 @@ public class UnivNoticeScraper implements Scraper<UnivNoticeResponseDto> {
                     .title(title)
                     .build();
 
-            if (!univNoticeMap.containsKey(writeType)) {
-                univNoticeMap.put(writeType, new ArrayList<>());
-            }
-            univNoticeMap.get(writeType).add(notice);
+            univNoticeList.add(notice);
         }
 
-        return new UnivNoticeResponseDto(univNoticeMap);
+        return new UnivNoticeScraperResponseDto(univNoticeList);
     }
 }
-

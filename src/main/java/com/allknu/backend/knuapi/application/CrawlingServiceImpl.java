@@ -2,15 +2,17 @@ package com.allknu.backend.knuapi.application;
 
 import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.knuapi.application.dto.CalendarResponseDto;
+import com.allknu.backend.knuapi.application.dto.EventNoticeResponseDto;
+import com.allknu.backend.knuapi.application.dto.UnivNoticeResponseDto;
 import com.allknu.backend.knuapi.domain.*;
 import com.allknu.backend.knuapi.application.dto.ResponseCrawling;
 import com.allknu.backend.knuapi.domain.scraper.EventNoticeScraper;
 import com.allknu.backend.knuapi.domain.scraper.KnuCalenderScraper;
 import com.allknu.backend.global.crawling.Scraper;
 import com.allknu.backend.knuapi.domain.scraper.UnivNoticeScraper;
-import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeScraperResponseDto;
 import com.allknu.backend.knuapi.domain.scraper.dto.KnuCalenderScraperResponseDto;
-import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.UnivNoticeScraperResponseDto;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
@@ -40,42 +42,41 @@ public class CrawlingServiceImpl implements CrawlingService {
         UnivNoticeScraper scraper = new UnivNoticeScraper(objectMapper, apiEndpointSecretProperties);
 
         try {
-            // 웹 페이지의 URL을 생성합니다.
             String url = apiEndpointSecretProperties.getCrawling().getUnivNotice()
                     + "?paginationInfo.currentPageNo=" + pageNum
                     + "&searchMenuSeq=" + type.getSearchMenuNumber()
                     + "&searchType=&searchValue=";
 
-            // URL로부터 Document 객체를 생성합니다.
             Document document = Jsoup.connect(url).get();
+            UnivNoticeScraperResponseDto univNoticeScraperResponseDto = scraper.scrape(document);
 
-            // Document 객체를 매개변수로 scrape 메서드를 호출합니다.
-            return scraper.scrape(document);
+            // 스크래퍼 DTO를 애플리케이션 레이어의 DTO로 변환.
+            return UnivNoticeResponseDto.from(univNoticeScraperResponseDto);
         } catch (Exception e) {
             log.error("학교공지 crawling error ", e);
-            return new UnivNoticeResponseDto(new LinkedHashMap<>());
+            return new UnivNoticeResponseDto(new ArrayList<>());
         }
     }
+
 
     @Override
     public EventNoticeResponseDto getEventNotice(int pageNum, EventNoticeType type) {
         EventNoticeScraper scraper = new EventNoticeScraper(objectMapper, apiEndpointSecretProperties);
-
         try {
-            // 웹 페이지의 URL을 생성합니다.
+
             String url = apiEndpointSecretProperties.getCrawling().getEventNotice()
                     + "?paginationInfo.currentPageNo=" + pageNum
                     + "&searchMenuSeq=" + type.getSearchMenuNumber()
                     + "&searchType=&searchValue=";
 
-            // URL로부터 Document 객체를 생성합니다.
             Document document = Jsoup.connect(url).get();
+            EventNoticeScraperResponseDto eventNoticeScraperResponseDto = scraper.scrape(document);
 
-            // Document 객체를 매개변수로 scrape 메서드를 호출합니다.
-            return scraper.scrape(document);
+            // 스크래퍼 DTO를 애플리케이션 레이어의 DTO로 변환.
+            return EventNoticeResponseDto.from(eventNoticeScraperResponseDto);
         } catch (Exception e) {
             log.error("행사공지 error ", e);
-            return new EventNoticeResponseDto(new LinkedHashMap<>());
+            return new EventNoticeResponseDto(new ArrayList<>());
         }
     }
 

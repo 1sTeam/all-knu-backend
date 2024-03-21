@@ -2,7 +2,7 @@ package com.allknu.backend.knuapi.domain.scraper;
 
 import com.allknu.backend.global.asset.ApiEndpointSecretProperties;
 import com.allknu.backend.global.scraper.Scraper;
-import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeResponseDto;
+import com.allknu.backend.knuapi.domain.scraper.dto.EventNoticeScraperResponseDto;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -16,14 +16,14 @@ import java.util.*;
 
 
 @RequiredArgsConstructor
-public class EventNoticeScraper implements Scraper<EventNoticeResponseDto> {
+public class EventNoticeScraper implements Scraper<EventNoticeScraperResponseDto> {
     private final ObjectMapper objectMapper;
     private final ApiEndpointSecretProperties apiEndpointSecretProperties;
     private static final Logger log = LoggerFactory.getLogger(EventNoticeScraper.class);
 
     @Override
-    public EventNoticeResponseDto scrape(Document document) throws Exception {
-        Map<String, List<EventNoticeResponseDto.EventDetail>> eventNoticeMap = new LinkedHashMap<>();
+    public EventNoticeScraperResponseDto scrape(Document document) throws Exception {
+        List<EventNoticeScraperResponseDto.ScraperEventDetail> eventNoticeList = new ArrayList<>();
 
         Iterator<Element> rows = document.select("div.tbody > ul > li").iterator();
         if (!rows.hasNext()) {
@@ -41,7 +41,7 @@ public class EventNoticeScraper implements Scraper<EventNoticeResponseDto> {
 
             String title = dt.get(0).text(); // 제목 title
 
-            // JSON 파싱 로직 필요
+            // JSON 파싱 로직
             Element linkElement = dt.get(0).selectFirst("a.detailLink"); // 링크
             String encMenuSeq, encMenuBoardSeq;
             try {
@@ -63,24 +63,17 @@ public class EventNoticeScraper implements Scraper<EventNoticeResponseDto> {
             String date = span.get(1).text().substring(4); // date
             String views = span.get(2).text().substring(4); // views
 
-            EventNoticeResponseDto.EventDetail eventDetail = EventNoticeResponseDto.EventDetail.builder()
+            EventNoticeScraperResponseDto.ScraperEventDetail eventDetail = EventNoticeScraperResponseDto.ScraperEventDetail.builder()
+                    .title(title)
                     .link(link)
                     .date(date)
                     .writer(writer)
                     .views(views)
-                    .title(title)
                     .build();
 
-            // 행사공지를 구분하는 키를 생성합니다.
-            // 예를 들어, 페이지 번호나 이벤트 타입을 사용할 수 있습니다.
-            String key = " ";
-
-            if (!eventNoticeMap.containsKey(key)) {
-                eventNoticeMap.put(key, new ArrayList<>());
-            }
-            eventNoticeMap.get(key).add(eventDetail);
+            eventNoticeList.add(eventDetail);
         }
 
-        return new EventNoticeResponseDto(eventNoticeMap);
+        return new EventNoticeScraperResponseDto(eventNoticeList);
     }
 }

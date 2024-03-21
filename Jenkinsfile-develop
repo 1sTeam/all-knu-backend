@@ -7,10 +7,10 @@ pipeline {
     TIME_ZONE = 'Asia/Seoul'
     REPOSITORY_CREDENTIAL_ID = 'all-knu-backend-jenkins-github-key' // github repository credential name
     REPOSITORY_URL = 'git@github.com:1sTeam/all-knu-backend.git'
-    TARGET_BRANCH = 'main'
-    IMAGE_NAME = 'all-knu-backend'
-    CONTAINER_NAME = 'all-knu-backend'
-    PROFILE = 'prod'
+    TARGET_BRANCH = 'develop'
+    IMAGE_NAME = 'all-knu-backend-develop'
+    CONTAINER_NAME = 'all-knu-backend-develop'
+    PROFILE = 'develop'
     DOCKER_NETWORK = 'all-knu-haproxy-net'
     LOGGING_HOST_PATH = '/home/aunae/all-knu-projects/log/all-knu-backend'
   }
