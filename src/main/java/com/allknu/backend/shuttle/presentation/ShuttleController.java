@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalTime;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -50,8 +51,8 @@ public class ShuttleController {
     }
 
     @PostMapping("/api/v2/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> registerStationTimetable(@RequestBody RequestStationTimetable.registerStationTime requestDto){
-        shuttleService.registerStationTimetable(requestDto.getStation(), requestDto.getTime(), requestDto.getDestination());
+    public ResponseEntity<CommonResponse> registerStationTimetable(@RequestBody RequestStationTimetable.registerStationTime requestDto) {
+        shuttleService.registerStationTimetable(requestDto.getStation(), requestDto.getDay(), requestDto.getTime(), requestDto.getDestination());
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -60,8 +61,8 @@ public class ShuttleController {
     }
 
     @GetMapping("/api/v2/knu/shuttle/timetable")
-    public ResponseEntity<CommonResponse> getStationTimetable(){
-        List<ResponseStation.getStationTime> stationTimetables = shuttleService.getStationTimetable();
+    public ResponseEntity<CommonResponse> getStationTimetable(@RequestParam String day) {
+        List<ResponseStation.getStationTime> stationTimetables = shuttleService.getStationTimetable(day);
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())
@@ -69,11 +70,11 @@ public class ShuttleController {
                 .list(stationTimetables)
                 .build(), HttpStatus.OK);
     }
-
-    @DeleteMapping("/knu/shuttle/{station}/{time}")
+    @DeleteMapping("/api/v2/knu/shuttle/{station}/{day}/{time}")
     public ResponseEntity<CommonResponse> deleteStationTimetable(@PathVariable String station,
-                                                                 @PathVariable @DateTimeFormat(pattern = "HH:mm:ss") Date time){
-        shuttleService.deleteStationTimetable(station, time);
+                                                                 @PathVariable String day,
+                                                                 @PathVariable @DateTimeFormat(pattern = "HH:mm:ss") Date time) {
+        shuttleService.deleteStationTimetable(station, day, time);
 
         return new ResponseEntity<>(CommonResponse.builder()
                 .status(HttpStatus.OK.value())

@@ -27,9 +27,14 @@ public class StationTimetable {
     @Column(name = "destination")
     private String destination;
 
+    @ManyToOne
+    @JoinColumn(name = "day_id")
+    private Day day;
+
     @Builder
-    public StationTimetable(Station station ,Date stopTime, String destination){
+    public StationTimetable(Station station,Day day, Date stopTime, String destination){
         this.station = station;
+        this.day= day;
         this.stopTime = stopTime;
         this.destination = destination;
     }
