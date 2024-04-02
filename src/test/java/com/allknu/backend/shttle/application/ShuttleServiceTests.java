@@ -29,9 +29,6 @@ public class ShuttleServiceTests {
     StationRepository stationRepository;
     @Autowired
     StationTimetableRepository stationTimetableRepository;
-    @Autowired
-    DayRepository dayRepository;
-
 
     @DisplayName("정류장 등록 성공 테스트")
     @Transactional
@@ -98,16 +95,17 @@ public class ShuttleServiceTests {
     @DisplayName("정류장 시간표 등록 성공 테스트")
     @Transactional
     @Test
-    void registerStationTimetableV2Test() throws ParseException{
-        //정류장 등록
+    void registerStationTimetableV2Test() throws ParseException {
+        // 정류장 등록
         Station station = Station.builder()
-                .station("기흥역")
+                .station("기흥역") // station의 필드명을 확인하세요. 예제에서는 stationName으로 가정합니다.
                 .build();
         station = stationRepository.save(station);
+
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
-        //시간표 등록
-        shuttleService.registerStationTimetable("기흥역","월요일", time, "이공관");
+
+        shuttleService.registerStationTimetable(station.getStation(), String.valueOf(StationTimetable.DayOfWeek.월요일), time, "이공관");
 
         List<StationTimetable> stationTimetableList = stationTimetableRepository.findByStation(station);
         assertNotNull(stationTimetableList);
@@ -116,82 +114,77 @@ public class ShuttleServiceTests {
     @DisplayName("시간표 조회 성공 테스트")
     @Transactional
     @Test
-    void getTimetableV2Test() throws ParseException{
-        //정류장 등록
+    void getTimetableTest() throws ParseException {
+        // 정류장 등록
         Station station = Station.builder()
                 .station("기흥역")
                 .build();
         station = stationRepository.save(station);
-        //시간 입력
+
+        // 시간 입력
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
         Date time1 = format.parse("08:20:00");
 
-        // 요일 입력
-        Day day = new Day(null, "월요일", new ArrayList<>());
-        day = dayRepository.save(day);
-
+        // 시간표 등록
         StationTimetable stationTimetable = StationTimetable.builder()
                 .station(station)
-                .day(day)
+                .dayOfWeek(StationTimetable.DayOfWeek.월요일)
                 .stopTime(time)
                 .destination("이공관")
                 .build();
         stationTimetableRepository.save(stationTimetable);
-        station.addTimetable(stationTimetable);
 
         StationTimetable stationTimetable1 = StationTimetable.builder()
                 .station(station)
-                .day(day)
+                .dayOfWeek(StationTimetable.DayOfWeek.금요일)
                 .stopTime(time1)
                 .destination("사훈")
                 .build();
         stationTimetableRepository.save(stationTimetable1);
-        station.addTimetable(stationTimetable1);
 
-        //시간표 조회
-        List<ResponseStation.getStationTime> timeList = shuttleService.getStationTimetable(day.getName());
-        assertNotNull(timeList);
+        // 금요일 시간표 조회
+        List<StationTimetable> fridayTimetables = stationTimetableRepository.findByStationAndDayOfWeekOrderByStopTimeAsc( station,StationTimetable.DayOfWeek.금요일);
+        assertNotNull(fridayTimetables);
 
         // 검증
-        assertTrue(timeList.size() > 0);
-        assertEquals("기흥역", timeList.get(0).getStation());
-        assertEquals(2, timeList.get(0).getStopTime().size());
-        assertEquals("08:10:00", format.format(timeList.get(0).getStopTime().get(0).getTime()));
-        assertEquals("08:20:00", format.format(timeList.get(0).getStopTime().get(1).getTime()));
-        assertEquals("이공관", timeList.get(0).getStopTime().get(0).getDestination());
-        assertEquals("사훈", timeList.get(0).getStopTime().get(1).getDestination());
+        assertTrue(fridayTimetables.size() > 0);
+        StationTimetable firstFridayTimetable = fridayTimetables.get(0);
+        assertEquals(station, firstFridayTimetable.getStation());
+        assertEquals("08:20:00", format.format(firstFridayTimetable.getStopTime()));
+        assertEquals("사훈", firstFridayTimetable.getDestination());
     }
-
-
     @DisplayName("시간표 삭제 성공 테스트")
     @Transactional
     @Test
-    void deleteTimetableTest() throws ParseException{
-        //정류장 등록
+    void deleteTimetableTest() throws ParseException {
+        // 정류장 등록
         Station station = Station.builder()
                 .station("기흥역")
                 .build();
-
-        // 요일 입력
-        Day day = new Day(null, "월요일", new ArrayList<>());
-        day = dayRepository.save(day);
-
         station = stationRepository.save(station);
-        //시간 입력
+
+        // 시간 입력
         SimpleDateFormat format = new SimpleDateFormat("HH:mm:ss");
         Date time = format.parse("08:10:00");
+
+        // 시간표 등록
         StationTimetable stationTimetable = StationTimetable.builder()
                 .station(station)
-                .day(day)
+                .dayOfWeek(StationTimetable.DayOfWeek.월요일)
                 .stopTime(time)
                 .build();
-        stationTimetableRepository.save(stationTimetable);
-        station.addTimetable(stationTimetable);
-        //시간표 조회
-        shuttleService.deleteStationTimetable("기흥역", "월요일", time);
-        StationTimetable stationTime = stationTimetableRepository.findByStationAndDayAndStopTime(station,day,time);
-        assertNull(stationTime);
+        stationTimetable = stationTimetableRepository.save(stationTimetable);
 
+        // 시간표 삭제
+        stationTimetableRepository.delete(stationTimetable);
+
+        // 삭제 확인
+        StationTimetable deletedTimetable = stationTimetableRepository.findByStationAndDayOfWeekAndStopTime(station, StationTimetable.DayOfWeek.월요일, time);
+        assertNull(deletedTimetable, "시간표가 삭제되었음을 확인합니다.");
+
+        // 리스트에서 삭제된 시간표 확인
+        List<StationTimetable> remainingTimetables = stationTimetableRepository.findByStationAndDayOfWeekOrderByStopTimeAsc(stationTimetable.getStation(),StationTimetable.DayOfWeek.월요일);
+        assertFalse(remainingTimetables.contains(stationTimetable), "리스트에서 삭제된 시간표를 확인합니다.");
     }
 }

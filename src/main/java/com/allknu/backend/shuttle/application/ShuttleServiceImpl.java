@@ -17,7 +17,6 @@ import java.util.List;
 public class ShuttleServiceImpl implements ShuttleService {
     private final StationRepository stationRepository;
     private final StationTimetableRepository stationTimetableRepository;
-    private final DayRepository dayRepository;
 
     @Transactional
     @Override
@@ -62,26 +61,33 @@ public class ShuttleServiceImpl implements ShuttleService {
 
     @Transactional
     @Override
-    public void registerStationTimetable(String stationName, String dayName, Date stopTime, String destination){
-        //정거장 엔티티 꺼내기
+    public void registerStationTimetable(String stationName, String dayName, Date stopTime, String destination) {
+        // 정거장 엔티티 꺼내기
         Station station = stationRepository.findByStation(stationName);
-        if(station == null){
+        if (station == null) {
             throw new NotFoundStationException();
         }
-        Day day = dayRepository.findByName(dayName);
-        StationTimetable stationTime = stationTimetableRepository.findByStationAndDayAndStopTimeAndDestination(station, day, stopTime, destination);
-        if(stationTime != null){// 이미 있는 시간일 경우
+
+        StationTimetable.DayOfWeek dayOfWeek;
+        try {
+            dayOfWeek = StationTimetable.DayOfWeek.valueOf(dayName.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundDayException();
+        }
+
+        StationTimetable existingStationTimetable = stationTimetableRepository.findByStationAndDayOfWeekAndStopTimeAndDestination(station, dayOfWeek, stopTime, destination);
+        if (existingStationTimetable != null) { // 이미 있는 시간일 경우
             throw new StationTimeDuplicatedException();
         }
-        //시간 입력
-        StationTimetable stationTimetable = StationTimetable.builder()
+
+        StationTimetable newStationTimetable = StationTimetable.builder()
                 .station(station)
-                .day(day)
+                .dayOfWeek(dayOfWeek)
                 .stopTime(stopTime)
                 .destination(destination)
                 .build();
-        stationTimetableRepository.save(stationTimetable);
-        station.addTimetable(stationTimetable);
+        stationTimetableRepository.save(newStationTimetable);
+        station.addTimetable(newStationTimetable);
     }
 
     @Transactional
@@ -90,10 +96,17 @@ public class ShuttleServiceImpl implements ShuttleService {
         List<ResponseStation.getStationTime> list = new ArrayList<>();
         List<Station> stationList = stationRepository.findAll();
 
+        StationTimetable.DayOfWeek weekDay;
+        try {
+            weekDay = StationTimetable.DayOfWeek.valueOf(day.toUpperCase());
+        } catch (IllegalArgumentException e) {
+            throw new NotFoundDayException();
+        }
+
         if(!stationList.isEmpty()){
             for(Station station : stationList){
-                // Day 엔티티를 사용하여 해당일에 맞는 시간표만 조회
-                List<StationTimetable> times = stationTimetableRepository.findByStationAndDayOrderByStopTimeAsc(station, dayRepository.findByName(day));
+                // 해당 요일에 맞는 시간표만 조회
+                List<StationTimetable> times = stationTimetableRepository.findByStationAndDayOfWeekOrderByStopTimeAsc(station, weekDay);
                 List<ResponseStationTimetable> stopTimeList = new ArrayList<>();
                 for(StationTimetable stationTimetable : times){
                     ResponseStationTimetable response = ResponseStationTimetable.builder()
@@ -116,23 +129,25 @@ public class ShuttleServiceImpl implements ShuttleService {
     @Transactional
     @Override
     public void deleteStationTimetable(String stationName, String dayName, Date stopTime){
-        //정거장 엔티티 꺼내기
+        // 정거장 엔티티 꺼내기
         Station station = stationRepository.findByStation(stationName);
         if(station == null){
             throw new NotFoundStationException();
         }
 
-        // 요일 엔티티 꺼내기
-        Day day = dayRepository.findByName(dayName);
-        if(day == null){
+        StationTimetable.DayOfWeek weekDay;
+        try {
+            weekDay = StationTimetable.DayOfWeek.valueOf(dayName.toUpperCase());
+        } catch (IllegalArgumentException e) {
             throw new NotFoundDayException();
         }
 
-        StationTimetable stationTime = stationTimetableRepository.findByStationAndDayAndStopTime(station, day, stopTime);
-        if(stationTime == null){// 존재하지 않는 시간일 경우
+        StationTimetable stationTime = stationTimetableRepository.findByStationAndDayOfWeekAndStopTime(station, weekDay, stopTime);
+        if(stationTime == null){ // 존재하지 않는 시간일 경우
             throw new NotFoundStationTimetableException();
         }
-        //시간표 삭제
+
         stationTimetableRepository.delete(stationTime);
     }
+
 }
