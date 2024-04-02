@@ -27,16 +27,20 @@ public class StationTimetable {
     @Column(name = "destination")
     private String destination;
 
-    @ManyToOne
-    @JoinColumn(name = "day_id")
-    private Day day;
+
+    @Enumerated(EnumType.STRING)
+    @Column(name = "day_of_week")
+    private DayOfWeek dayOfWeek;
 
     @Builder
-    public StationTimetable(Station station,Day day, Date stopTime, String destination){
+    public StationTimetable(Station station, DayOfWeek dayOfWeek, Date stopTime, String destination){
         this.station = station;
-        this.day= day;
+        this.dayOfWeek = dayOfWeek;
         this.stopTime = stopTime;
         this.destination = destination;
+    }
+    public enum DayOfWeek {
+        월요일, 화요일, 수요일, 목요일, 금요일, 토요일, 일요일
     }
 
 }
